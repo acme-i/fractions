@@ -1,3 +1,7 @@
+To listen to some crazy experiments with reading and generating a new midi,
+open the solution in Visual Studio. Set the '''fractions.examples''' as startup project.
+Start the project listen to for example 22
+
 # Midi #
 
 ## Type CallbackMessage
