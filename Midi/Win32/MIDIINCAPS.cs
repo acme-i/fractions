@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 
 // ReSharper disable InconsistentNaming
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     ///     Struct representing the capabilities of an input device.

@@ -1,6 +1,6 @@
 // ReSharper disable InconsistentNaming
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     ///     Status type returned from most functions in the Win32 API.

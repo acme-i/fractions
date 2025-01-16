@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     /// EO: 2016-04-14

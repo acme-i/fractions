@@ -28,7 +28,7 @@ using System.Text;
 
 // ReSharper disable InconsistentNaming
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     ///     C# wrappers for the Win32 MIDI API.

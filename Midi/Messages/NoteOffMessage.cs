@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>Note Off message</summary>
     public class NoteOffMessage : NoteMessage, ICloneable

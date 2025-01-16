@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 // ReSharper disable InconsistentNaming
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     ///     Strut to hold outgoing long messages (sysex)

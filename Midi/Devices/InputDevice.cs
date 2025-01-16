@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     /// Midi input device

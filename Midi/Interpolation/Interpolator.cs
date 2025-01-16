@@ -49,7 +49,7 @@ using System.Linq;
 * @Traduzione Andrea85cs (andrea85cs@dynematica.it)
 */
 
-namespace midieval
+namespace fractions
 {
     public delegate double EaseFunction(double start, double distance, double elapsedTime, double duration);
 

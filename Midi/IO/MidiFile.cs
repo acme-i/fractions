@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     /// Credit original author: https://github.com/davidluzgouveia/midi-parser

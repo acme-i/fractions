@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     ///     MIDI Device Manager, providing access to available input/output midi devices

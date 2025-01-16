@@ -1,6 +1,6 @@
 // ReSharper disable InconsistentNaming
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     ///     Flags for dwSupport field of MIDIOUTCAPS structure.

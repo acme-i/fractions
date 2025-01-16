@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     ///     Struct representing the capabilities of an output device.

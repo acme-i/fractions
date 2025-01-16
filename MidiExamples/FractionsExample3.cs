@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace midieval.examples
+namespace fractions.examples
 {
     /// <summary>Demonstrates simple single-threaded output</summary>
     /// <remarks>
@@ -25,7 +25,7 @@ namespace midieval.examples
         private readonly Dictionary<Channel, Enumerate<float>> EchoPanMap = new Dictionary<Channel, Enumerate<float>>();
         private readonly Dictionary<Channel, Enumerate<float>> EchoPanMap2 = new Dictionary<Channel, Enumerate<float>>();
 
-        private IOutputDevice OutputDevice = midieval.OutputDevice.InstalledDevices.FirstOrDefault();
+        private IOutputDevice OutputDevice = fractions.OutputDevice.InstalledDevices.FirstOrDefault();
         private Clock Clock = new Clock(32);
 
         private readonly Enumerate<Channel> chans = new Enumerate<Channel>(

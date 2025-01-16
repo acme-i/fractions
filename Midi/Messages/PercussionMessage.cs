@@ -21,7 +21,7 @@
 
 using System;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>Percussion message</summary>
     /// <remarks>

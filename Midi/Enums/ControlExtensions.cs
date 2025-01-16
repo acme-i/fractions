@@ -25,7 +25,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     ///     Extension methods for the Control enum.

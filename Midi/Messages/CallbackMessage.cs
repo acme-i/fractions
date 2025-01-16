@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     ///     Pseudo-MIDI message used to arrange for a callback at a certain time.

@@ -73,7 +73,7 @@ A MIDI Channel
 
 > Each MIDI device has 16 independent channels. Channels are named starting at 1, but are encoded programmatically starting at 0. 
 
- All of the channels are general-purpose except for Channel10, which is the dedicated percussion channel. Any notes sent to that channel will play [[ percussion notes |T:Midi.Percussion]], regardless of any [[ Program Change |M:midieval.OutputDevice.SendProgramChange(Midi.Channel,Midi.Instrument)]] messages sent on that channel. 
+ All of the channels are general-purpose except for Channel10, which is the dedicated percussion channel. Any notes sent to that channel will play [[ percussion notes |T:Midi.Percussion]], regardless of any [[ Program Change |M:fractions.OutputDevice.SendProgramChange(Midi.Channel,Midi.Instrument)]] messages sent on that channel. 
 
  This enum has extension methods, such as [[|M:Midi.ChannelExtensions.Name(Midi.Channel)]] and [[|M:Midi.ChannelExtensions.IsValid(Midi.Channel)]], defined in [[|T:Midi.ChannelExtensions]]. 
 
@@ -587,7 +587,7 @@ A clock for scheduling MIDI messages in a rate-adjustable, pausable timeline
 
 
 
-> Clock is used for scheduling MIDI messages. Though you can always send messages synchronously with the various [[|T:midieval.OutputDevice]].Send* methods, doing so requires your code to be "ready" at the precise moment each message needs to be sent. In most cases, and especially in interactive programs, it's more convenient to describe messages that  be sent at specified points in the future, and then rely on a scheduler to make it happen. Clock is such a scheduler. 
+> Clock is used for scheduling MIDI messages. Though you can always send messages synchronously with the various [[|T:fractions.OutputDevice]].Send* methods, doing so requires your code to be "ready" at the precise moment each message needs to be sent. In most cases, and especially in interactive programs, it's more convenient to describe messages that  be sent at specified points in the future, and then rely on a scheduler to make it happen. Clock is such a scheduler. 
 
  In the simplest case, Clock can be used to schedule a sequence of messages which is known in its entirety ahead of time. For example, this code snippet schedules two notes to play one after the other: 
 
@@ -2688,9 +2688,9 @@ General MIDI percussion note
 
 
 
-> In General MIDI, notes played on [[|F:Midi.Channel.Channel10]] make the following percussion sounds, regardless of any [[ Program Change |M:midieval.OutputDevice.SendProgramChange(Midi.Channel,Midi.Instrument)]] messages on that channel. 
+> In General MIDI, notes played on [[|F:Midi.Channel.Channel10]] make the following percussion sounds, regardless of any [[ Program Change |M:fractions.OutputDevice.SendProgramChange(Midi.Channel,Midi.Instrument)]] messages on that channel. 
 
- This enum is used with [[ OutputDevice.SendPercussion |M:midieval.OutputDevice.SendPercussion(Midi.Percussion,System.Int32)]] and [[|T:Midi.PercussionMessage]]. Equivalently, when cast to [[|T:Midi.Note]] it can be used with [[ OutputDevice.SendNoteOn |M:midieval.OutputDevice.SendNoteOn(Midi.Channel,Midi.Pitch,System.Int32)]] and [[|T:Midi.NoteOnMessage]] on [[|F:Midi.Channel.Channel10]]. 
+ This enum is used with [[ OutputDevice.SendPercussion |M:fractions.OutputDevice.SendPercussion(Midi.Percussion,System.Int32)]] and [[|T:Midi.PercussionMessage]]. Equivalently, when cast to [[|T:Midi.Note]] it can be used with [[ OutputDevice.SendNoteOn |M:fractions.OutputDevice.SendNoteOn(Midi.Channel,Midi.Pitch,System.Int32)]] and [[|T:Midi.NoteOnMessage]] on [[|F:Midi.Channel.Channel10]]. 
 
  This enum has extension methods, such as [[|M:Midi.PercussionExtensions.Name(Midi.Percussion)]] and [[|M:Midi.PercussionExtensions.IsValid(Midi.Percussion)]], defined in [[|T:Midi.PercussionExtensions]]. 
 
@@ -3335,9 +3335,9 @@ A MIDI output device
 
 
 
-> Each instance of this class describes a MIDI output device installed on the system. You cannot create your own instances, but instead must go through the [[|P:midieval.OutputDevice.InstalledDevices]] property to find which devices are available. You may wish to examine the [[|P:Midi.DeviceBase.Name]] property of each one and present the user with a choice of which device to use. 
+> Each instance of this class describes a MIDI output device installed on the system. You cannot create your own instances, but instead must go through the [[|P:fractions.OutputDevice.InstalledDevices]] property to find which devices are available. You may wish to examine the [[|P:Midi.DeviceBase.Name]] property of each one and present the user with a choice of which device to use. 
 
- Open an output device with [[|M:midieval.OutputDevice.Open]] and close it with [[|M:midieval.OutputDevice.Close]]. While it is open, you may send MIDI messages with functions such as [[|M:midieval.OutputDevice.SendNoteOn(Midi.Channel,Midi.Pitch,System.Int32)]], [[|M:midieval.OutputDevice.SendNoteOff(Midi.Channel,Midi.Pitch,System.Int32)]] and [[|M:midieval.OutputDevice.SendProgramChange(Midi.Channel,Midi.Instrument)]]. All notes may be silenced on the device by calling [[|M:midieval.OutputDevice.SilenceAllNotes]]. 
+ Open an output device with [[|M:fractions.OutputDevice.Open]] and close it with [[|M:fractions.OutputDevice.Close]]. While it is open, you may send MIDI messages with functions such as [[|M:fractions.OutputDevice.SendNoteOn(Midi.Channel,Midi.Pitch,System.Int32)]], [[|M:fractions.OutputDevice.SendNoteOff(Midi.Channel,Midi.Pitch,System.Int32)]] and [[|M:fractions.OutputDevice.SendProgramChange(Midi.Channel,Midi.Instrument)]]. All notes may be silenced on the device by calling [[|M:fractions.OutputDevice.SilenceAllNotes]]. 
 
  Note that the above methods send their messages immediately. If you wish to arrange for a message to be sent at a specific future time, you'll need to instantiate some subclass of [[|T:Midi.Message]] (eg [[|T:Midi.NoteOnMessage]]) and then pass it to [[ Clock.Schedule |M:Midi.Clock.Schedule(Midi.Message)]]. 
 
@@ -3649,7 +3649,7 @@ Pitches supported by MIDI
 
 > MIDI defines 127 distinct pitches, in semitone intervals, ranging from C five octaves below middle C, up to G five octaves above middle C. This covers several octaves above and below the range of a normal 88-key piano. 
 
- These 127 pitches are the only ones directly expressible in MIDI. Precise variations in frequency can be achieved with [[ Pitch Bend |M:midieval.OutputDevice.SendPitchBend(Midi.Channel,System.Int32)]] messages, though Pitch Bend messages apply to the whole channel at once. 
+ These 127 pitches are the only ones directly expressible in MIDI. Precise variations in frequency can be achieved with [[ Pitch Bend |M:fractions.OutputDevice.SendPitchBend(Midi.Channel,System.Int32)]] messages, though Pitch Bend messages apply to the whole channel at once. 
 
  In this enum, pitches are given C Major note names (eg "F", "GSharp") followed by the octave number. Octaves use standard piano terminology: Middle C is in octave 4. (Note that this is different from "MIDI octaves", which have Middle C in octave 0.) 
 

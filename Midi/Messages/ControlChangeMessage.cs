@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>Control change message</summary>
     public class ControlChangeMessage : ChannelMessage, ICloneable

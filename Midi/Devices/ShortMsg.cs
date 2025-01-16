@@ -21,7 +21,7 @@
 
 using System;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>Utility functions for encoding and decoding short messages</summary>
     internal static class ShortMsg

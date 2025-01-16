@@ -26,7 +26,7 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 
-namespace midieval.tests
+namespace fractions.tests
 {
     /// <summary>Unit tests for the Channel enum</summary>
     [TestFixture]

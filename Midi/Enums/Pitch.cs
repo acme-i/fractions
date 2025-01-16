@@ -1,4 +1,4 @@
-﻿namespace midieval
+﻿namespace fractions
 {
     /// <summary>
     ///     Pitches supported by MIDI.

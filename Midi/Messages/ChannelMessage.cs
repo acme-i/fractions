@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     ///     Base class for messages relevant to a specific device channel.

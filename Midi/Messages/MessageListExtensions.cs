@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace midieval
+namespace fractions
 {
     public static class MessageListExtensions
     {

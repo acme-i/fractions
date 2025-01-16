@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace midieval
+namespace fractions
 {
     public class Enumerate<T> : IEnumerable<T>
     {

@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
 
-namespace midieval.tests
+namespace fractions.tests
 {
     [TestFixture]
     public class FractionTests

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace midieval
+namespace fractions
 {
     public static class LinearInterpolator<T>
         where T : NoteMessage

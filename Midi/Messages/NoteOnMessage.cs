@@ -21,7 +21,7 @@
 
 using System;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>Note On message</summary>
     public class NoteOnMessage : NoteMessage, ICloneable

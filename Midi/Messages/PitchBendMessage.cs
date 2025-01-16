@@ -21,7 +21,7 @@
 
 using System;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>Pitch Bend message</summary>
     public class PitchBendMessage : ChannelMessage, ICloneable

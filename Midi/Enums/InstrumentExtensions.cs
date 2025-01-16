@@ -25,7 +25,7 @@
 
 using System;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     ///     Extension methods for the Instrument enum.

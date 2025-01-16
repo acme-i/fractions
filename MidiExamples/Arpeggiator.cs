@@ -24,7 +24,7 @@
 
 using System.Collections.Generic;
 
-namespace midieval.examples
+namespace fractions.examples
 {
     public class Arpeggiator
     {
