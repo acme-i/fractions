@@ -1,0 +1,429 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F60D8B7B-2D2E-4B94-A736-3783FFE1A25C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Midi</RootNamespace>
+    <AssemblyName>Midi</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Midi.XML</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Midi.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Interpolation\NoteInterpolator.cs" />
+    <Compile Include="Interpolation\LinearInterpolator.cs" />
+    <Compile Include="IO\ArrayExtensions.cs" />
+    <Compile Include="IO\MidiFile.cs" />
+    <Compile Include="Devices\DeviceManager.cs" />
+    <Compile Include="Devices\IInputDevice.cs" />
+    <Compile Include="Devices\IOutputDevice.cs" />
+    <Compile Include="Devices\LongMsg.cs" />
+    <Compile Include="Messages\NoteOperator.cs" />
+    <Compile Include="Util\Enumerate.cs" />
+    <Compile Include="Util\EnumerateExtensions.cs" />
+    <Compile Include="Util\Fraction.cs" />
+    <Compile Include="Util\Fractions.cs" />
+    <Compile Include="Interpolation\Interpolator.cs" />
+    <Compile Include="Interpolation\Curves\AnticipationCurve.cs" />
+    <Compile Include="Interpolation\Curves\BounceCurve.cs" />
+    <Compile Include="Interpolation\Curves\DoubleCriticalSpringDamperCurve.cs" />
+    <Compile Include="Interpolation\Curves\InvertedQuadraticCurve.cs" />
+    <Compile Include="Interpolation\Curves\LinearCurve.cs" />
+    <Compile Include="Interpolation\Curves\PowerCurve.cs" />
+    <Compile Include="Interpolation\Curves\QuadraticCurve.cs" />
+    <Compile Include="Interpolation\Curves\SineCurve.cs" />
+    <Compile Include="Interpolation\ITimeCurve.cs" />
+    <Compile Include="Permutations\Permutations.cs" />
+    <Compile Include="Enums\Channels.cs" />
+    <Compile Include="Enums\ControlExtensions.cs" />
+    <Compile Include="Enums\Instruments.cs" />
+    <Compile Include="Messages\CallbackMessage.cs" />
+    <Compile Include="Enums\Channel.cs" />
+    <Compile Include="Enums\ChannelExtensions.cs" />
+    <Compile Include="Messages\ChannelMessage.cs" />
+    <Compile Include="Instruments\Chord.cs" />
+    <Compile Include="Instruments\ChordPattern.cs" />
+    <Compile Include="Devices\Clock.cs" />
+    <Compile Include="IO\Int14.cs" />
+    <Compile Include="IO\Unmanaged.cs" />
+    <Compile Include="Enums\Control.cs" />
+    <Compile Include="Messages\ControlChangeMessage.cs" />
+    <Compile Include="Devices\DeviceBase.cs" />
+    <Compile Include="Devices\DeviceException.cs" />
+    <Compile Include="Messages\DeviceMessage.cs" />
+    <Compile Include="Enums\Instrument.cs" />
+    <Compile Include="Enums\InstrumentExtensions.cs" />
+    <Compile Include="Enums\Interval.cs" />
+    <Compile Include="Enums\IntervalExtensions.cs" />
+    <Compile Include="Messages\Message.cs" />
+    <Compile Include="Messages\MessageListExtensions.cs" />
+    <Compile Include="Instruments\Note.cs" />
+    <Compile Include="Messages\NoteMessage.cs" />
+    <Compile Include="Messages\NoteOffMessage.cs" />
+    <Compile Include="Messages\NoteOnMessage.cs" />
+    <Compile Include="Messages\NoteOnOffMessage.cs" />
+    <Compile Include="Enums\Percussion.cs" />
+    <Compile Include="Devices\InputDevice.cs" />
+    <Compile Include="MessageQueue.cs" />
+    <Compile Include="Devices\OutputDevice.cs" />
+    <Compile Include="Enums\PercussionExtensions.cs" />
+    <Compile Include="Messages\NrpnMessage.cs" />
+    <Compile Include="Messages\PercussionMessage.cs" />
+    <Compile Include="Enums\Pitch.cs" />
+    <Compile Include="Messages\PitchBendMessage.cs" />
+    <Compile Include="Enums\PitchExtensions.cs" />
+    <Compile Include="Messages\ProgramChangeMessage.cs" />
+    <Compile Include="Instruments\ScalePattern.cs" />
+    <Compile Include="Devices\ShortMsg.cs" />
+    <Compile Include="Messages\SysExMessage.cs" />
+    <Compile Include="Util\Incrementor.cs" />
+    <Compile Include="Win32\HMIDIIN.cs" />
+    <Compile Include="Win32\HMIDIOUT.cs" />
+    <Compile Include="Win32\MidiDeviceType.cs" />
+    <Compile Include="Win32\MidiExtraFeatures.cs" />
+    <Compile Include="Win32\MIDIHDR.cs" />
+    <Compile Include="Win32\MIDIINCAPS.cs" />
+    <Compile Include="Win32\MidiInMessage.cs" />
+    <Compile Include="Win32\MidiOpenFlags.cs" />
+    <Compile Include="Win32\MIDIOUTCAPS.cs" />
+    <Compile Include="Win32\MidiOutMessage.cs" />
+    <Compile Include="Win32\MMRESULT.cs" />
+    <Compile Include="Win32\Win32API.cs" />
+    <Compile Include="Instruments\Scale.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.MD" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MidiFiles\bach_cpe_anh122_march_in_d.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_cpe_anh124_march_in_g.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_cpe_solfeggio_in_cm.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_anh126_musette_in_d.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_anh132_minuet_in_dm.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0147_10_jesu_joy_of_mans_desiring_1.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0147_10_jesu_joy_of_mans_desiring_2.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0244_o_haupt_voll.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0578_fugue_in_gm_little_fugue.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0645a_choral_prelude_in_eb.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0775_two-part_invention_04.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0779_two-part_invention_08.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0780_two-part_invention_09.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0816_french_suite_no5_in_g_4_gavotte.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0825_keyboard_partita_no1_in_bb_2_allemande.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0825_keyboard_partita_no1_in_bb_3_corrente_1.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0825_keyboard_partita_no1_in_bb_3_corrente_2.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0826_keyboard_partita_no2_in_cm_1_sinfonia.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0845_gigue_in_fm.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0846_1_wtc1_no01_prelude_in_c.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0847_1_wtc1_no02_prelude_in_cm.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0847_2_wtc1_no02_fugue_in_cm.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0849_1_wtc1_no04_prelude_in_cqm.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0893_1_wtc2_no24_prelude_in_bm.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0900_1_prelude_in_em.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0926_prelude_no3_in_dm.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0971_italian_concerto_2_andante.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0988_goldberg_variations_00_aria.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0995_lute_suite_in_gm_1_praludium.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0995_lute_suite_in_gm_2_allemande.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0995_lute_suite_in_gm_3_courante.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0995_lute_suite_in_gm_5b_gavotte_2_en_rondeaux.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0996_lute_suite_in_em_3_courante.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0996_lute_suite_in_em_5_bourree.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0997_lute_suite_in_cm_1_prelude.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0997_lute_suite_in_cm_2_fugue.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0997_lute_suite_in_cm_3_sarabande.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0997_lute_suite_in_cm_4_gigue.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0997_lute_suite_in_cm_5_double.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv0999_prelude_in_cm_for_lute.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1001_violin_sonata_no1_in_gm_2_fuga.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1001_violin_sonata_no1_in_gm_4_presto.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1002_violin_partita_1_in_bm_5_sarabande.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1003_violin_sonata_no2_in_am_1_grave.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1003_violin_sonata_no2_in_am_3_andante.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1004_violin_partita_no2_in_dm_1_allemande.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1004_violin_partita_no2_in_dm_2_corrente.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1004_violin_partita_no2_in_dm_3_sarabande.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1005_violin_sonata_no3_in_c_1_adagio.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1005_violin_sonata_no3_in_c_2_fuga.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1005_violin_sonata_no3_in_c_3_largo.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1005_violin_sonata_no3_in_c_4_allegro_assai.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1006a_lute_suite_no4_in_e_1_preludio.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1006a_lute_suite_no4_in_e_3_gavotte_en_rondeau.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1006a_lute_suite_no4_in_e_4_menuet1.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1006a_lute_suite_no4_in_e_4_menuet2.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1006_violin_partita_3_in_e_2_loure.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1006_violin_partita_3_in_e_5_bourree.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1006_violin_partita_3_in_e_6_giga.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1007_cello_suite_no1_in_g_1_prelude.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1008_cello_suite_no2_in_dm_1_prelude.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1008_cello_suite_no2_in_dm_2_allemande.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1012_cello_suite_no6_in_d_5_gavottes1_2.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1033_flute_sonata_in_c_1_andante_presto.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1034_flute_sonata_in_em_1_adagio_ma_non_tanto.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1034_flute_sonata_in_em_2_allegro.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1034_flute_sonata_in_em_3_andante.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1034_flute_sonata_in_em_4_allegro.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1042_violin_concerto_in_e_1_allegro.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1047_brandenburg_concerto_2_in_f_1_%28allegro%29.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1056_harpsichod_concerto_in_fm_2_largo_%28arioso%29.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1067_orchestral_suite_2_in_bm_5_polonaise_double.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1067_orchestral_suite_2_in_bm_6_menuet.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\bach_js_bwv1068_suite_no3_in_d_2_air.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\Beethoven-Moonlight-Sonata.mid">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\Bohemian-Rhapsody-1.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\Feel_good_4beatsBass.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\GORILLAZ_-_Feel_Good_Inc.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\moonlight_16.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\moonlight_sonata.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\peter_gunn_16beats.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MidiFiles\something.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

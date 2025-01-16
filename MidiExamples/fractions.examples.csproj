@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1A5F8ED9-D70D-4FF3-8153-72D9859FA89E}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MidiExamples</RootNamespace>
+    <AssemblyName>MidiExamples</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\MidiExamples.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Arpeggiator.cs" />
+    <Compile Include="bach_js_bwv0999_prelude_in_cm_for_lute_3.cs" />
+    <Compile Include="bach_js_bwv1006a_lute_suite_no4_in_e_1_preludio.cs" />
+    <Compile Include="bach_js_bwv1056_harpsichod_concerto_in_fm_2_largo_arioso_2.cs" />
+    <Compile Include="bach_js_bwv1067_orchestral_suite_2_in_bm_5_polonaise_double_2.cs" />
+    <Compile Include="bach_js_bwv1067_orchestral_suite_2_in_bm_5_polonaise_double.cs" />
+    <Compile Include="bach_js_bwv0775_two_part_invention_04.cs" />
+    <Compile Include="bach_js_bwv1056_harpsichod_concerto_in_fm_2_largo_arioso.cs" />
+    <Compile Include="bach_js_bwv0578_fugue_in_gm_little_fugue_2.cs" />
+    <Compile Include="Drummer.cs" />
+    <Compile Include="Ease.cs" />
+    <Compile Include="bach_js_bwv0999_prelude_in_cm_for_lute.cs" />
+    <Compile Include="BasicExample.cs" />
+    <Compile Include="bach_js_bwv0999_prelude_in_cm_for_lute_2.cs" />
+    <Compile Include="bach_js_bwv1006a_lute_suite_no4_in_e_1_preludio_2.cs" />
+    <Compile Include="FractionsExample7.cs" />
+    <Compile Include="FractionsExample6.cs" />
+    <Compile Include="FractionsExample5.cs" />
+    <Compile Include="FractionsExample4.cs" />
+    <Compile Include="FractionsExample3.cs" />
+    <Compile Include="FractionsExample2.cs" />
+    <Compile Include="FractionsExample.cs" />
+    <Compile Include="FileReaderExample2.cs" />
+    <Compile Include="MetronomeExample.cs" />
+    <Compile Include="FileReaderExample.cs" />
+    <Compile Include="DeviceInfoExample.cs" />
+    <Compile Include="Explainer.cs" />
+    <Compile Include="bach_cpe_solfeggio_in_cm.cs" />
+    <Compile Include="bach_js_bwv0578_fugue_in_gm_little_fugue.cs" />
+    <Compile Include="bach_js_bwv0996_lute_suite_in_em_3_courante.cs" />
+    <Compile Include="NoClue.cs" />
+    <Compile Include="R7c3_b_2.cs" />
+    <Compile Include="y2023m12d17.cs" />
+    <Compile Include="R7c3_c.cs" />
+    <Compile Include="R7c3_b.cs" />
+    <Compile Include="R7c4.cs" />
+    <Compile Include="R7c3.cs" />
+    <Compile Include="SingleThreadedOutputExample.cs" />
+    <Compile Include="SimpleDrumMachineExample.cs" />
+    <Compile Include="PrintNotesAndChordsExample.cs" />
+    <Compile Include="ArpeggiatorExample.cs" />
+    <Compile Include="ExampleBase.cs" />
+    <Compile Include="ExampleUtil.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Summarizer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Helpers\fractions.extensions.csproj">
+      <Project>{abc912aa-1490-45b7-993a-db595e66eb10}</Project>
+      <Name>fractions.extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Midi\fractions.csproj">
+      <Project>{F60D8B7B-2D2E-4B94-A736-3783FFE1A25C}</Project>
+      <Name>fractions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
+    <None Include="app.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
