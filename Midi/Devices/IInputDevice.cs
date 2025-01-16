@@ -1,6 +1,6 @@
 using System;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     ///     A MIDI input device.

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>Base class for all MIDI messages</summary>
     [DebuggerDisplay("Time = {Time}")]

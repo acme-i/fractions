@@ -1,6 +1,6 @@
 using System;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     ///     Unmanaged helper class

@@ -25,7 +25,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace midieval.examples
+namespace fractions.examples
 {
     /// <summary>Simple drum machine</summary>
     /// <remarks>

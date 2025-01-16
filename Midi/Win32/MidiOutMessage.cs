@@ -1,6 +1,6 @@
 // ReSharper disable InconsistentNaming
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     ///     "Midi Out Messages", passed to wMsg param of MidiOutProc.

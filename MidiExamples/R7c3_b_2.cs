@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace midieval.examples
+namespace fractions.examples
 {
     /// <summary>Demonstrates simple single-threaded output</summary>
     /// <remarks>
@@ -34,7 +34,7 @@ namespace midieval.examples
             }
         }
 
-        static IOutputDevice OutputDevice = midieval.OutputDevice.InstalledDevices.FirstOrDefault();
+        static IOutputDevice OutputDevice = fractions.OutputDevice.InstalledDevices.FirstOrDefault();
         static int BPM = 250;
         static Clock Clock = new Clock(BPM);
 

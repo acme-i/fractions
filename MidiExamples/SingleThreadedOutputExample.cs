@@ -25,7 +25,7 @@
 using System;
 using System.Threading;
 
-namespace midieval.examples
+namespace fractions.examples
 {
     /// <summary>Demonstrates simple single-threaded output</summary>
     /// <remarks>
@@ -47,7 +47,7 @@ namespace midieval.examples
         public override void Run()
         {
             // Prompt user to choose an output device (or if there is only one, use that one).
-            var outputDevice = ExampleUtil.ChooseOutputDeviceFromConsole(); //midieval.OutputDevice.InstalledDevices.FirstOrDefault();
+            var outputDevice = ExampleUtil.ChooseOutputDeviceFromConsole(); //fractions.OutputDevice.InstalledDevices.FirstOrDefault();
             if (outputDevice == null)
             {
                 Console.WriteLine("No output devices, so can't run this example.");

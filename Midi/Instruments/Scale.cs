@@ -24,7 +24,7 @@
 
 using System;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     /// A scale based on a pattern and a tonic note.

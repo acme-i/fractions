@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     ///     Description of a scale's pattern as it ascends through an octave.

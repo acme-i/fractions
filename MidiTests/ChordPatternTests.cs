@@ -25,7 +25,7 @@
 using System;
 using NUnit.Framework;
 
-namespace midieval.tests
+namespace fractions.tests
 {
     /// <summary>Unit tests for the ChordPattern class</summary>
     public class ChordPatternTests

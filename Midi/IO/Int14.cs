@@ -1,4 +1,4 @@
-namespace midieval
+namespace fractions
 {
     internal struct Int14
     {

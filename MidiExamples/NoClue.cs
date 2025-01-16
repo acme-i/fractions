@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading;
 
-namespace midieval.examples
+namespace fractions.examples
 {
     /// <summary>Demonstrates simple single-threaded output</summary>
     /// <remarks>

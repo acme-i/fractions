@@ -24,7 +24,7 @@
 
 using System;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     ///     A letter and accidental, which together form an octave-independent note.

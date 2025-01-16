@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace midieval.tests
+namespace fractions.tests
 {
     /// <summary>Unit tests for the Channel enum</summary>
     public class EnumerateTests

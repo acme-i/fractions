@@ -27,7 +27,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace midieval.examples
+namespace fractions.examples
 {
     internal class Program
     {

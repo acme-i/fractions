@@ -22,7 +22,7 @@
 using System;
 using System.Diagnostics;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>A Note On message which schedules its own Note Off message when played</summary>
     [DebuggerDisplay("{DebuggerDisplay,nq}")]

@@ -23,7 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>A time-sorted queue of MIDI messages</summary>
     /// Messages can be added in any order, and can be popped off in timestamp order.

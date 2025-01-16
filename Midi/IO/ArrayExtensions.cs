@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace midieval
+namespace fractions
 {
     public static class ArrayExtensions
     {

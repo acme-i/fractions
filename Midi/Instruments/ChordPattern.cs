@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     ///     Description of a chord's pattern starting at the root note.

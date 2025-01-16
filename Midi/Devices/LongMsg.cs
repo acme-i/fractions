@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     ///     Utility functions for encoding and decoding short messages.

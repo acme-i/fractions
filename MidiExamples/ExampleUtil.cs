@@ -26,7 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace midieval.examples
+namespace fractions.examples
 {
     /// <summary>Utility functions for MIDI examples</summary>
     public class ExampleUtil

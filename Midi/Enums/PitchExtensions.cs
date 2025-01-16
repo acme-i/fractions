@@ -24,7 +24,7 @@
 
 using System;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>Extension methods for the Pitch enum</summary>
     public static class PitchExtensions

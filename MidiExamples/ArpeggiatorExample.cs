@@ -24,7 +24,7 @@
 
 using System;
 
-namespace midieval.examples
+namespace fractions.examples
 {
     /// <summary>Simple arpeggiator</summary>
     /// <remarks>

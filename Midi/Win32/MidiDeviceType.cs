@@ -1,6 +1,6 @@
 // ReSharper disable InconsistentNaming
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     ///     Values for wTechnology field of MIDIOUTCAPS structure.

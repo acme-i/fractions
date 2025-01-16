@@ -25,7 +25,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     ///     A clock for scheduling MIDI messages in a rate-adjustable, pause-able timeline.

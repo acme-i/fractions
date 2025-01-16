@@ -25,7 +25,7 @@
 using System;
 using NUnit.Framework;
 
-namespace midieval.tests
+namespace fractions.tests
 {
     /// <summary>Unit tests for the Control enum</summary>
     public class ControlTests

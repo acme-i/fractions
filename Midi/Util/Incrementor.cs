@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     /// A way of oscilating between A and Z

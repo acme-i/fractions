@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>Base class for messages relevant to a specific device</summary>
     public abstract class DeviceMessage : Message

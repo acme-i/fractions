@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>Base class for messages relevant to a specific note</summary>
     [DebuggerDisplay("Pitch = {Pitch}, Velocity = {Velocity}, Channel = {Channel}, Time = {Time}, Pan = {Pan}")]

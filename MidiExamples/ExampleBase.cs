@@ -22,7 +22,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-namespace midieval.examples
+namespace fractions.examples
 {
     /// <summary>Base class for examples that can be run by the MidiExamples program</summary>
     public abstract class ExampleBase

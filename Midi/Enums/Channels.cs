@@ -26,7 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace midieval
+namespace fractions
 {
     public static class Channels
     {

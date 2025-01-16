@@ -27,7 +27,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace midieval
+namespace fractions
 {
     public static class Instruments
     {

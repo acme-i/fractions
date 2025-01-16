@@ -24,7 +24,7 @@
 
 using System;
 
-namespace midieval.examples
+namespace fractions.examples
 {
     /// <summary>Prints information about MIDI input and output devices</summary>
     internal class DeviceInfoExample : ExampleBase

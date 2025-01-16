@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>Program Change message</summary>
     public class ProgramChangeMessage : ChannelMessage, ICloneable

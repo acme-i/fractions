@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 
-namespace midieval
+namespace fractions
 {
     /// <summary>
     /// Extensions on ReadOnlyCollection

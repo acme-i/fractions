@@ -24,7 +24,7 @@
 
 using NUnit.Framework;
 
-namespace midieval.tests
+namespace fractions.tests
 {
     /// <summary>Unit tests for the Pitch enum</summary>
     public class PitchTests
