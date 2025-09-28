@@ -36,7 +36,7 @@ namespace fractions
 
         #region Methods
 
-        public static Channel Clamp(this Control value)
+        public static Channel Clamp(this Channel value)
         {
             return (Channel)Math.Min(Math.Max((int)value, (int)Channel.Channel1), (int)Channel.Channel16);
         }

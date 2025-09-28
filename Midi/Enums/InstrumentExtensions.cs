@@ -203,12 +203,16 @@ namespace fractions
 
         #region Methods
 
+        public static Instrument Clamp(this Instrument value)
+        {
+            return (Instrument)Math.Min(Math.Max((int)value, (int)Instrument.AcousticGrandPiano), (int)Instrument.Gunshot);
+        }
+
         /// <summary>
         ///     Returns true if the specified instrument is valid.
         /// </summary>
         /// <param name="instrument">The instrument to test.</param>
-        public static bool IsValid(this Instrument instrument) =>
-            (int)instrument >= 0 && (int)instrument < 128;
+        public static bool IsValid(this Instrument instrument) => instrument >= Instrument.AcousticGrandPiano && instrument <= Instrument.Gunshot;
 
         /// <summary>
         ///     Returns the human-readable name of a MIDI instrument.

@@ -460,10 +460,6 @@ namespace fractions
         Applause = 126,
 
         /// <summary>General MIDI instrument 127 ("Gunshot")</summary>
-        Gunshot = 127,
-
-        MinInstrument = 0,
-
-        MaxInstrument = 127
+        Gunshot = 127
     };
 }
