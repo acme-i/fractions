@@ -118,7 +118,7 @@ namespace fractions
             var uninvertedSequence = new Note[pattern.Ascent.Length];
             Build(root, pattern, _positionInOctaveToContains, uninvertedSequence);
             NoteSequence = new Note[pattern.Ascent.Length];
-            RotateArrayLeft(uninvertedSequence, NoteSequence, inversion);
+            uninvertedSequence.RotateArrayLeft(NoteSequence, inversion);
         }
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace fractions
                     throw new ArgumentException("invalid bass note for inversion.");
                 }
             }
-            RotateArrayLeft(uninvertedSequence, NoteSequence, Inversion);
+            uninvertedSequence.RotateArrayLeft(NoteSequence, Inversion);
         }
 
         /// <summary>
@@ -253,7 +253,7 @@ namespace fractions
                 for (var inversion = 0; inversion < semitoneSequence.Length; ++inversion)
                 {
                     var invertedSequence = new int[semitoneSequence.Length];
-                    RotateArrayLeft(semitoneSequence, invertedSequence, inversion);
+                    semitoneSequence.RotateArrayLeft(invertedSequence, inversion);
                     if (inversion != 0)
                     {
                         for (var i = 0; i < semitoneSequence.Length - inversion; ++i)

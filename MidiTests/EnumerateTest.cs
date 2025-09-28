@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 
 namespace fractions.tests
 {
@@ -26,5 +27,24 @@ namespace fractions.tests
         }
 
         #endregion Methods
+
+        [Test]
+        public void StartsAtZero()
+        {
+
+        var maxLeft = 10;
+        var maxRight = 117;
+
+        var pSteps = Interpolator.Interpolate(maxLeft, maxRight, 4 * 12, 0);
+            var pSteps2 = Interpolator.Interpolate(maxLeft, maxRight, 4 * 6, 0);
+
+            var pSteppers = new Enumerate<List<float>>
+            (
+                new[] { pSteps, pSteps2 },
+                IncrementMethod.MinMax
+            );
+
+            Assert.AreEqual(0, pSteppers.Incrementor.Value);
+        }
     }
 }

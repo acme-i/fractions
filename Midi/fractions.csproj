@@ -76,6 +76,7 @@
     <Compile Include="Extensions\ArrayExtensions.cs" />
     <Compile Include="Extensions\RandomExtensions.cs" />
     <Compile Include="Extensions\ReadOnlyCollectionExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Interpolation\NoteInterpolator.cs" />
     <Compile Include="Interpolation\LinearInterpolator.cs" />
     <Compile Include="IO\MidiFile.cs" />
