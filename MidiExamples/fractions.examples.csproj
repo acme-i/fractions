@@ -102,10 +102,6 @@
     <Compile Include="Summarizer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Helpers\fractions.extensions.csproj">
-      <Project>{abc912aa-1490-45b7-993a-db595e66eb10}</Project>
-      <Name>fractions.extensions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Midi\fractions.csproj">
       <Project>{F60D8B7B-2D2E-4B94-A736-3783FFE1A25C}</Project>
       <Name>fractions</Name>
