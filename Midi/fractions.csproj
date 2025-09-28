@@ -83,6 +83,7 @@
     <Compile Include="Devices\IInputDevice.cs" />
     <Compile Include="Devices\IOutputDevice.cs" />
     <Compile Include="Devices\LongMsg.cs" />
+    <Compile Include="Messages\NoteMessageListExtensions.cs" />
     <Compile Include="Messages\NoteOperator.cs" />
     <Compile Include="Util\Enumerate.cs" />
     <Compile Include="Util\EnumerateExtensions.cs" />
