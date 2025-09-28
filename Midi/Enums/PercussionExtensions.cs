@@ -88,10 +88,14 @@ namespace fractions
 
         #region Methods
 
+        public static Percussion Clamp(this Percussion value)
+        {
+            return (Percussion)Math.Min(Math.Max((int)value, (int)Percussion.BassDrum2), (int)Percussion.OpenTriangle);
+        }
+
         /// <summary>Returns true if the specified percussion is valid</summary>
         /// <param name="percussion"> The percussion to test</param>
-        public static bool IsValid(this Percussion percussion) =>
-            (int)percussion >= 35 && (int)percussion <= 81;
+        public static bool IsValid(this Percussion percussion) => percussion >= Percussion.BassDrum2 && percussion <= Percussion.OpenTriangle;
 
         /// <summary>Returns the human-readable name of a MIDI percussion</summary>
         /// <param name="percussion"> The percussion</param>

@@ -100,6 +100,10 @@ namespace fractions
         AllControllersOff = 121,
 
         /// <summary>General MIDI Control--See MIDI spec for details</summary>
-        AllNotesOff = 123
+        AllNotesOff = 123,
+
+        MaxControl = 127,
+
+        MinControl = 0
     }
 }
