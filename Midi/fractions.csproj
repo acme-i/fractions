@@ -73,11 +73,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\ArrayExtensions.cs" />
     <Compile Include="Extensions\RandomExtensions.cs" />
     <Compile Include="Extensions\ReadOnlyCollectionExtensions.cs" />
     <Compile Include="Interpolation\NoteInterpolator.cs" />
     <Compile Include="Interpolation\LinearInterpolator.cs" />
-    <Compile Include="IO\ArrayExtensions.cs" />
     <Compile Include="IO\MidiFile.cs" />
     <Compile Include="Devices\DeviceManager.cs" />
     <Compile Include="Devices\IInputDevice.cs" />

@@ -1,9 +1,41 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace fractions
 {
     public static class ArrayExtensions
     {
+        /// <summary>
+        ///     Fills dest with a rotated version of source.
+        /// </summary>
+        /// <param name="source">The source array.</param>
+        /// <param name="dest">
+        ///     The dest array, which must have the same length and underlying type
+        ///     as source.
+        /// </param>
+        /// <param name="rotation">The number of elements to rotate to the left by.</param>
+        public static void RotateArrayLeft(this Array source, Array dest, int rotation)
+        {
+            if (source.Length != dest.Length)
+            {
+                throw new ArgumentException("source and dest lengths differ.");
+            }
+            if (rotation == 0)
+            {
+                source.CopyTo(dest, 0);
+            }
+            else
+            {
+                for (var i = 0; i < source.Length; ++i)
+                {
+                    dest.SetValue(source.GetValue((rotation + i) % source.Length), i);
+                }
+            }
+        }
+
         public static T[] ShuffleWith<T>(this T[] values, Random rand)
         {
             if (values?.Length > 1)
