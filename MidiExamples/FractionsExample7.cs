@@ -36,9 +36,9 @@ namespace fractions.examples
         private readonly Dictionary<Channel, Enumerate<float>> EchoReverbMap2 = new Dictionary<Channel, Enumerate<float>>();
 
         private IOutputDevice OutputDevice = fractions.OutputDevice.InstalledDevices.FirstOrDefault();
-        private Clock Clock = new Clock(32);
+        private Clock Clock = new Clock(8);
 
-        private readonly Enumerate<Channel> chans = new Enumerate<Channel>(
+        private readonly Enumerate<Channel> channels = new Enumerate<Channel>(
             new[] {
                 Channel.Channel1,
                 Channel.Channel2,
@@ -46,8 +46,7 @@ namespace fractions.examples
                 Channel.Channel4,
             }, IncrementMethod.MinMax);
 
-
-        private readonly Enumerate<Channel> echoChans = new Enumerate<Channel>(
+        private readonly Enumerate<Channel> echoChannels = new Enumerate<Channel>(
             new[] {
                 Channel.Channel5,
                 Channel.Channel6,
@@ -55,7 +54,7 @@ namespace fractions.examples
                 Channel.Channel8,
             }, IncrementMethod.MinMax);
 
-        private readonly Enumerate<Channel> chans2 = new Enumerate<Channel>(
+        private readonly Enumerate<Channel> secondChannels = new Enumerate<Channel>(
             new[] {
                 Channel.Channel9,
                 Channel.Channel11,
@@ -63,8 +62,7 @@ namespace fractions.examples
                 Channel.Channel13,
             }, IncrementMethod.MinMax);
 
-
-        private readonly Enumerate<Channel> echoChans2 = new Enumerate<Channel>(
+        private readonly Enumerate<Channel> secondEchoChannels = new Enumerate<Channel>(
             new[] {
                 Channel.Channel14,
                 Channel.Channel15,
@@ -77,19 +75,19 @@ namespace fractions.examples
                 Instrument.SlapBass1,
             };
 
-        private Enumerate<Instrument> mainInstr = new Enumerate<Instrument>(
+        private Enumerate<Instrument> mainInstruments = new Enumerate<Instrument>(
             instruments_.Reverse<Instrument>(),
             IncrementMethod.Cyclic);
 
-        private Enumerate<Instrument> secondInstr = new Enumerate<Instrument>(
+        private Enumerate<Instrument> secondInstruments = new Enumerate<Instrument>(
             instruments_,
             IncrementMethod.Cyclic);
 
-        private Enumerate<Instrument> echoMainInstr = new Enumerate<Instrument>(
+        private Enumerate<Instrument> echoMainInstruments = new Enumerate<Instrument>(
             instruments_.Reverse<Instrument>(),
             IncrementMethod.Cyclic);
 
-        private Enumerate<Instrument> echoSecondInstr = new Enumerate<Instrument>(
+        private Enumerate<Instrument> echoSecondInstruments = new Enumerate<Instrument>(
             instruments_,
             IncrementMethod.Cyclic);
 
@@ -98,8 +96,8 @@ namespace fractions.examples
         static float div = file.TicksPerQuarterNote + 0f;
 
         static (IEnumerable<MidiEvent> OnEvents, IEnumerable<MidiEvent> OffEvents, IEnumerable<float> Durations) result = file.GetEventsAndDurations();
-        static Enumerate<MidiEvent> nots = new Enumerate<MidiEvent>(result.OnEvents, IncrementMethod.MinMax);
-        static Enumerate<float> durs = new Enumerate<float>(result.Durations, IncrementMethod.MinMax);
+        static Enumerate<MidiEvent> notes = new Enumerate<MidiEvent>(result.OnEvents, IncrementMethod.MinMax);
+        static Enumerate<float> durations = new Enumerate<float>(result.Durations, IncrementMethod.MinMax);
 
         public FractionsExample7() : base("FractionsExample7 - BWV0999: Prelude in Cm for Lute") { }
 
@@ -169,11 +167,8 @@ namespace fractions.examples
                 IncrementMethod.Cyclic
             );
 
-            Enumerate<float> fen;
             foreach (var x in channels)
             {
-                var s = (int)x;
-
                 for (int y = 0; y < 3; y++)
                 {
                     volMappers.Next().Add(x, new Enumerate<float>(vSteppers.Next(), IncrementMethod.Cyclic));
@@ -238,13 +233,13 @@ namespace fractions.examples
 
         private NoteOnOffMessage PlayAt(int i)
         {
-            var note = nots.Next();
-            var dur = durs.Next();
-            var chan = i % 2 == 0 ? chans : chans2;
+            var note = notes.Next();
+            var dur = durations.Next();
+            var chan = i % 2 == 0 ? channels : secondChannels;
             var ch = chan.Next();
             var pm = i % 2 == 0 ? PanMap[ch] : EchoPanMap[ch];
             var vol = i % 2 == 0 ? VolMap[ch] : EchoVolMap[ch];
-            var instr = i % 4 != 0 ? mainInstr : secondInstr;
+            var instr = i % 4 != 0 ? mainInstruments : secondInstruments;
             var rev = i % 2 == 0 ? ReverbMap[ch] : EchoReverbMap[ch];
 
             var nt = new NoteOnOffMessage(OutputDevice, ch, (Pitch)note.Note + 12, vol.Next(), note.Time / div, Clock, dur, pm.Next(), instr.Next(), rev.Next());
@@ -269,8 +264,8 @@ namespace fractions.examples
         {
             //Console.WriteLine($"Echo {i} {max}");
 
-            var notsClone = nots.Clone();
-            var durClone = durs.Clone();
+            var notsClone = notes.Clone();
+            var durClone = durations.Clone();
 
             for (int y = 0; y < i - 1; y++)
             {
@@ -291,11 +286,11 @@ namespace fractions.examples
 
             for (var j = i; j < max; j++)
             {
-                var chan = j % 2 == 0 ? echoChans : echoChans2;
+                var chan = j % 2 == 0 ? echoChannels : secondEchoChannels;
                 var ch = chan.Next();
                 var pm = i % 2 == 0 ? EchoPanMap[ch] : EchoPanMap2[ch];
                 var vol = i % 2 == 0 ? EchoVolMap[ch] : EchoVolMap2[ch];
-                var instr = i % 2 == 0 ? echoMainInstr : echoSecondInstr;
+                var instr = i % 2 == 0 ? echoMainInstruments : echoSecondInstruments;
                 var rev = i % 2 == 0 ? EchoReverbMap[ch] : EchoReverbMap2[ch];
 
                 Clock.Schedule(

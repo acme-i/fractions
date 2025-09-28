@@ -27,7 +27,7 @@ namespace fractions.examples
 
         private IOutputDevice outputDevice;
         private Clock clock;
-        private readonly int BPM = 70;
+        private readonly int BPM = 20;
 
         public override void Run()
         {
@@ -65,7 +65,7 @@ namespace fractions.examples
             Console.WriteLine(seed);
 
             var leftInstr = new Enumerate<Instrument>(new[] { Instrument.ElectricBassFinger, Instrument.AcousticBass, Instrument.SlapBass1 }, step: 1);
-            var rightInstr = new Enumerate<Instrument>(new[] { Instrument.Vibraphone, Instrument.Vibraphone }, step: 1);
+            var rightInstr = new Enumerate<Instrument>(new[] { Instrument.ElectricPiano1, Instrument.ElectricPiano1, Instrument.ElectricPiano1, Instrument.ElectricPiano2 }, step: 1);
 
             var file = new MidiFile(path);
             var div = (float)file.TicksPerQuarterNote;
@@ -94,8 +94,8 @@ namespace fractions.examples
 
             var stepsIn = new Enumerate<int>(new[] { 1, 2, 4, 8, 16 }, IncrementMethod.Cyclic);
             var stepsOut = new Enumerate<int>(new[] { 1, 2, 4, 8, 16 }.Reverse(), IncrementMethod.Cyclic);
-            var maxEchos1 = new Enumerate<int>(new[] { 1, 2, 4, 8, 16 }.Reverse(), IncrementMethod.Cyclic);
-            var maxEchos2 = new Enumerate<int>(new[] { 1, 3, 6, 9, 12 }.Reverse(), IncrementMethod.Cyclic);
+            var maxEchos1 = new Enumerate<int>(new[] { 8, 4, 16, 64, 32, 128 }.OrderBy(i => i).Reverse(), IncrementMethod.Cyclic);
+            var maxEchos2 = new Enumerate<int>(new[] { 9, 6, 48, 24, 12, 96 }.OrderBy(i => i).Reverse(), IncrementMethod.Cyclic);
 
             var pcurve = new List<double>();
             var vcurve = new List<double>();
@@ -110,11 +110,11 @@ namespace fractions.examples
                 vcurve.AddRange(vpoints.Select(e => e * DeviceBase.ControlChangeMax));
             }
 
-            var leftPan = new Enumerate<double>(pcurve, IncrementMethod.Cyclic);
-            var leftVol = new Enumerate<double>(vcurve, IncrementMethod.Cyclic);
+            var leftPan = new Enumerate<double>(pcurve, IncrementMethod.Cyclic, 14);
+            var leftVol = new Enumerate<double>(vcurve, IncrementMethod.Cyclic, 1);
 
-            var rightPan = new Enumerate<double>(pcurve, IncrementMethod.Cyclic, 1, pcurve.Count / 2);
-            var rightVol = new Enumerate<double>(vcurve, IncrementMethod.Cyclic, 1, vcurve.Count / 2);
+            var rightPan = new Enumerate<double>(pcurve.Reverse<double>(), IncrementMethod.Cyclic, 14);
+            var rightVol = new Enumerate<double>(vcurve.Reverse<double>(), IncrementMethod.Cyclic, 1);
 
             var notes = file.GetNotes(outputDevice, clock);
             var newNotes = new List<NoteOnOffMessage>(notes.Count * 32);
@@ -125,17 +125,22 @@ namespace fractions.examples
             var enumes2 = new Enumerate<float>(new[] { 16f, 32f, 64f, 128f }.Reverse(), IncrementMethod.Cyclic);
 
             var temp = new List<float> { 0.25f, 0.5f, 1f, 2f, 3f, 4f, 6f, 12f, 16f, 8f, 4f, 3f, 2f, 1f, 0.5f };
-            //temp.AddRange(temp.ToList().Select(t => t + 1 / 3f));
+            temp.AddRange(temp.ToList().Select(t => t + 1 / 3f));
             temp.AddRange(temp.ToList().Select(t => t + 1 / 4f));
-            //temp.AddRange(temp.ToList().Select(t => t + 1 / 6f));
+            temp.AddRange(temp.ToList().Select(t => t + 1 / 6f));
             temp.AddRange(temp.ToList().Select(t => t + 1 / 8f));
-            //temp.AddRange(temp.ToList().Select(t => t + 1 / 12f));
+            temp.AddRange(temp.ToList().Select(t => t + 1 / 12f));
             temp.AddRange(temp.ToList().Select(t => t + 1 / 16f));
+            temp.AddRange(temp.ToList().Select(t => t + 1 / 24f));
             temp.AddRange(temp.ToList().Select(t => t + 1 / 32f));
+            temp.AddRange(temp.ToList().Select(t => t + 1 / 48f));
             temp.AddRange(temp.ToList().Select(t => t + 1 / 64f));
+            temp.AddRange(temp.ToList().Select(t => t + 1 / 96f));
+            temp.AddRange(temp.ToList().Select(t => t + 1 / 128f));
 
             //temp = temp.Distinct().ToList();
             temp.Sort();
+            temp = temp.Distinct().ToList();
 
             var temp2 = temp.Reverse<float>().ToList();
 

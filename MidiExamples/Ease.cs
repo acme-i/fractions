@@ -113,7 +113,7 @@ namespace fractions.examples
                 //{
                 //    var v = ef(r.Velocity, rn.Velocity * 0.25f, count++, remain.Count());
                 //    echo.Velocity = v;
-                //    echo.Channel = echoChans.Next();
+                //    echo.Channel = echoChannels.Next();
                 //    Clock.Schedule(echo);
                 //}
 

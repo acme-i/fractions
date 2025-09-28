@@ -16,11 +16,11 @@ namespace fractions
 
         public float Base { get; private set; }
 
-        public float Over(float denom)
+        public float Over(float denominator)
         {
-            if (denom == 0) throw new DivideByZeroException();
+            if (denominator == 0) throw new DivideByZeroException();
 
-            return Base / denom;
+            return Base / denominator;
         }
 
         public float Under(float numerator)
@@ -38,19 +38,19 @@ namespace fractions
         public float Sixth { get { return Over(6f); } }
         public float Seventh { get { return Over(7f); } }
         public float Eighth { get { return Over(8f); } }
-        public float Nineth { get { return Over(9f); } }
+        public float Ninth { get { return Over(9f); } }
         public float Tenth { get { return Over(10f); } }
-        public float Elleventh { get { return Over(11f); } }
-        public float Twelveth { get { return Over(12f); } }
+        public float Eleventh { get { return Over(11f); } }
+        public float Twelfth { get { return Over(12f); } }
         public float Thirteenth { get { return Over(13f); } }
         public float Fourteenth { get { return Over(14f); } }
         public float Fifteenth { get { return Over(15f); } }
         public float Sixteenth { get { return Over(16f); } }
         public float Seventeenth { get { return Over(17f); } }
-        public float Eigthteenth { get { return Over(18f); } }
+        public float Eighteenth { get { return Over(18f); } }
         public float Nineteenth { get { return Over(19f); } }
-        public float Twenteenth { get { return Over(20f); } }
-        public float TwentyOneth { get { return Over(21f); } }
+        public float Twentieth { get { return Over(20f); } }
+        public float TwentyFirst { get { return Over(21f); } }
         public float TwentySecond { get { return Over(22f); } }
         public float TwentyThird { get { return Over(23f); } }
         public float TwentyFourth { get { return Over(24f); } }
@@ -58,9 +58,9 @@ namespace fractions
         public float TwentySixth { get { return Over(26f); } }
         public float TwentySeventh { get { return Over(27f); } }
         public float TwentyEighth { get { return Over(28f); } }
-        public float TwentyNineth { get { return Over(29f); } }
-        public float Thirtyth { get { return Over(30f); } }
-        public float ThirtyOneth { get { return Over(31f); } }
+        public float TwentyNinth { get { return Over(29f); } }
+        public float Thirtieth { get { return Over(30f); } }
+        public float ThirtyFirst { get { return Over(31f); } }
         public float ThirtySecond { get { return Over(32f); } }
         public float ThirtyThird { get { return Over(33f); } }
         public float ThirtyFourth { get { return Over(34f); } }
@@ -68,29 +68,29 @@ namespace fractions
         public float ThirtySixth { get { return Over(36f); } }
         public float ThirtySeventh { get { return Over(37f); } }
         public float ThirtyEighth { get { return Over(38f); } }
-        public float ThirtyNineth { get { return Over(39f); } }
-        public float Fourtyth { get { return Over(40f); } }
-        public float FourtyOneth { get { return Over(41f); } }
-        public float FourtySecond { get { return Over(42f); } }
-        public float FourtyThird { get { return Over(43f); } }
-        public float FourtyFourth { get { return Over(44f); } }
-        public float FourtyFifth { get { return Over(45f); } }
-        public float FourtySixth { get { return Over(46f); } }
-        public float FourtySeventh { get { return Over(47f); } }
-        public float FourtyEighth { get { return Over(48f); } }
-        public float FourtyNineth { get { return Over(49f); } }
-        public float Fiftyth { get { return Over(50f); } }
-        public float FiftyOneth { get { return Over(51f); } }
+        public float ThirtyNinth { get { return Over(39f); } }
+        public float Fortieth { get { return Over(40f); } }
+        public float FortyFirst { get { return Over(41f); } }
+        public float FortySecond { get { return Over(42f); } }
+        public float FortyThird { get { return Over(43f); } }
+        public float FortyFourth { get { return Over(44f); } }
+        public float FortyFifth { get { return Over(45f); } }
+        public float FortySixth { get { return Over(46f); } }
+        public float FortySeventh { get { return Over(47f); } }
+        public float FortyEighth { get { return Over(48f); } }
+        public float FortyNinth { get { return Over(49f); } }
+        public float Fiftieth { get { return Over(50f); } }
+        public float FiftyFirst { get { return Over(51f); } }
         public float FiftySecond { get { return Over(52f); } }
         public float FiftyThird { get { return Over(53f); } }
         public float FiftyFourth { get { return Over(54f); } }
         public float FiftyFifth { get { return Over(55f); } }
         public float FiftySixth { get { return Over(56f); } }
         public float FiftySeventh { get { return Over(57f); } }
-        public float FiftyEigth { get { return Over(58f); } }
-        public float FiftyNineth { get { return Over(59f); } }
-        public float Sixtyth { get { return Over(60f); } }
-        public float SixtyOneth { get { return Over(61f); } }
+        public float FiftyEighth { get { return Over(58f); } }
+        public float FiftyNinth { get { return Over(59f); } }
+        public float Sixtieth { get { return Over(60f); } }
+        public float SixtyFirst { get { return Over(61f); } }
         public float SixtySecond { get { return Over(62f); } }
         public float SixtyThird { get { return Over(63f); } }
         public float SixtyFourth { get { return Over(64f); } }
@@ -123,8 +123,8 @@ namespace fractions
             {
                 return new List<float>
                 {
-                    Identity, Half, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Nineth,
-                    Tenth, Elleventh, Twelveth, Thirteenth, Fourteenth, Fifteenth, Sixteenth
+                    Identity, Half, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth,
+                    Tenth, Eleventh, Twelfth, Thirteenth, Fourteenth, Fifteenth, Sixteenth
                 };
             }
         }
@@ -135,10 +135,10 @@ namespace fractions
             {
                 return new List<float>
                 {
-                    Identity, Half, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Nineth,
-                    Tenth, Elleventh, Twelveth, Thirteenth, Fourteenth, Fifteenth, Sixteenth, Seventeenth, Eigthteenth, Nineteenth,
-                    Twenteenth, TwentyOneth, TwentySecond, TwentyThird, TwentyFourth, TwentyFifth, TwentySixth, TwentySeventh, TwentyEighth, TwentyNineth,
-                    Thirtyth, ThirtyOneth, ThirtySecond
+                    Identity, Half, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth,
+                    Tenth, Eleventh, Twelfth, Thirteenth, Fourteenth, Fifteenth, Sixteenth, Seventeenth, Eighteenth, Nineteenth,
+                    Twentieth, TwentyFirst, TwentySecond, TwentyThird, TwentyFourth, TwentyFifth, TwentySixth, TwentySeventh, TwentyEighth, TwentyNinth,
+                    Thirtieth, ThirtyFirst, ThirtySecond
                 };
             }
         }
@@ -149,13 +149,13 @@ namespace fractions
             {
                 return new List<float>
                 {
-                    Identity, Half, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Nineth,
-                    Tenth, Elleventh, Twelveth, Thirteenth, Fourteenth, Fifteenth, Sixteenth, Seventeenth, Eigthteenth, Nineteenth,
-                    Twenteenth, TwentyOneth, TwentySecond, TwentyThird, TwentyFourth, TwentyFifth, TwentySixth, TwentySeventh, TwentyEighth, TwentyNineth,
-                    Thirtyth, ThirtyOneth, ThirtySecond, ThirtyThird, ThirtyFourth, ThirtyFifth, ThirtySixth, ThirtySeventh, ThirtyEighth, ThirtyNineth,
-                    Fourtyth, FourtyOneth, FourtySecond, FourtyThird, FourtyFourth, FourtyFifth, FourtySixth, FourtySeventh, FourtyEighth, FourtyNineth,
-                    Fiftyth, FiftyOneth, FiftySecond, FiftyThird, FiftyFourth, FiftyFifth, FiftySixth, FiftySeventh, FiftyEigth, FiftyNineth,
-                    Sixtyth, SixtyOneth, SixtySecond, SixtyThird, SixtyFourth
+                    Identity, Half, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth,
+                    Tenth, Eleventh, Twelfth, Thirteenth, Fourteenth, Fifteenth, Sixteenth, Seventeenth, Eighteenth, Nineteenth,
+                    Twentieth, TwentyFirst, TwentySecond, TwentyThird, TwentyFourth, TwentyFifth, TwentySixth, TwentySeventh, TwentyEighth, TwentyNinth,
+                    Thirtieth, ThirtyFirst, ThirtySecond, ThirtyThird, ThirtyFourth, ThirtyFifth, ThirtySixth, ThirtySeventh, ThirtyEighth, ThirtyNinth,
+                    Fortieth, FortyFirst, FortySecond, FortyThird, FortyFourth, FortyFifth, FortySixth, FortySeventh, FortyEighth, FortyNinth,
+                    Fiftieth, FiftyFirst, FiftySecond, FiftyThird, FiftyFourth, FiftyFifth, FiftySixth, FiftySeventh, FiftyEighth, FiftyNinth,
+                    Sixtieth, SixtyFirst, SixtySecond, SixtyThird, SixtyFourth
                 };
             }
         }

@@ -116,7 +116,6 @@ namespace fractions.examples
                         leftPan.Clone(), leftVol.Clone(),
                         startTimes[i], multipliers[i]
                     );
-
                 }
 
                 if (i % 4 == 0)
