@@ -9,30 +9,35 @@ namespace fractions
     {
         internal IList<T> collection;
 
-        public Enumerate(Enumerate<T> source, int newStepValue)
+        public Enumerate(Enumerate<T> source, int newStepValue, string name = null)
         {
             if (source is null) throw new ArgumentNullException(nameof(source));
 
             this.collection = source.ToList();
             this.Incrementor = new Incrementor(source.Incrementor, newStepValue);
+            this.Name = name ?? Guid.NewGuid().ToString();
         }
 
-        public Enumerate(IEnumerable<T> collection, IncrementMethod method = IncrementMethod.MinMax, int step = 1, int startIndex = 0)
+        public Enumerate(IEnumerable<T> collection, IncrementMethod method = IncrementMethod.MinMax, int step = 1, int startIndex = 0, string name = null)
         {
             AssertCollection(collection);
             AssertMethod(method);
 
             this.collection = collection.ToList();
             this.Incrementor = new Incrementor(Math.Max(0, startIndex), 0, this.collection.Count - 1, Math.Min(Math.Max(1, step), this.collection.Count - 1), method);
+            this.Name = name ?? Guid.NewGuid().ToString();
         }
 
-        public Enumerate(IEnumerable<T> collection, Incrementor source)
+        public Enumerate(IEnumerable<T> collection, Incrementor source, string name = null)
         {
             AssertCollection(collection);
 
             this.collection = collection.ToList();
             this.Incrementor = source.Clone();
+            this.Name = name ?? Guid.NewGuid().ToString();
         }
+        
+        public string Name { get; set; } = string.Empty;
 
         public Incrementor Incrementor { get; internal set; }
 

@@ -91,25 +91,23 @@ namespace fractions.examples
 
             var file = new MidiFile(path);
             var div = (float)file.TicksPerQuarterNote;
-            var chans = new Enumerate<Channel>(Channels.InstrumentChannels, step: 1);
+            var chans = Channels.InstrumentChannels.AsEnumeration();
 
-            var lChans = Channels.Range(Channel.Channel1, Channel.Channel9);
-            var rChans = Channels.Range(Channel.Channel11, Channel.Channel16);
-            var leftChans = new Enumerate<Channel>(lChans, step: 1);
-            var rightChans = new Enumerate<Channel>(rChans, step: 1);
+            var leftChans = Channels.Range(Channel.Channel1, Channel.Channel9).AsEnumeration();
+            var rightChans = Channels.Range(Channel.Channel11, Channel.Channel16).AsEnumeration();
 
             foreach (var x in Channels.InstrumentChannels)
                 outputDevice.SendProgramChange(x, instrList.GetNext());
 
-            foreach (var x in lChans)
+            foreach (var x in leftChans)
                 outputDevice.SendControlChange(x, Control.ReverbLevel, 0);
 
-            foreach (var x in rChans)
+            foreach (var x in rightChans)
                 outputDevice.SendControlChange(x, Control.ReverbLevel, 127);
 
             clock = new Clock(BPM);
 
-            var steps = new Enumerate<int>(new[] { 1, 2, 4, 8, 16 }, IncrementMethod.MinMax, 1);
+            var steps = new[] { 1, 2, 4, 8, 16 }.AsEnumeration();
             var pcurve = new List<double>();
             var vcurve = new List<double>();
             var eIn = Interpolator.EaseInFunctions();
@@ -123,17 +121,17 @@ namespace fractions.examples
                 pcurve.AddRange(ppoints.Select(e => e * 127));
                 vcurve.AddRange(vpoints.Select(e => e * 120));
             }
-            var leftPan = new Enumerate<double>(pcurve, IncrementMethod.Cyclic, 6);
-            var leftVol = new Enumerate<double>(vcurve.Select(v => v * 0.75), IncrementMethod.Cyclic);
+            var leftPan = pcurve.AsCycle(step: 6);
+            var leftVol = vcurve.Select(v => v * 0.75).AsCycle();
 
-            var rightPan = new Enumerate<double>(pcurve.Select(p => 127 - p), IncrementMethod.Cyclic, 6);
-            var rightVol = new Enumerate<double>(vcurve, IncrementMethod.Cyclic);
-            var fractions = new Enumerate<float>(new[] { 1 / 2f, 1 / 3f, 1 / 4f, 1 / 8f, 1 / 12f, 1 / 16f, 1 / 24f, 1 / 32f }, IncrementMethod.MinMax, 3);
-            var nEchoes = new Enumerate<float>(new[] { 0f, 2f, 4f, 8f, 16f, 32f }, IncrementMethod.Cyclic);
+            var rightPan = pcurve.Select(p => 127 - p).AsCycle(step: 6);
+            var rightVol = leftVol.AsReversed();
+            var fractions = new[] { 1 / 2f, 1 / 3f, 1 / 4f, 1 / 8f, 1 / 12f, 1 / 16f, 1 / 24f, 1 / 32f }.AsEnumeration(step: 3);
+            var nEchoes = new[] { 0f, 2f, 4f, 8f, 16f, 32f }.AsCycle();
             var playEchoes = true;
 
             var notes = file.GetNotes(outputDevice, clock);
-            var noteE = new Enumerate<NoteOnOffMessage>(notes, step: 1);
+            var noteE = notes.AsEnumeration();
             for (var i = 0; i < notes.Count - 1; i++)
             {
                 var note = noteE.GetNext();
@@ -155,10 +153,10 @@ namespace fractions.examples
                 var nEcho = nEchoes.GetNext();
                 if (playEchoes && nEcho > 0 && note.Pitch > (Pitch.C4 - 3) && note.Time != next.Time)
                 {
-                    var leftC = new Enumerate<double>(leftPan, IncrementMethod.Cyclic, 2);
-                    var rightC = new Enumerate<double>(rightPan, IncrementMethod.Cyclic, 2);
-                    var leftV = new Enumerate<double>(leftVol, IncrementMethod.Cyclic, 2);
-                    var rightV = new Enumerate<double>(rightVol, IncrementMethod.Cyclic, 2);
+                    var leftC = leftPan.AsCycle(step: 2);
+                    var rightC = rightPan.AsCycle(step: 2);
+                    var leftV = leftVol.AsCycle(step: 2);
+                    var rightV = rightVol.AsCycle(step: 2);
                     var minDur = (next.Time - note.Time) / nEcho;
                     var j = i + 1;
                     var fract = fractions.GetNext();

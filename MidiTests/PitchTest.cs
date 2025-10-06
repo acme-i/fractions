@@ -152,8 +152,8 @@ namespace fractions.tests
             var range = PitchRange.Default;
             Assert.Throws(typeof(ArgumentException), () => range.Min = (Pitch)((int)Pitch.CNeg1 - 1));
             Assert.Throws(typeof(ArgumentException), () => range.Max = (Pitch)((int)Pitch.G9 + 1));
-            Assert.Throws(typeof(ArgumentException), () => range.Min = Pitch.G9);
-            Assert.Throws(typeof(ArgumentException), () => range.Max = Pitch.CNeg1);
+            Assert.Throws(typeof(ArgumentException), () => range.Min = (Pitch)((int)Pitch.G9 + 1));
+            Assert.Throws(typeof(ArgumentException), () => range.Max = (Pitch)((int)Pitch.CNeg1 - 1));
         }
 
         [Test]

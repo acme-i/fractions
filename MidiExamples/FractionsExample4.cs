@@ -87,8 +87,8 @@ namespace fractions.examples
         static float div = file.TicksPerQuarterNote + 0f;
 
         static (IEnumerable<MidiEvent> OnEvents, IEnumerable<MidiEvent> OffEvents, IEnumerable<float> Durations) result = file.GetEventsAndDurations();
-        static Enumerate<MidiEvent> nots = new Enumerate<MidiEvent>(result.OnEvents, IncrementMethod.MinMax);
-        static Enumerate<float> durs = new Enumerate<float>(result.Durations, IncrementMethod.MinMax);
+        static Enumerate<MidiEvent> nots = result.OnEvents.AsEnumeration();
+        static Enumerate<float> durs = result.Durations.AsEnumeration();
 
         public FractionsExample4() : base("FractionsExample4 - BWV0999: Prelude in Cm for Lute") { }
 

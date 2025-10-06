@@ -36,7 +36,7 @@ namespace fractions.examples
 
         private IOutputDevice OutputDevice;
         private Clock Clock;
-        private readonly Enumerate<Channel> chans = new Enumerate<Channel>(Channels.InstrumentChannels, IncrementMethod.MinMax, 1, 0);
+        private readonly Enumerate<Channel> chans = Channels.InstrumentChannels.AsEnumeration();
 
         private void Play()
         {
@@ -48,7 +48,7 @@ namespace fractions.examples
             var result = file.GetEventsAndDurations();
 
             var max = result.OnEvents.Count();
-            var nots = new Enumerate<MidiEvent>(result.OnEvents, IncrementMethod.MinMax, 1, 0);
+            var nots = result.OnEvents.AsEnumeration();
             for (var i = 0; i < max; i++)
             {
                 var note = nots.GetNext();

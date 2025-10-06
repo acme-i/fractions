@@ -52,7 +52,7 @@ namespace fractions.examples
             clock = new Clock(BPM);
             file = new MidiFile(path);
             notes = file.GetNotes(outputDevice, clock);
-            noteE = new Enumerate<NoteOnOffMessage>(notes);
+            noteE = notes.AsEnumeration();
 
             Enumerate<int> stepsIn = new Enumerate<int>(new[] { 1, 2, 4, 8 }, IncrementMethod.Cyclic);
             Enumerate<int> stepsOut = new Enumerate<int>(new[] { 1, 4, 8, 16 }.Reverse(), IncrementMethod.Cyclic);
@@ -72,7 +72,7 @@ namespace fractions.examples
                 vcurve.AddRange(vpoints.Select(e => e * DeviceBase.ControlChangeMax));
             }
 
-            Enumerate<double> leftPan = new Enumerate<double>(pcurve, IncrementMethod.Cyclic);
+            Enumerate<double> leftPan = pcurve.AsCycle();
             Enumerate<double> leftVol = new Enumerate<double>(vcurve, IncrementMethod.Cyclic);
 
             Enumerate<double> rightPan = new Enumerate<double>(pcurve, IncrementMethod.Cyclic, 1, pcurve.Count / 2);

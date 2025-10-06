@@ -50,28 +50,26 @@ namespace fractions.examples
 
         private bool inited = false;
 
-        private readonly Enumerate<Channel> chans = new Enumerate<Channel>(
-            new[] {
-                Channel.Channel1,
-                Channel.Channel2,
-                Channel.Channel3,
-                Channel.Channel4,
-                Channel.Channel5,
-                Channel.Channel6,
-                Channel.Channel7,
-                Channel.Channel8,
-                Channel.Channel9,
-                Channel.Channel11,
-                Channel.Channel12,
-            }, IncrementMethod.MinMax, 1, 0);
+        private readonly Enumerate<Channel> chans = new[] {
+            Channel.Channel1,
+            Channel.Channel2,
+            Channel.Channel3,
+            Channel.Channel4,
+            Channel.Channel5,
+            Channel.Channel6,
+            Channel.Channel7,
+            Channel.Channel8,
+            Channel.Channel9,
+            Channel.Channel11,
+            Channel.Channel12,
+        }.AsEnumeration();
 
-        private readonly Enumerate<Channel> stringChans = new Enumerate<Channel>(
-            new[] {
-                Channel.Channel13,
-                Channel.Channel14,
-                Channel.Channel15,
-                Channel.Channel16
-            }, IncrementMethod.MinMax, 1, 0);
+        private readonly Enumerate<Channel> stringChans = new[] {
+            Channel.Channel13,
+            Channel.Channel14,
+            Channel.Channel15,
+            Channel.Channel16
+        }.AsEnumeration();
 
         private readonly Instrument[] instrList = new[] {
             Instrument.AcousticBass,
@@ -150,14 +148,6 @@ namespace fractions.examples
                 inited = true;
 
                 var channels = Channels.InstrumentChannels;
-                //foreach (var x in channels)
-                //{
-                //    OutputDevice.SendControlChange(x, Control.Volume, 100);
-                //    OutputDevice.SendControlChange(x, Control.CelesteLevel, 0);
-                //    OutputDevice.SendControlChange(x, Control.TremoloLevel, 25);
-                //    OutputDevice.SendControlChange(x, Control.ReverbLevel, 100);
-                //}
-
                 var pSteps = Interpolator.Interpolate(maxLeft, maxRight, 4 * 12, 0);
                 var vSteps = Interpolator.Interpolate(minVol, maxVol, 4 * 4, 0);
 
@@ -167,22 +157,22 @@ namespace fractions.examples
                 {
                     var s = (int)x;
 
-                    var vv = new Enumerate<float>(vSteps, IncrementMethod.Cyclic);
+                    var vv = vSteps.AsCycle();
                     for (var i = 0; i < s; i++)
                         vv.GetNext();
                     VolMap.Add(x, vv);
 
-                    var tempv = new Enumerate<float>(vSteps, IncrementMethod.Cyclic);
+                    var tempv = vSteps.AsCycle();
                     for (var i = 0; i < s + voffset; i++)
                         tempv.GetNext();
                     EchoVolMap.Add(x, tempv);
 
-                    var pp = new Enumerate<float>(pSteps, IncrementMethod.Cyclic);
+                    var pp = pSteps.AsCycle();
                     for (var i = 0; i < s; i++)
                         pp.GetNext();
                     PanMap.Add(x, pp);
 
-                    var tempp = new Enumerate<float>(pSteps, IncrementMethod.Cyclic);
+                    var tempp = pSteps.AsCycle();
                     for (var i = 0; i < s + poffset; i++)
                         tempp.GetNext();
                     EchoPanMap.Add(x, tempp);
@@ -203,11 +193,11 @@ namespace fractions.examples
 
             var result = file.GetEventsAndDurations();
 
-            Enumerate<MidiEvent> nots = new Enumerate<MidiEvent>(result.OnEvents, IncrementMethod.MinMax);
-            Enumerate<float> durs = new Enumerate<float>(result.Durations, IncrementMethod.MinMax);
+            var nots = result.OnEvents.AsEnumeration();
+            var durs = result.Durations.AsEnumeration();
 
-            instrs = new Enumerate<Instrument>(instrList, IncrementMethod.Cyclic);
-            stringInstrs = new Enumerate<Instrument>(stringInstrList, IncrementMethod.Cyclic);
+            instrs = instrList.AsCycle();
+            stringInstrs = stringInstrList.AsCycle();
             for (var i = 0; i < result.Durations.Count(); i++)
             {
                 var note = nots.GetNext();

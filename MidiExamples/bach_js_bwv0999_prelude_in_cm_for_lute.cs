@@ -85,7 +85,7 @@ namespace fractions.examples
             leftChan = new Enumerate<Channel>(Channels.InstrumentChannels.Take(8), step: 1);
             rightChan = new Enumerate<Channel>(Channels.InstrumentChannels.Skip(8).Take(7), step: 1);
 
-            leftPan = new Enumerate<double>(pcurve, IncrementMethod.Cyclic);
+            leftPan = pcurve.AsCycle();
             leftVol = new Enumerate<double>(vcurve, IncrementMethod.Cyclic);
 
             rightPan = new Enumerate<double>(pcurve.AsEnumerable().Reverse(), IncrementMethod.Cyclic);

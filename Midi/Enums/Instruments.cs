@@ -61,18 +61,18 @@ namespace fractions
                     .ToList()
         );
 
+        private static readonly Lazy<List<Instrument>> _pads = new Lazy<List<Instrument>>(() =>
+            Enum.GetValues(typeof(Instrument))
+                    .Cast<Instrument>()
+                    .Where(i => Regex.IsMatch(i.Name(), "pad", RegexOptions.IgnoreCase))
+                    .ToList()
+        );
+
         private static readonly Lazy<List<Instrument>> _basses = new Lazy<List<Instrument>>(() =>
             Enum.GetValues(typeof(Instrument))
                     .Cast<Instrument>()
                     .Where(i => Regex.IsMatch(i.Name(), "bass", RegexOptions.IgnoreCase))
                     .Except(new[] { Instrument.Bassoon })
-                    .ToList()
-        );
-
-        private static readonly Lazy<List<Instrument>> _pads = new Lazy<List<Instrument>>(() =>
-            Enum.GetValues(typeof(Instrument))
-                    .Cast<Instrument>()
-                    .Where(i => Regex.IsMatch(i.Name(), "pad", RegexOptions.IgnoreCase))
                     .ToList()
         );
 
@@ -86,38 +86,37 @@ namespace fractions
         /// <summary>
         /// Returns a list of all instruments
         /// </summary>
-        public static List<Instrument> All => _all.Value;
-
+        public static List<Instrument> All => new List<Instrument>(_all.Value);
 
         /// <summary>
         /// Returns a list of all pianos
         /// </summary>
-        public static List<Instrument> Pianos => _pianos.Value;
+        public static List<Instrument> Pianos => new List<Instrument>(_pianos.Value);
 
         /// <summary>
         /// Returns a list of all guitars
         /// </summary>
-        public static List<Instrument> Guitars => _guitars.Value;
+        public static List<Instrument> Guitars = new List<Instrument>(_guitars.Value);
 
         /// <summary>
-        /// Returns a list of all guitars
+        /// Returns a list of all soft guitars
         /// </summary>
-        public static List<Instrument> SoftGuitars => _softGuitars.Value;
+        public static List<Instrument> SoftGuitars => new List<Instrument>(_softGuitars.Value);
 
         /// <summary>
         /// Returns a list of all pads
         /// </summary>
-        public static List<Instrument> Pads = _pads.Value;
+        public static List<Instrument> Pads => new List<Instrument>(_pads.Value);
 
         /// <summary>
-        /// Returns a list of all pads
+        /// Returns a list of all basses
         /// </summary>
-        public static List<Instrument> Basses = _basses.Value;
+        public static List<Instrument> Basses => new List<Instrument>(_basses.Value);
 
         /// <summary>
-        /// Returns a list of all guitars
+        /// Returns a list of all soft basses
         /// </summary>
-        public static List<Instrument> SoftBasses = _softBasses.Value;
+        public static List<Instrument> SoftBasses => new List<Instrument>(_softBasses.Value);
 
     }
 }

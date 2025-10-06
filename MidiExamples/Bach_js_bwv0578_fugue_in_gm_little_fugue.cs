@@ -68,7 +68,7 @@ namespace fractions.examples
 
             var file = new MidiFile(path);
             var div = (float)file.TicksPerQuarterNote;
-            var chans = Channels.EnumerateInstrumentChannels;
+            var chans = Channels.InstrumentChannels.AsEnumeration();
 
             var lChans = Channels.Range(Channel.Channel1, Channel.Channel9);
             var rChans = Channels.Range(Channel.Channel11, Channel.Channel16);
@@ -104,8 +104,8 @@ namespace fractions.examples
                 pcurve.AddRange(ppoints.Select(e => e * 127));
                 vcurve.AddRange(vpoints.Select(e => e * 120));
             }
-            var leftPan = new Enumerate<double>(pcurve, IncrementMethod.Cyclic);
-            var leftVol = new Enumerate<double>(vcurve.Select(v => v * 0.75), IncrementMethod.Cyclic);
+            var leftPan = pcurve.AsCycle();
+            var leftVol = vcurve.Select(v => v * 0.75).AsCycle();
 
             var rightPan = new Enumerate<double>(pcurve.Select(p => 127 - p), IncrementMethod.Cyclic);
             var rightVol = new Enumerate<double>(vcurve, IncrementMethod.Cyclic);
@@ -116,7 +116,7 @@ namespace fractions.examples
             var playEchoes = true;
 
             var notes = file.GetNotes(outputDevice, clock);
-            var noteE = new Enumerate<NoteOnOffMessage>(notes);
+            var noteE = notes.AsEnumeration();
             for (var i = 0; i < notes.Count - 1; i++)
             {
                 var note = noteE.GetNext();

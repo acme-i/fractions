@@ -63,10 +63,6 @@ namespace fractions
         /// </summary>
         public static List<Channel> PercussionChannels => percussionChannels.Value;
 
-        public static Enumerate<Channel> EnumerateAllChannels => new Enumerate<Channel>(Channels.All);
-        public static Enumerate<Channel> EnumerateInstrumentChannels => new Enumerate<Channel>(Channels.InstrumentChannels);
-        public static Enumerate<Channel> EnumeratePercussionChannels => new Enumerate<Channel>(Channels.PercussionChannels);
-
         /// <summary>
         /// Channel numbers are index based.
         /// Returns a list of all the channels in the range [indexStart; indexEnd].

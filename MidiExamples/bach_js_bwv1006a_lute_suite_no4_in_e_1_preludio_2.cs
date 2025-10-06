@@ -120,22 +120,22 @@ namespace fractions.examples
             {
                 var s = (int)x;
 
-                var vv = new Enumerate<float>(vSteps, IncrementMethod.Cyclic);
+                var vv = vSteps.AsCycle();
                 for (var i = 0; i < s; i++)
                     vv.GetNext();
                 VolMap.Add(x, vv);
 
-                var tempv = new Enumerate<float>(vSteps, IncrementMethod.Cyclic);
+                var tempv = vSteps.AsCycle();
                 for (var i = 0; i < s + voffset; i++)
                     tempv.GetNext();
                 EchoVolMap.Add(x, tempv);
 
-                var pp = new Enumerate<float>(pSteps, IncrementMethod.Cyclic);
+                var pp = pSteps.AsCycle();
                 for (var i = 0; i < s; i++)
                     pp.GetNext();
                 PanMap.Add(x, pp);
 
-                var tempp = new Enumerate<float>(pSteps, IncrementMethod.Cyclic);
+                var tempp = pSteps.AsCycle();
                 for (var i = 0; i < s + poffset; i++)
                     tempp.GetNext();
                 EchoPanMap.Add(x, tempp);
@@ -147,8 +147,8 @@ namespace fractions.examples
         static float div = file.TicksPerQuarterNote + 0f;
 
         static (IEnumerable<MidiEvent> OnEvents, IEnumerable<MidiEvent> OffEvents, IEnumerable<float> Durations) result = file.GetEventsAndDurations();
-        static Enumerate<MidiEvent> nots = new Enumerate<MidiEvent>(result.OnEvents, IncrementMethod.MinMax);
-        static Enumerate<float> durs = new Enumerate<float>(result.Durations, IncrementMethod.MinMax);
+        static Enumerate<MidiEvent> nots = result.OnEvents.AsEnumeration();
+        static Enumerate<float> durs = result.Durations.AsEnumeration();
 
         private void Play()
         {
@@ -180,8 +180,8 @@ namespace fractions.examples
                 return right;
             }
 
-            var multen = new Enumerate<int>(new[] { 1, 2, 1, 2, 2, 1, 1, 4, 1, 1, 1, 2, 2, 2, 4, 4 }, IncrementMethod.Cyclic);
-            var shifter = new Enumerate<int>(Enumerable.Range(1, times.Count() - 1), IncrementMethod.Cyclic);
+            var multen = new[] { 1, 2, 1, 2, 2, 1, 1, 4, 1, 1, 1, 2, 2, 2, 4, 4 }.AsCycle();
+            var shifter = Enumerable.Range(1, times.Count() - 1).AsCycle();
 
             var resultTimes = new List<int>(times);
             while(resultTimes.Count() < nots.Count())
@@ -190,7 +190,7 @@ namespace fractions.examples
             }
             resultTimes = resultTimes.Take(nots.Count()).ToList();
 
-            var echos = new Enumerate<int>(resultTimes, IncrementMethod.MinMax);
+            var echos = resultTimes.AsEnumeration();
             for (var i = 0; i < result.Durations.Count(); i++)
             {
                 PlayAt(i);
@@ -238,10 +238,15 @@ namespace fractions.examples
             var noteDest = notsClone.PeekAt(max);
             var durDest = durClone.PeekAt(max);
 
-            var notesTimes = new Enumerate<float>(Interpolator.Interpolate(note.Time, noteDest.Time, max, 1));
-            var noteDurs = new Enumerate<float>(Interpolator.Interpolate(dur, durDest, max, 1));
+            var notesTimes = Interpolator.Interpolate(note.Time, noteDest.Time, max, 1).AsEnumeration();
+            var noteDurs = Interpolator.Interpolate(dur, durDest, max, 1).AsEnumeration();
+            
             var sm = max + 1;
-            var scalers = new Enumerate<float>(Enumerable.Range(sm / 4, sm).Select(x => x / (float)(sm * 1.0125f)).ToList(), IncrementMethod.MaxMin);
+
+            var scalers = Enumerable
+                .Range(sm / 4, sm)
+                .Select(x => x / (float)(sm * 1.0125f))
+                .AsEnumeration();
 
             max = i + max;
 

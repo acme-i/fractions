@@ -75,7 +75,7 @@ namespace fractions.examples
 
             var file = new MidiFile(path);
             var div = (float)file.TicksPerQuarterNote;
-            var chans = new Enumerate<Channel>(Channels.InstrumentChannels, step: 1);
+            var chans = Channels.InstrumentChannels.AsEnumeration();
 
             var lChans = Channels.Range(Channel.Channel1, Channel.Channel9);
             var rChans = Channels.Range(Channel.Channel11, Channel.Channel16);
@@ -97,7 +97,7 @@ namespace fractions.examples
 
             clock = new Clock(BPM);
 
-            var steps = new Enumerate<int>(new[] { 1, 2, 4, 8, 16 });
+            var steps = new[] { 1, 2, 4, 8, 16 }.AsEnumeration();
             
             var pcurve = new List<double>();
             var vcurve = new List<double>();
@@ -113,7 +113,7 @@ namespace fractions.examples
                 pcurve.AddRange(ppoints.Select(e => e * DeviceBase.ControlChangeMax));
                 vcurve.AddRange(vpoints.Select(e => e * DeviceBase.ControlChangeMax));
             }
-            var leftPan = new Enumerate<double>(pcurve, IncrementMethod.Cyclic);
+            var leftPan = pcurve.AsCycle();
             var leftVol = new Enumerate<double>(vcurve, IncrementMethod.Cyclic);
 
             var rightPan = new Enumerate<double>(pcurve, IncrementMethod.Cyclic, pcurve.Count / 2);

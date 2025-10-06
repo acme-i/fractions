@@ -62,25 +62,21 @@ namespace fractions.examples
             Console.WriteLine(path);
             Console.WriteLine(seed);
 
-            var leftInstr = new Enumerate<Instrument>(new[] { Instrument.Vibraphone, Instrument.Vibraphone }.Reverse());
-            var rightInstr = new Enumerate<Instrument>(new[] { Instrument.Vibraphone, Instrument.Vibraphone });
+            var leftInstr = new[] { Instrument.Vibraphone, Instrument.Vibraphone }.AsEnumeration();
+            var rightInstr = leftInstr.AsReversed();
 
             var file = new MidiFile(path);
             var div = (float)file.TicksPerQuarterNote;
-            var chans = Channels.EnumerateInstrumentChannels;
+            var chans = Channels.InstrumentChannels.AsEnumeration();
 
-            var lChans = Channels.Range(Channel.Channel1, Channel.Channel9);
-            var rChans = Channels.Range(Channel.Channel11, Channel.Channel16);
-            var leftChans = new Enumerate<Channel>(lChans);
-            var rightChans = new Enumerate<Channel>(rChans);
-
-            foreach (var x in lChans)
+            var leftChans = Channels.Range(Channel.Channel1, Channel.Channel9).AsEnumeration();
+            foreach (var x in leftChans)
             {
                 outputDevice.SendControlChange(x, Control.ReverbLevel, 0);
                 outputDevice.SendProgramChange(x, leftInstr.GetNext());
             }
-
-            foreach (var x in rChans)
+            var rightChans = Channels.Range(Channel.Channel11, Channel.Channel16).AsEnumeration();
+            foreach (var x in rightChans)
             {
                 outputDevice.SendControlChange(x, Control.ReverbLevel, 127);
                 outputDevice.SendControlChange(x, Control.Volume, 100);
@@ -89,7 +85,7 @@ namespace fractions.examples
 
             clock = new Clock(BPM);
 
-            var steps = new Enumerate<int>(new[] { 1, 3, 6, 12, 24 }, IncrementMethod.Cyclic);
+            var steps = new[] { 1, 3, 6, 12, 24 }.AsCycle();
             var pcurve = new List<double>();
             var vcurve = new List<double>();
             var eIn = Interpolator.EaseInFunctions();
@@ -104,23 +100,23 @@ namespace fractions.examples
                 vcurve.AddRange(vpoints.Select(e => e * 120));
             }
 
-            var leftPan = new Enumerate<double>(pcurve, IncrementMethod.Cyclic);
-            var leftVol = new Enumerate<double>(vcurve, IncrementMethod.Cyclic);
+            var leftPan = pcurve.AsCycle();
+            var leftVol = vcurve.AsCycle();
 
-            var rightPan = new Enumerate<double>(pcurve.Select(p => 127f - p), IncrementMethod.Cyclic);
-            var rightVol = new Enumerate<double>(vcurve, IncrementMethod.Cyclic);
+            var rightPan = pcurve.Select(p => 127f - p).AsCycle();
+            var rightVol = vcurve.AsCycle();
 
             var notes = file.GetNotes(outputDevice, clock);
 
-            var noteE = new Enumerate<NoteOnOffMessage>(notes);
+            var noteE = notes.AsEnumeration();
 
-            var enumes = new Enumerate<float>(new[] { 32f, 64f, 128f }, IncrementMethod.Cyclic);
-            var enumes2 = new Enumerate<float>(new[] { 16f, 32f, 64f, 128f }.Reverse(), IncrementMethod.Cyclic, 3);
+            var enumes = new[] { 32f, 64f, 128f }.AsCycle();
+            var enumes2 = new[] { 16f, 32f, 64f, 128f }.Reverse().AsCycle();
 
             var enumValues = new[] { 0.25f, 0.5f, 1f, 2f, 3f, 4f, 6f, 12f, 16f, 8f, 4f, 3f, 2f, 1f, 0.5f };
 
-            var denoms = new Enumerate<float>(enumValues, IncrementMethod.Cyclic);
-            var denoms2 = new Enumerate<float>(enumValues.Select(e => e * 3.33f), IncrementMethod.Cyclic);
+            var denoms = enumValues.AsCycle();
+            var denoms2 = enumValues.Select(e => e * 3.33f).AsCycle();
 
             var fs = new Enumerate<List<Fraction>>(new[] { Fractions.Thirds, Fractions.Fourths, Fractions.Sixths, Fractions.Eighths, Fractions.Twelveths, Fractions.Sixteenths, Fractions.TwentyFourths, Fractions.ThirtySeconds }, IncrementMethod.Cyclic);
 
@@ -146,20 +142,20 @@ namespace fractions.examples
 
                 var denom = i % 2 == 0 ? denoms.GetNext() : denoms2.GetNext();
                 var enumerator = i % 2 == 0 ? enumes.GetNext() : enumes2.GetNext();
-                var nEchoes = new Enumerate<float>(Fractions.Fourths.Select(f => enumerator / f.Over(denom)), IncrementMethod.Cyclic);
-                var nEchoes2 = new Enumerate<float>(Fractions.Fourths.Select(f => enumerator / f.Over(denom)).Reverse(), IncrementMethod.Cyclic);
+                var nEchoes = Fractions.Fourths.Select(f => enumerator / f.Over(denom)).AsCycle();
+                var nEchoes2 = Fractions.Fourths.Select(f => enumerator / f.Over(denom)).Reverse().AsCycle();
 
                 var nEcho = i % 2 != 0 ? nEchoes.GetNext() : nEchoes2.GetNext();
                 if (note.Time != next.Time)
                 {
-                    var leftC = new Enumerate<double>(leftPan, IncrementMethod.Cyclic);
-                    var rightC = new Enumerate<double>(rightPan, IncrementMethod.Cyclic);
-                    var leftV = new Enumerate<double>(leftVol, IncrementMethod.Cyclic);
-                    var rightV = new Enumerate<double>(rightVol, IncrementMethod.Cyclic);
+                    var leftC =     leftPan.AsCycle();
+                    var rightC = rightPan.AsCycle();
+                    var leftV = leftVol.AsCycle();
+                    var rightV = rightVol.AsCycle();
                     var minDur = (next.Time - note.Time) / nEcho;
                     var fss = fs.GetNext();
-                    var fractions = new Enumerate<float>(fss.Select(f => f.Over(nEcho)), IncrementMethod.Cyclic);
-                    var fractions2 = new Enumerate<float>(fss.Select(f => f.Over(nEcho)).Reverse(), IncrementMethod.Cyclic);
+                    var fractions = fss.Select(f => f.Over(nEcho)).AsCycle();
+                    var fractions2 = fss.Select(f => f.Over(nEcho)).Reverse().AsCycle();
                     var fract = i % 2 == 0 ? fractions.GetNext() : fractions2.GetNext();
                     var diff = next.Time - note.Time;
                     var p = note.Pitch;
