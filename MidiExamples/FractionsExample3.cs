@@ -128,32 +128,32 @@ namespace fractions.examples
 
                 var vv = new Enumerate<float>(vSteps, IncrementMethod.Cyclic);
                 for (var i = 0; i < s; i++)
-                    vv.Next();
+                    vv.GetNext();
                 VolMap.Add(x, vv);
 
                 var tempv2 = new Enumerate<float>(vSteps2, IncrementMethod.Cyclic);
                 for (var i = 0; i < s + voffset; i++)
-                    tempv2.Next();
+                    tempv2.GetNext();
                 EchoVolMap.Add(x, tempv2);
 
                 var pp = new Enumerate<float>(pSteps, IncrementMethod.Cyclic);
                 for (var i = 0; i < s; i++)
-                    pp.Next();
+                    pp.GetNext();
                 PanMap.Add(x, pp);
 
                 var tempp = new Enumerate<float>(pSteps, IncrementMethod.Cyclic);
                 for (var i = 0; i < s + poffset; i++)
-                    tempp.Next();
+                    tempp.GetNext();
                 EchoPanMap.Add(x, tempp);
 
                 var tempv = new Enumerate<float>(vSteps, IncrementMethod.Cyclic);
                 for (var i = 0; i < s + voffset; i++)
-                    tempv.Next();
+                    tempv.GetNext();
                 EchoVolMap2.Add(x, tempv);
 
                 var temppp = new Enumerate<float>(pSteps2, IncrementMethod.Cyclic);
                 for (var i = 0; i < s + poffset; i++)
-                    temppp.Next();
+                    temppp.GetNext();
                 EchoPanMap2.Add(x, temppp);
 
             }
@@ -203,7 +203,7 @@ namespace fractions.examples
             for (var i = 0; i < result.Durations.Count(); i++)
             {
                 PlayAt(i);
-                var echoes = echos.Next();
+                var echoes = echos.GetNext();
                 if (echoes > 1)
                 {
                     PlayEchos(i, echoes);
@@ -217,18 +217,18 @@ namespace fractions.examples
 
         private void PlayAt(int i)
         {
-            var note = nots.Next();
-            var dur = durs.Next();
+            var note = nots.GetNext();
+            var dur = durs.GetNext();
             var chan = i % 2 == 0 ? chans : chans2;
-            var ch = chan.Next();
+            var ch = chan.GetNext();
             var pm = i % 2 == 0 ? PanMap[ch] : EchoPanMap[ch];
             var vol = i % 2 == 0 ? VolMap[ch] : EchoVolMap[ch];
             var instr = i % 4 != 0 ? mainInstr : secondInstr;
 
-            var nt = new NoteOnOffMessage(OutputDevice, ch, (Pitch)note.Note + 12, vol.Next(), note.Time / div, Clock, dur, pm.Next());
+            var nt = new NoteOnOffMessage(OutputDevice, ch, (Pitch)note.Note + 12, vol.GetNext(), note.Time / div, Clock, dur, pm.GetNext());
             nt.BeforeSendingNoteOnOff += m =>
             {
-                OutputDevice.SendProgramChange(m.Channel, instr.Next());
+                OutputDevice.SendProgramChange(m.Channel, instr.GetNext());
             };
             Clock.Schedule(nt);
         }
@@ -250,40 +250,40 @@ namespace fractions.examples
             var notsClone = nots.Clone();
             var durClone = durs.Clone();
 
-            var note = notsClone.Next();
-            var dur = durClone.Next();
+            var note = notsClone.GetNext();
+            var dur = durClone.GetNext();
 
-            var noteDest = notsClone.Peek(max);
-            var durDest = durClone.Peek(max);
+            var noteDest = notsClone.PeekAt(max);
+            var durDest = durClone.PeekAt(max);
             var ps = i % 2 == 0 ? ps1 : ps2;
 
             var scaler = new Enumerate<float>(Interpolator.Interpolate(1f, 1.5f, max, 0), IncrementMethod.Cyclic);
             var notesTimes = new Enumerate<float>(Interpolator.Interpolate(note.Time, noteDest.Time, max, 1));
             var noteDurs = new Enumerate<float>(Interpolator.Interpolate(dur, durDest, max, 1));
             var sm = max;
-            var scalers = new Enumerate<float>(Enumerable.Range(1, sm).Select(x => x / (float)(sm * scaler.Next())).ToList(), IncrementMethod.MaxMin);
+            var scalers = new Enumerate<float>(Enumerable.Range(1, sm).Select(x => x / (float)(sm * scaler.GetNext())).ToList(), IncrementMethod.MaxMin);
             max = i + max;
 
             for (var j = i; j < max; j++)
             {
                 var chan = j % 2 == 0 ? echoChans : echoChans2;
-                var ch = chan.Next();
+                var ch = chan.GetNext();
                 var pm = i % 2 == 0 ? EchoPanMap[ch] : EchoPanMap2[ch];
                 var vol = i % 2 == 0 ? EchoVolMap[ch] : EchoVolMap2[ch];
                 var instr = j % 2 == 0 ? echoMainInstr : echoSecondInstr;
 
-                var nt = new NoteOnOffMessage(OutputDevice, ch, (Pitch)note.Note + ps.Next(), vol.Next() , (notsClone.Current().Time + notesTimes.Next()) / div, Clock, noteDurs.Next(), pm.Next());
+                var nt = new NoteOnOffMessage(OutputDevice, ch, (Pitch)note.Note + ps.GetNext(), vol.GetNext() , (notsClone.Current.Time + notesTimes.GetNext()) / div, Clock, noteDurs.GetNext(), pm.GetNext());
                 nt.BeforeSendingNoteOnOff += m =>
                 {
-                    OutputDevice.SendProgramChange(m.Channel, instr.Next());
+                    OutputDevice.SendProgramChange(m.Channel, instr.GetNext());
                 };
                 Clock.Schedule(nt);
 
-                note = notsClone.Next();
-                dur = durClone.Next();
+                note = notsClone.GetNext();
+                dur = durClone.GetNext();
             }
 
-            ps.Next();
+            ps.GetNext();
         }
     }
 }

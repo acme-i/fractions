@@ -37,16 +37,12 @@ namespace fractions.tests
         public void AlignSanityTest()
         {
             var clock = new Clock(128);
-            var channels = new List<Channel>
-            {
-                Channel.Channel1,
-                Channel.Channel2
-            };
+            var channels = new List<Channel> { Channel.Channel1, Channel.Channel2 };
             var a = new NoteOnOffMessage(OutputDevice.InstalledDevices.First(), channels[0], Pitch.A2, 40, 0f, clock, 6);
             var b = new NoteOnOffMessage(OutputDevice.InstalledDevices.First(), channels[1], Pitch.A3, 40, 3f, clock, 12);
             clock.Schedule(a);
             clock.Schedule(b);
-            clock.Align(channels, Pitch.A2, Pitch.A4);
+            clock.Align(channels, new PitchRange(Pitch.A2, Pitch.A4));
 
             Assert.AreEqual(3f, a.Duration);
             Assert.AreEqual(12f, b.Duration);
@@ -56,11 +52,7 @@ namespace fractions.tests
         public void Align()
         {
             var clock = new Clock(128);
-            var channels = new List<Channel>
-            {
-                Channel.Channel1,
-                Channel.Channel2
-            };
+            var channels = new List<Channel> { Channel.Channel1, Channel.Channel2 };
             var device = OutputDevice.InstalledDevices.First();
 
             /*
@@ -97,7 +89,7 @@ namespace fractions.tests
             clock.Schedule(a);
             clock.Schedule(e);
 
-            clock.Align(channels, Pitch.A2, Pitch.A4);
+            clock.Align(channels, new PitchRange(Pitch.A2, Pitch.A4));
 
             Assert.AreEqual(0f, a.Time);
             Assert.AreEqual(0f, c.Time);

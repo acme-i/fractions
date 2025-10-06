@@ -163,22 +163,22 @@ namespace fractions.examples
 
                 var vv = new Enumerate<float>(vSteps, IncrementMethod.Cyclic);
                 for (var i = 0; i < s; i++)
-                    vv.Next();
+                    vv.GetNext();
                 VolMap.Add(x, vv);
 
                 var tempv = new Enumerate<float>(vSteps, IncrementMethod.Cyclic);
                 for (var i = 0; i < s + voffset; i++)
-                    tempv.Next();
+                    tempv.GetNext();
                 EchoVolMap.Add(x, tempv);
 
                 var pp = new Enumerate<float>(pSteps, IncrementMethod.Cyclic);
                 for (var i = 0; i < s; i++)
-                    pp.Next();
+                    pp.GetNext();
                 PanMap.Add(x, pp);
 
                 var tempp = new Enumerate<float>(pSteps, IncrementMethod.Cyclic);
                 for (var i = 0; i < s + poffset; i++)
-                    tempp.Next();
+                    tempp.GetNext();
                 EchoPanMap.Add(x, tempp);
             }
 
@@ -203,26 +203,26 @@ namespace fractions.examples
             stringInstrs = new Enumerate<Instrument>(stringInstrList, IncrementMethod.Cyclic, 1, 0);
             for (var i = 0; i < result.Durations.Count(); i++)
             {
-                var note = nots.Next();
-                var ch = chans.Next();
-                var dur = durs.Next();
+                var note = nots.GetNext();
+                var ch = chans.GetNext();
+                var dur = durs.GetNext();
                 var pm = i % 2 == 0 ? PanMap[ch] : EchoPanMap[ch];
                 var vol = i % 2 == 0 ? VolMap[ch] : EchoVolMap[ch];
 
-                var nt = new NoteOnOffMessage(OutputDevice, ch, (Pitch)note.Note, vol.Next(), note.Time / div, Clock, dur, pm.Next());
+                var nt = new NoteOnOffMessage(OutputDevice, ch, (Pitch)note.Note, vol.GetNext(), note.Time / div, Clock, dur, pm.GetNext());
                 nt.BeforeSendingNoteOnOff += m =>
                 {
-                    OutputDevice.SendProgramChange(m.Channel, instrs.Next());
+                    OutputDevice.SendProgramChange(m.Channel, instrs.GetNext());
                 };
                 Clock.Schedule(nt);
 
                 if (i % 4 == 0 || i % 9 == 0 || i % 12 == 0)
                 {
-                    ch = stringChans.Next();
-                    var ns = new NoteOnOffMessage(OutputDevice, ch, (Pitch)note.Note, vol.Current(), note.Time / div, Clock, dur / div, pm.Current());
+                    ch = stringChans.GetNext();
+                    var ns = new NoteOnOffMessage(OutputDevice, ch, (Pitch)note.Note, vol.Current, note.Time / div, Clock, dur / div, pm.Current);
                     ns.BeforeSendingNoteOnOff += m =>
                     {
-                        OutputDevice.SendProgramChange(m.Channel, stringInstrs.Next());
+                        OutputDevice.SendProgramChange(m.Channel, stringInstrs.GetNext());
                     };
                     Clock.Schedule(ns);
                 }

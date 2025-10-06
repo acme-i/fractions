@@ -83,7 +83,7 @@ namespace fractions.examples
                 Console.WriteLine("Down : Slower");
                 Console.WriteLine("Up: Faster");
                 Console.WriteLine("Left: Previous Chord or Scale");
-                Console.WriteLine("Right: Next Chord or Scale");
+                Console.WriteLine("Right: GetNext Chord or Scale");
                 Console.WriteLine("Space = Toggle Play");
                 Console.WriteLine("Enter = Toggle Scales/Chords");
                 ConsoleKey key = Console.ReadKey(true).Key;

@@ -80,22 +80,22 @@ namespace fractions.examples
 
                     var vv = new Enumerate<float>(vSteps, IncrementMethod.Cyclic);
                     for (var i = 0; i < s; i++)
-                        vv.Next();
+                        vv.GetNext();
                     VolMap.Add(channel, vv);
 
                     var tempv = new Enumerate<float>(vSteps, IncrementMethod.Cyclic);
                     for (var i = 0; i < s + voffset; i++)
-                        tempv.Next();
+                        tempv.GetNext();
                     EchoVolMap.Add(channel, tempv);
 
                     var pp = new Enumerate<float>(pSteps, IncrementMethod.Cyclic);
                     for (var i = 0; i < s; i++)
-                        pp.Next();
+                        pp.GetNext();
                     PanMap.Add(channel, pp);
 
                     var tempp = new Enumerate<float>(pSteps, IncrementMethod.Cyclic);
                     for (var i = 0; i < s + poffset; i++)
-                        tempp.Next();
+                        tempp.GetNext();
                     EchoPanMap.Add(channel, tempp);
                 }
 
@@ -125,13 +125,13 @@ namespace fractions.examples
 
             for (var i = 0; i < max; i++)
             {
-                var note = nots.Next();
-                var ch = chans.Next();
-                var dur = durs.Next();
+                var note = nots.GetNext();
+                var ch = chans.GetNext();
+                var dur = durs.GetNext();
                 var pm = i % 2 == 0 ? PanMap[ch] : EchoPanMap[ch];
                 var vol = i % 2 == 0 ? VolMap[ch] : EchoVolMap[ch];
 
-                var nt = new NoteOnOffMessage(OutputDevice, ch, (Pitch)note.Note, vol.Next(), note.Time / div2, Clock, dur, pm.Next());
+                var nt = new NoteOnOffMessage(OutputDevice, ch, (Pitch)note.Note, vol.GetNext(), note.Time / div2, Clock, dur, pm.GetNext());
                 Clock.Schedule(nt);
             }
 

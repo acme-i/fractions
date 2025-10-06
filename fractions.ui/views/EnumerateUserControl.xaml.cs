@@ -27,6 +27,5 @@ public partial class EnumerateUserControl : UserControl
     {
         InitializeComponent();
         _messenger = messenger;
-
     }
 }

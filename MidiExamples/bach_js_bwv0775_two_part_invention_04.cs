@@ -67,7 +67,7 @@ namespace fractions.examples
 
             var file = new MidiFile(path);
             var div = (float)file.TicksPerQuarterNote;
-            var chans = new Enumerate<Channel>(Channels.InstrumentChannels);
+            var chans = Channels.EnumerateInstrumentChannels;
 
             var lChans = Channels.Range(Channel.Channel1, Channel.Channel9);
             var rChans = Channels.Range(Channel.Channel11, Channel.Channel16);
@@ -77,14 +77,14 @@ namespace fractions.examples
             foreach (var x in lChans)
             {
                 outputDevice.SendControlChange(x, Control.ReverbLevel, 0);
-                outputDevice.SendProgramChange(x, leftInstr.Next());
+                outputDevice.SendProgramChange(x, leftInstr.GetNext());
             }
 
             foreach (var x in rChans)
             {
                 outputDevice.SendControlChange(x, Control.ReverbLevel, 127);
                 outputDevice.SendControlChange(x, Control.Volume, 100);
-                outputDevice.SendProgramChange(x, rightInstr.Next());
+                outputDevice.SendProgramChange(x, rightInstr.GetNext());
             }
 
             clock = new Clock(BPM);
@@ -96,8 +96,8 @@ namespace fractions.examples
             var eOut = Interpolator.EaseOutFunctions();
             for (var part = 0; part < eIn.Count; part++)
             {
-                var sIn = steps.Next();
-                var sOut = sIn; // steps.Next();
+                var sIn = steps.GetNext();
+                var sOut = sIn; // steps.GetNext();
                 var ppoints = Interpolator.InOutCurve(0.10, 0.90, sIn, sOut, eIn[part], eOut[part]);
                 var vpoints = Interpolator.InOutCurve(0.90, 1.00, sIn, sOut, eIn[part], eOut[part]);
                 pcurve.AddRange(ppoints.Select(e => e * 127));
@@ -126,30 +126,30 @@ namespace fractions.examples
 
             for (var i = 0; i < notes.Count - 1; i++)
             {
-                var note = noteE.Next();
-                var next = noteE.Peek();
+                var note = noteE.GetNext();
+                var next = noteE.Peek;
 
                 note.Pitch = note.Pitch.OctaveAbove();
 
                 if (note.Pitch <= Pitch.C3)
                 {
-                    note.Channel = leftChans.Next();
-                    note.Pan = leftPan.Next();
-                    note.Velocity = leftVol.Next();
+                    note.Channel = leftChans.GetNext();
+                    note.Pan = leftPan.GetNext();
+                    note.Velocity = leftVol.GetNext();
                 }
                 else
                 {
-                    note.Channel = rightChans.Next();
-                    note.Pan = rightPan.Next();
-                    note.Velocity = rightVol.Next();
+                    note.Channel = rightChans.GetNext();
+                    note.Pan = rightPan.GetNext();
+                    note.Velocity = rightVol.GetNext();
                 }
 
-                var denom = i % 2 == 0 ? denoms.Next() : denoms2.Next();
-                var enumerator = i % 2 == 0 ? enumes.Next() : enumes2.Next();
+                var denom = i % 2 == 0 ? denoms.GetNext() : denoms2.GetNext();
+                var enumerator = i % 2 == 0 ? enumes.GetNext() : enumes2.GetNext();
                 var nEchoes = new Enumerate<float>(Fractions.Fourths.Select(f => enumerator / f.Over(denom)), IncrementMethod.Cyclic);
                 var nEchoes2 = new Enumerate<float>(Fractions.Fourths.Select(f => enumerator / f.Over(denom)).Reverse(), IncrementMethod.Cyclic);
 
-                var nEcho = i % 2 != 0 ? nEchoes.Next() : nEchoes2.Next();
+                var nEcho = i % 2 != 0 ? nEchoes.GetNext() : nEchoes2.GetNext();
                 if (note.Time != next.Time)
                 {
                     var leftC = new Enumerate<double>(leftPan, IncrementMethod.Cyclic);
@@ -157,10 +157,10 @@ namespace fractions.examples
                     var leftV = new Enumerate<double>(leftVol, IncrementMethod.Cyclic);
                     var rightV = new Enumerate<double>(rightVol, IncrementMethod.Cyclic);
                     var minDur = (next.Time - note.Time) / nEcho;
-                    var fss = fs.Next();
+                    var fss = fs.GetNext();
                     var fractions = new Enumerate<float>(fss.Select(f => f.Over(nEcho)), IncrementMethod.Cyclic);
                     var fractions2 = new Enumerate<float>(fss.Select(f => f.Over(nEcho)).Reverse(), IncrementMethod.Cyclic);
-                    var fract = i % 2 == 0 ? fractions.Next() : fractions2.Next();
+                    var fract = i % 2 == 0 ? fractions.GetNext() : fractions2.GetNext();
                     var diff = next.Time - note.Time;
                     var p = note.Pitch;
                     var j = i + 1;
@@ -172,15 +172,15 @@ namespace fractions.examples
                         if (clone.Time > next.Time)
                             break;
 
-                        clone.Pan = rightC.Next();
-                        clone.Channel = rightChans.Next();
-                        clone.Velocity = rightV.Next();
+                        clone.Pan = rightC.GetNext();
+                        clone.Channel = rightChans.GetNext();
+                        clone.Velocity = rightV.GetNext();
                         clone.Duration = Math.Max(clone.Duration, minDur);
 
                         if (j++ % 2 == 0)
                         {
                             clone.Pitch = p.OctaveAbove();
-                            clone.Pan = clone.Pan = rightC.Next();
+                            clone.Pan = clone.Pan = rightC.GetNext();
                         }
 
                         clock.Schedule(clone);

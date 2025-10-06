@@ -65,6 +65,7 @@ public abstract partial class BaseViewModel : ObservableObject
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ErrorMessage))]
+    [NotifyPropertyChangedFor(nameof(StatusMessage))]
     protected Exception? lastException;
 
     [ObservableProperty]

@@ -27,7 +27,7 @@ namespace fractions
 {
     /// <summary>A time-sorted queue of MIDI messages</summary>
     /// Messages can be added in any order, and can be popped off in timestamp order.
-    internal class MessageQueue
+    public class MessageQueue
     {
         #region Fields
 
@@ -61,14 +61,12 @@ namespace fractions
 
         #region Methods
 
-        public void AlignDissonants(IEnumerable<Channel> channels, Pitch minPitch = Pitch.CNeg1, Pitch maxPitch = Pitch.G9)
+        public void AlignDissonants(IEnumerable<Channel> channels, PitchRange range)
         {
-            AssertMinMaxPitch(minPitch, maxPitch);
-
             var relevant = messages.SelectMany(x => x)
                 .Where(m => m.GetType() == typeof(NoteOnOffMessage))
                 .Cast<NoteOnOffMessage>()
-                .Where(m => channels.Contains(m.Channel) && m.Pitch >= minPitch && m.Pitch <= maxPitch)
+                .Where(m => channels.Contains(m.Channel) && range.IsInside(m.Pitch))
                 .Where(m => !float.IsNaN(m.Time))
                 .OrderBy(m => m.Time)
                 .ThenBy(m => m.Duration)
@@ -118,14 +116,12 @@ namespace fractions
             }
         }
 
-        public void AlignDissonants(float timeMin, float timeMax, IEnumerable<Channel> channels, Pitch minPitch = Pitch.CNeg1, Pitch maxPitch = Pitch.G9)
+        public void AlignDissonants(float timeMin, float timeMax, IEnumerable<Channel> channels, PitchRange range)
         {
-            AssertMinMaxPitch(minPitch, maxPitch);
-
             var relevant = messages.SelectMany(x => x)
                 .Where(m => m.GetType() == typeof(NoteOnOffMessage))
                 .Cast<NoteOnOffMessage>()
-                .Where(m => channels.Contains(m.Channel) && m.Pitch >= minPitch && m.Pitch <= maxPitch)
+                .Where(m => channels.Contains(m.Channel) && range.IsInside(m.Pitch))
                 .Where(m => !float.IsNaN(m.Time))
                 .Where(m => m.Time >= timeMin && m.Time < timeMax)
                 .OrderBy(m => m.Time)
@@ -176,14 +172,12 @@ namespace fractions
             }
         }
 
-        public void Align(IEnumerable<Channel> channels, Pitch minPitch = Pitch.CNeg1, Pitch maxPitch = Pitch.G9)
+        public void Align(IEnumerable<Channel> channels, PitchRange range)
         {
-            AssertMinMaxPitch(minPitch, maxPitch);
-
             var relevant = messages.SelectMany(x => x)
                 .Where(m => m.GetType() == typeof(NoteOnOffMessage))
                 .Cast<NoteOnOffMessage>()
-                .Where(m => channels.Contains(m.Channel) && m.Pitch >= minPitch && m.Pitch <= maxPitch)
+                .Where(m => channels.Contains(m.Channel) && range.IsInside(m.Pitch))
                 .OrderBy(m => m.Time)
                 .ThenBy(m => m.Duration)
                 .ToList();
@@ -217,14 +211,12 @@ namespace fractions
             }
         }
 
-        public void Align(float timeMin, float timeMax, IEnumerable<Channel> channels, Pitch minPitch = Pitch.CNeg1, Pitch maxPitch = Pitch.G9)
+        public void Align(float timeMin, float timeMax, IEnumerable<Channel> channels, PitchRange range)
         {
-            AssertMinMaxPitch(minPitch, maxPitch);
-
             var relevant = messages.SelectMany(x => x)
                 .Where(m => m.GetType() == typeof(NoteOnOffMessage))
                 .Cast<NoteOnOffMessage>()
-                .Where(m => channels.Contains(m.Channel) && m.Pitch >= minPitch && m.Pitch <= maxPitch)
+                .Where(m => channels.Contains(m.Channel) && range.IsInside(m.Pitch))
                 .Where(m => m.Time >= timeMin && m.Time < timeMax)
                 .OrderBy(m => m.Time)
                 .ThenBy(m => m.Duration)
@@ -259,15 +251,14 @@ namespace fractions
             }
         }
 
-        public void MaxDuration(IEnumerable<Channel> channels, float maxDuration, Pitch minPitch = Pitch.CNeg1, Pitch maxPitch = Pitch.G9)
+        public void SetMaxDuration(IEnumerable<Channel> channels, float maxDuration, PitchRange range)
         {
-            AssertMinMaxPitch(minPitch, maxPitch);
             AssertGreaterThanZero(maxDuration, nameof(maxDuration));
 
             messages.SelectMany(x => x)
                 .Where(m => m.GetType() == typeof(NoteOnOffMessage))
                 .Cast<NoteOnOffMessage>()
-                .Where(m => channels.Contains(m.Channel) && m.Duration > maxDuration && m.Pitch >= minPitch && m.Pitch < maxPitch)
+                .Where(m => channels.Contains(m.Channel) && m.Duration > maxDuration && range.IsInside(m.Pitch))
                 .ToList()
                 .ForEach(a =>
                 {
@@ -275,15 +266,14 @@ namespace fractions
                 });
         }
 
-        public void MinDuration(IEnumerable<Channel> channels, float minDuration, Pitch minPitch = Pitch.CNeg1, Pitch maxPitch = Pitch.G9)
+        public void SetMinDuration(IEnumerable<Channel> channels, float minDuration, PitchRange range)
         {
-            AssertMinMaxPitch(minPitch, maxPitch);
             AssertGreaterThanZero(minDuration, nameof(minDuration));
 
             messages.SelectMany(x => x)
                 .Where(m => m.GetType() == typeof(NoteOnOffMessage))
                 .Cast<NoteOnOffMessage>()
-                .Where(m => channels.Contains(m.Channel) && m.Duration < minDuration && m.Pitch >= minPitch && m.Pitch < maxPitch)
+                .Where(m => channels.Contains(m.Channel) && m.Duration < minDuration && range.IsInside(m.Pitch))
                 .ToList()
                 .ForEach(a =>
                 {
@@ -291,15 +281,14 @@ namespace fractions
                 });
         }
 
-        public void MaxVelocity(IEnumerable<Channel> channels, float maxVelocity, Pitch minPitch = Pitch.CNeg1, Pitch maxPitch = Pitch.G9)
+        public void SetMaxVelocity(IEnumerable<Channel> channels, float maxVelocity, PitchRange range)
         {
-            AssertMinMaxPitch(minPitch, maxPitch);
             AssertGreaterThanZero(maxVelocity, nameof(maxVelocity));
 
             messages.SelectMany(x => x)
                 .Where(m => m.GetType() == typeof(NoteMessage))
                 .Cast<NoteMessage>()
-                .Where(m => channels.Contains(m.Channel) && m.Velocity > maxVelocity && m.Pitch >= minPitch && m.Pitch < maxPitch)
+                .Where(m => channels.Contains(m.Channel) && m.Velocity > maxVelocity && range.IsInside(m.Pitch))
                 .ToList()
                 .ForEach(a =>
                 {
@@ -307,15 +296,14 @@ namespace fractions
                 });
         }
 
-        public void MinVelocity(IEnumerable<Channel> channels, float minVelocity, Pitch minPitch = Pitch.CNeg1, Pitch maxPitch = Pitch.G9)
+        public void SetMinVelocity(IEnumerable<Channel> channels, float minVelocity, PitchRange range)
         {
-            AssertMinMaxPitch(minPitch, maxPitch);
             AssertGreaterThanZero(minVelocity, nameof(minVelocity));
 
             messages.SelectMany(x => x)
                 .Where(m => m.GetType() == typeof(NoteMessage))
                 .Cast<NoteMessage>()
-                .Where(m => channels.Contains(m.Channel) && m.Velocity > minVelocity && m.Pitch >= minPitch && m.Pitch < maxPitch)
+                .Where(m => channels.Contains(m.Channel) && m.Velocity > minVelocity && range.IsInside(m.Pitch))
                 .ToList()
                 .ForEach(a =>
                 {
@@ -323,7 +311,7 @@ namespace fractions
                 });
         }
 
-        public void MaxPitch(IEnumerable<Channel> channels, Pitch maxPitch)
+        public void SetMaxPitch(IEnumerable<Channel> channels, Pitch maxPitch)
         {
             messages.SelectMany(x => x)
                 .Where(m => m.GetType() == typeof(NoteOnOffMessage))
@@ -337,7 +325,7 @@ namespace fractions
                 });
         }
 
-        public void MinPitch(IEnumerable<Channel> channels, Pitch minPitch)
+        public void SetMinPitch(IEnumerable<Channel> channels, Pitch minPitch)
         {
             messages.SelectMany(x => x)
                 .Where(m => m.GetType() == typeof(NoteOnOffMessage))
@@ -349,27 +337,6 @@ namespace fractions
                     while (a.Pitch < minPitch)
                         a.Pitch += 12;
                 });
-        }
-        public double GetMaxVelocity(IEnumerable<Channel> channels, Pitch minPitch = Pitch.CNeg1, Pitch maxPitch = Pitch.G9)
-        {
-            AssertMinMaxPitch(minPitch, maxPitch);
-            var min = messages.SelectMany(x => x)
-                .Where(m => m.GetType() == typeof(NoteMessage))
-                .Cast<NoteMessage>()
-                .Where(m => channels.Contains(m.Channel) && m.Pitch >= minPitch && m.Pitch < maxPitch)
-                .Max(m => m.Velocity);
-            return min;
-        }
-
-        public double GetMinVelocity(IEnumerable<Channel> channels, Pitch minPitch = Pitch.CNeg1, Pitch maxPitch = Pitch.G9)
-        {
-            AssertMinMaxPitch(minPitch, maxPitch);
-            var min = messages.SelectMany(x => x)
-                .Where(m => m.GetType() == typeof(NoteMessage))
-                .Cast<NoteMessage>()
-                .Where(m => channels.Contains(m.Channel) && m.Pitch >= minPitch && m.Pitch < maxPitch)
-                .Min(m => m.Velocity);
-            return min;
         }
 
         public void MovePitchAbove(IEnumerable<Channel> channels, Pitch max, Predicate<Pitch> shouldBeDeleted = null, Predicate<Pitch> shouldBeMoved = null)
@@ -431,56 +398,15 @@ namespace fractions
                 Cleanup();
             }
         }
-
-        public void SetMelody(Enumerate<NoteOnOffMessage> messages, Pitch minPitch = Pitch.CNeg1, Pitch maxPitch = Pitch.G9)
-        {
-            SetMelody(Channels.InstrumentChannels, messages, minPitch, maxPitch);
-        }
-
-        public void SetMelody(IEnumerable<Channel> channels, Enumerate<NoteOnOffMessage> melody, Pitch minPitch = Pitch.CNeg1, Pitch maxPitch = Pitch.G9)
-        {
-            AssertMinMaxPitch(minPitch, maxPitch);
-
-            var note = melody.Current();
-
-            messages.SelectMany(x => x)
-                .Where(m => m.GetType() == typeof(NoteOnOffMessage))
-                .Cast<NoteOnOffMessage>()
-                .Where(m => channels.Contains(m.Channel) && m.Pitch >= minPitch && m.Pitch < maxPitch)
-                .OrderBy(n => n.Time)
-                .ToList()
-                .ForEach(m =>
-                {
-                    var npio = note.Pitch.PositionInOctave();
-                    var mpio = m.Pitch.PositionInOctave();
-                    if (npio != mpio)
-                    {
-                        var octaves = npio - mpio;
-                        var pitch = (int)note.Pitch + (12 * octaves);
-                        while (pitch > (int)maxPitch)
-                        {
-                            pitch -= 12;
-                        }
-                        while (pitch < (int)minPitch)
-                        {
-                            pitch += 12;
-                        }
-                        m.Pitch = (Pitch)pitch;
-                    }
-
-                    note = melody.Next();
-                });
-        }
-
-        public void ToPrecision(IEnumerable<Channel> channels, float fraction, Pitch minPitch = Pitch.CNeg1, Pitch maxPitch = Pitch.G9)
+        
+        public void ToPrecision(IEnumerable<Channel> channels, float fraction, PitchRange range)
         {
             AssertGreaterThanZero(fraction, nameof(fraction));
-            AssertMinMaxPitch(minPitch, maxPitch);
 
             messages.SelectMany(x => x)
                 .Where(m => m.GetType() == typeof(NoteMessage))
                 .Cast<NoteMessage>()
-                .Where(m => channels.Contains(m.Channel) && m.Pitch >= minPitch && m.Pitch < maxPitch)
+                .Where(m => channels.Contains(m.Channel) && range.IsInside(m.Pitch))
                 .ToList()
                 .ForEach(m =>
                 {
@@ -514,15 +440,13 @@ namespace fractions
             }
         }
 
-        public void RemoveIdenticalNotes(IEnumerable<Channel> channels, Pitch minPitch = Pitch.CNeg1, Pitch maxPitch = Pitch.G9)
+        public void RemoveIdenticalNotes(IEnumerable<Channel> channels, PitchRange range)
         {
-            AssertMinMaxPitch(minPitch, maxPitch);
-
             var groupings = messages.SelectMany(x => x)
                 .Where(m => m.GetType() == typeof(NoteOnOffMessage))
                 .Cast<NoteOnOffMessage>()
                 .Where(m => channels.Contains(m.Channel))
-                .Where(m => m.Pitch >= minPitch && m.Pitch <= maxPitch)
+                .Where(m => range.IsInside(m.Pitch))
                 .GroupBy(m => m.Pitch)
                 .Where(m => m.Count() > 1)
                     .SelectMany(m => m)
@@ -675,10 +599,10 @@ namespace fractions
                         {
                             if (counter == 0)
                             {
-                                var newNote = melody.Next();
+                                var newNote = melody.GetNext();
                                 while (newNote == repeater)
                                 {
-                                    newNote = melody.Next();
+                                    newNote = melody.GetNext();
                                 }
                                 repeater = newNote;
                             }
@@ -694,7 +618,7 @@ namespace fractions
                         }
                         else
                         {
-                            note.Pitch = melody.Next();
+                            note.Pitch = melody.GetNext();
                         }
                     }
                 }
@@ -717,16 +641,15 @@ namespace fractions
                 }
         }
 
-        public void InterpolateVelocity(List<Channel> channels, double newMin, double newMax, int method = 1, Pitch minPitch = Pitch.CNeg1, Pitch maxPitch = Pitch.G9)
+        public void InterpolateVelocity(List<Channel> channels, double newMin, double newMax, PitchRange range, int method = 1)
         {
-            AssertMinMaxPitch(minPitch, maxPitch);
             AssertMinMax(newMin, newMax);
 
             messages.SelectMany(x => x)
                 .Where(m => m.GetType() == typeof(NoteMessage))
                 .Cast<NoteMessage>()
                 .Where(m => channels.Contains(m.Channel))
-                .Where(m => m.Pitch >= minPitch && m.Pitch <= maxPitch)
+                .Where(m => range.IsInside(m.Pitch))
                 .ToList()
                 .ForEach(m =>
                 {
@@ -753,7 +676,7 @@ namespace fractions
         ///    which have a channel equal to one of sourceChannels
         ///    raise each note an octave - unless it would raise it above Pitch.G9 in which case it is ignored
         /// </summary>
-        public void OctaveAbove(IEnumerable<Channel> channels)
+        public void SetOctaveAbove(IEnumerable<Channel> channels)
         {
             messages.SelectMany(x => x)
                .Where(m => m.GetType() == typeof(NoteMessage))
@@ -772,7 +695,7 @@ namespace fractions
         ///    which have a channel equal to one of sourceChannels
         ///    drop each note an octave - unless it would drop it below Pitch.CNeg1 in which case it is ignored
         /// </summary>
-        public void OctaveBelow(IEnumerable<Channel> channels)
+        public void SetOctaveBelow(IEnumerable<Channel> channels)
         {
             messages.SelectMany(x => x)
                .Where(m => m.GetType() == typeof(NoteMessage))
@@ -788,14 +711,13 @@ namespace fractions
 
         /// <summary>
         /// From all NoteMessages in messages, 
-        ///    which notes belong to the interval [minPitch;maxPitch[
+        ///    which notes belong to the interval [min;max[
         ///    which have a channel equal to one of sourceChannels
         ///    in the order as listed by sourceChannels
-        ///    set each the channel of each note to whatever channel the targetChannels.Next() returns
+        ///    set each the channel of each note to whatever channel the targetChannels.GetNext() returns
         /// </summary>
-        public void MapNoteMessages(IEnumerable<Channel> sourceChannels, Enumerate<Channel> targetChannels, Pitch minPitch = Pitch.CNeg1, Pitch maxPitch = Pitch.G9)
+        public void MapNoteMessages(IEnumerable<Channel> sourceChannels, Enumerate<Channel> targetChannels, PitchRange range)
         {
-            AssertMinMaxPitch(minPitch, maxPitch);
             if (!sourceChannels.Any() || !targetChannels.ToList().Any() || (targetChannels.Length == 1 && targetChannels.First() == Channel.Channel10))
             {
                 return;
@@ -809,11 +731,11 @@ namespace fractions
             foreach (var sourceChannel in relevantChannels)
             {
                 relevant
-                    .Where(m => m.Channel == sourceChannel && m.Pitch >= minPitch && m.Pitch < maxPitch)
+                    .Where(m => m.Channel == sourceChannel && range.IsInside(m.Pitch))
                     .ToList()
                     .ForEach(m =>
                     {
-                        var t = targetChannels.Next();
+                        var t = targetChannels.GetNext();
                         if (t != Channel.Channel10)
                         {
                             m.Channel = t;
@@ -822,9 +744,8 @@ namespace fractions
             }
         }
 
-        public void MapSourceChannelsToTargetChannel(IEnumerable<Channel> sourceChannels, Channel targetChannel, Pitch minPitch = Pitch.CNeg1, Pitch maxPitch = Pitch.G9)
+        public void MapSourceChannelsToTargetChannel(IEnumerable<Channel> sourceChannels, Channel targetChannel, PitchRange range)
         {
-            AssertMinMaxPitch(minPitch, maxPitch);
             if (!sourceChannels.Any() || targetChannel == Channel.Channel10)
             {
                 return;
@@ -838,7 +759,7 @@ namespace fractions
             foreach (var channel in relevantChannels)
             {
                 relevant
-                    .Where(m => m.Channel == channel && m.Pitch >= minPitch && m.Pitch < maxPitch)
+                    .Where(m => m.Channel == channel && range.IsInside(m.Pitch))
                     .ToList()
                     .ForEach(m =>
                     {
@@ -935,19 +856,19 @@ namespace fractions
             }
         }
 
-        private static void AssertMinMaxPitch(Pitch minPitch, Pitch maxPitch)
+        private static void AssertMinMaxPitch(Pitch min, Pitch max)
         {
-            if (minPitch > maxPitch)
+            if (min > max)
             {
-                throw new ArgumentException($"{nameof(minPitch)} must be <= {nameof(maxPitch)}", nameof(minPitch));
+                throw new ArgumentException($"{nameof(min)} must be <= {nameof(max)}", nameof(min));
             }
         }
 
-        private static void AssertMinMaxPercussion(Percussion minPercussion, Percussion maxPercussion)
+        private static void AssertMinMaxPercussion(Percussion min, Percussion max)
         {
-            if (minPercussion > maxPercussion)
+            if (min > max)
             {
-                throw new ArgumentException($"{nameof(minPercussion)} must be <= {nameof(maxPercussion)}", nameof(minPercussion));
+                throw new ArgumentException($"{nameof(min)} must be <= {nameof(max)}", nameof(min));
             }
         }
 

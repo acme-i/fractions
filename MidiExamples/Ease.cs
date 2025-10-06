@@ -76,7 +76,7 @@ namespace fractions.examples
 
             foreach (var c in Channels.InstrumentChannels)
             {
-                OutputDevice.SendProgramChange(c, be.Next());
+                OutputDevice.SendProgramChange(c, be.GetNext());
             }
 
             Clock = new Clock(BPM);
@@ -97,12 +97,12 @@ namespace fractions.examples
                 var r = result[i];
                 //var rn = result[i + 1];
 
-                r.Channel = chans.Next();
+                r.Channel = chans.GetNext();
                 Clock.Schedule(r);
 
                 //var ef = Interpolator.RandomEase();
                 //var d = (rn.Time - r.Time);
-                //var es = echos.Next();
+                //var es = echos.GetNext();
 
                 //var notes = NoteInterpolator<NoteOnOffMessage>.NewEase(ef, r, rn, es, NoteProperty.Time | NoteProperty.Duration);
 
@@ -113,7 +113,7 @@ namespace fractions.examples
                 //{
                 //    var v = ef(r.Velocity, rn.Velocity * 0.25f, count++, remain.Count());
                 //    echo.Velocity = v;
-                //    echo.Channel = echoChannels.Next();
+                //    echo.Channel = echoChannels.GetNext();
                 //    Clock.Schedule(echo);
                 //}
 

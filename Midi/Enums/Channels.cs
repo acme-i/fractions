@@ -30,24 +30,42 @@ namespace fractions
 {
     public static class Channels
     {
-        private readonly static List<Channel> all = Enum.GetValues(typeof(Channel)).Cast<Channel>().OrderBy(c => (int)c).ToList();
-        private readonly static List<Channel> instrumentChannels = all.Where(c => !c.IsPercussion()).ToList();
-        private readonly static List<Channel> percussionChannels = all.Where(c => c.IsPercussion()).ToList();
+        private readonly static Lazy<List<Channel>> all = new Lazy<List<Channel>>(() => 
+            Enum.GetValues(typeof(Channel)).Cast<Channel>()
+                .OrderBy(c => (int)c)
+                .ToList()
+        );
+        private readonly static Lazy<List<Channel>> instrumentChannels = new Lazy<List<Channel>>(() =>
+            Enum.GetValues(typeof(Channel)).Cast<Channel>()
+                .OrderBy(c => (int)c)
+                .Where(c => !c.IsPercussion())
+                .ToList()
+        );
+        private readonly static Lazy<List<Channel>> percussionChannels = new Lazy<List<Channel>>(() =>
+            Enum.GetValues(typeof(Channel)).Cast<Channel>()
+                .OrderBy(c => (int)c)
+                .Where(c => c.IsPercussion())
+                .ToList()
+        );
 
         /// <summary>
         /// Returns a list of all channels
         /// </summary>
-        public static List<Channel> All => all;
+        public static List<Channel> All => all.Value;
 
         /// <summary>
         /// Returns a list of all channels except the Percussion channel
         /// </summary>
-        public static List<Channel> InstrumentChannels => instrumentChannels;
+        public static List<Channel> InstrumentChannels => instrumentChannels.Value;
 
         /// <summary>
         /// Returns a list of all the percussion channels.
         /// </summary>
-        public static List<Channel> PercussionChannels => percussionChannels;
+        public static List<Channel> PercussionChannels => percussionChannels.Value;
+
+        public static Enumerate<Channel> EnumerateAllChannels => new Enumerate<Channel>(Channels.All);
+        public static Enumerate<Channel> EnumerateInstrumentChannels => new Enumerate<Channel>(Channels.InstrumentChannels);
+        public static Enumerate<Channel> EnumeratePercussionChannels => new Enumerate<Channel>(Channels.PercussionChannels);
 
         /// <summary>
         /// Channel numbers are index based.
@@ -58,8 +76,8 @@ namespace fractions
             if (!indexEnd.HasValue)
                 indexEnd = indexStart;
 
-            var first = (int)all.First();
-            var last = (int)all.Last();
+            var first = (int)All.First();
+            var last = (int)All.Last();
 
             if (indexStart > indexEnd || indexStart > last || indexEnd > last || indexStart < first || indexEnd < first)
                 throw new ArgumentOutOfRangeException();

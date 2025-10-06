@@ -117,7 +117,7 @@ namespace fractions
         /// <exception cref="DeviceException">The device cannot be opened.</exception>
         /// <remarks>
         /// Note that Open() establishes a connection to the device, but no messages will be
-        /// received until <see cref="StartReceiving" /> is called.
+        /// received until <see cref="StartReceiving(Clock)" /> is called.
         /// </remarks>
         public void Open()
         {

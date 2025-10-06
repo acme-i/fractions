@@ -55,7 +55,7 @@ namespace fractions.examples
             var rand = new Random(seed);
 
             //string[] files = Directory.GetFiles(@".\midifiles\", "*.mid");
-            //string path = files[rand.Next(files.Count())];
+            //string path = files[rand.GetNext(files.Count())];
             var path = @".\midifiles\bach_js_bwv0999_prelude_in_cm_for_lute.mid";
 
             Console.WriteLine(path);
@@ -77,14 +77,14 @@ namespace fractions.examples
             {
                 outputDevice.SendControlChange(x, Control.ReverbLevel, 0);
                 outputDevice.SendControlChange(x, Control.Volume, DeviceBase.ControlChangeMax);
-                outputDevice.SendProgramChange(x, leftInstr.Next());
+                outputDevice.SendProgramChange(x, leftInstr.GetNext());
             }
 
             foreach (var x in rChans)
             {
                 outputDevice.SendControlChange(x, Control.ReverbLevel, 100);
                 outputDevice.SendControlChange(x, Control.Volume, DeviceBase.ControlChangeMax);
-                outputDevice.SendProgramChange(x, rightInstr.Next());
+                outputDevice.SendProgramChange(x, rightInstr.GetNext());
             }
 
             clock = new Clock(BPM);
@@ -99,8 +99,8 @@ namespace fractions.examples
             var efs = Interpolator.EaseFunctions();
             foreach (var ef in efs)
             {
-                var sIn = stepsIn.Next();
-                var sOut = stepsOut.Next();
+                var sIn = stepsIn.GetNext();
+                var sOut = stepsOut.GetNext();
                 var ppoints = Interpolator.InOutCurve(0.30, 0.70, sIn, sOut, ef.easeIn, ef.easeOut);
                 var vpoints = Interpolator.InOutCurve(0.50, 0.90, sIn, sOut, ef.easeIn, ef.easeOut);
                 pcurve.AddRange(ppoints.Select(e => e * DeviceBase.ControlChangeMax));
@@ -119,20 +119,20 @@ namespace fractions.examples
 
             for (var i = 0; i < notes.Count - 1; i++)
             {
-                var note = noteE.Next();
-                var next = noteE.Peek();
+                var note = noteE.GetNext();
+                var next = noteE.Peek;
 
                 if (i % 2 == 0)
                 {
-                    note.Channel = leftChans.Next();
-                    note.Pan = leftPan.Next();
-                    note.Velocity = leftVol.Next();
+                    note.Channel = leftChans.GetNext();
+                    note.Pan = leftPan.GetNext();
+                    note.Velocity = leftVol.GetNext();
                 }
                 else
                 {
-                    note.Channel = rightChans.Next();
-                    note.Pan = rightPan.Next();
-                    note.Velocity = rightVol.Next();
+                    note.Channel = rightChans.GetNext();
+                    note.Pan = rightPan.GetNext();
+                    note.Velocity = rightVol.GetNext();
                 }
 
             }

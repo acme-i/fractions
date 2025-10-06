@@ -52,6 +52,32 @@ namespace fractions.tests
             Assert.Throws(typeof(ArgumentOutOfRangeException), () => ((Percussion)82).Validate());
         }
 
+        [Test]
+        public void RangeTest()
+        {
+            Assert.AreEqual(Percussion.BassDrum2, PercussionRange.Default.Min);
+            Assert.AreEqual(Percussion.OpenTriangle, PercussionRange.Default.Max);
+
+            var range = new PercussionRange(Percussion.BassDrum2, Percussion.OpenTriangle);
+            Assert.AreEqual(Percussion.BassDrum2, range.Min);
+            Assert.AreEqual(Percussion.OpenTriangle, range.Max);
+
+            Assert.Throws(typeof(ArgumentException), () => new PercussionRange((Percussion)34, Percussion.OpenTriangle));
+            Assert.Throws(typeof(ArgumentException), () => new PercussionRange(Percussion.BassDrum2, (Percussion)82));
+            Assert.Throws(typeof(ArgumentException), () => new PercussionRange(Percussion.SnareDrum1, Percussion.BassDrum2));
+            
+            range.Min = Percussion.ClosedHiHat;
+            Assert.AreEqual(Percussion.ClosedHiHat, range.Min);
+
+            range.Max = Percussion.CrashCymbal1;
+            Assert.AreEqual(Percussion.CrashCymbal1, range.Max);
+
+            Assert.Throws(typeof(ArgumentException), () => range.Min = (Percussion)2);
+            Assert.Throws(typeof(ArgumentException), () => range.Max = (Percussion)82);
+            Assert.Throws(typeof(ArgumentException), () => range.Min = Percussion.OpenTriangle);
+            Assert.Throws(typeof(ArgumentException), () => range.Max = Percussion.BassDrum2);
+        }
+
         #endregion Methods
     }
 }

@@ -111,7 +111,7 @@ namespace fractions.examples
 
             //var rand = new Random(1976);
             //var files = Directory.GetFiles(@".\midifiles\", "*.mid");
-            //var path = files[rand.Next(files.Count())];
+            //var path = files[rand.GetNext(files.Count())];
             var path = @".\midifiles\bach_cpe_solfeggio_in_cm.mid";
 
             var file = new MidiFile(path);
@@ -132,8 +132,8 @@ namespace fractions.examples
             var minValues = new Enumerate<int>(new[] { 0, 64, 20, 64, 30, 64, 40, 64, 50, 64 }, IncrementMethod.Cyclic);
             var volMinValues = new Enumerate<int>(new[] { 80, 90, 100 }, IncrementMethod.Cyclic);
 
-            var pmin = minValues.Next();
-            var vmin = volMinValues.Next();
+            var pmin = minValues.GetNext();
+            var vmin = volMinValues.GetNext();
 
             var panner = new Enumerate<double>(panValues.Select(p => Math.Max(pmin, p * (127 - pmin))), IncrementMethod.MinMax);
             var voller = new Enumerate<double>(panValues.Select(p => Math.Max(vmin, p * (127 - vmin))), IncrementMethod.MinMax);
@@ -148,13 +148,13 @@ namespace fractions.examples
                     prevTrack = evt.Channel;
                 }
 
-                var note = new NoteOnOffMessage(outputDevice, mainChannels.Next(), (Pitch)evt.Note, voller.Next(), evt.Time / div, clock, dur * 0.125f, panner.Next());
+                var note = new NoteOnOffMessage(outputDevice, mainChannels.GetNext(), (Pitch)evt.Note, voller.GetNext(), evt.Time / div, clock, dur * 0.125f, panner.GetNext());
                 clock.Schedule(note);
 
                 if (evt.Channel != prevTrack)
                 {
-                    pmin = minValues.Next();
-                    vmin = volMinValues.Next();
+                    pmin = minValues.GetNext();
+                    vmin = volMinValues.GetNext();
                     panner.Set(panValues.Select(p => Math.Max(pmin, p * (127 - pmin))));
                     voller.Set(panValues.Select(p => Math.Max(vmin, p * (127 - vmin))));
                 }
@@ -166,7 +166,7 @@ namespace fractions.examples
             {
                 var evt = stringOns[time];
                 var dur = stringDurs[time];
-                var note = new NoteOnOffMessage(outputDevice, striChannels.Next(), (Pitch)evt.Note, voller.Next(), evt.Time / div, clock, dur / div, panner.Next());
+                var note = new NoteOnOffMessage(outputDevice, striChannels.GetNext(), (Pitch)evt.Note, voller.GetNext(), evt.Time / div, clock, dur / div, panner.GetNext());
                 clock.Schedule(note);
             }
 

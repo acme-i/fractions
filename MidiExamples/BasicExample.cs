@@ -51,8 +51,8 @@ namespace fractions.examples
             var nots = new Enumerate<MidiEvent>(result.OnEvents, IncrementMethod.MinMax, 1, 0);
             for (var i = 0; i < max; i++)
             {
-                var note = nots.Next();
-                var nt = new NoteOnOffMessage(OutputDevice, chans.Next(), (Pitch)note.Note, note.Velocity, note.Time / div, Clock, 4 * note.Value / div);
+                var note = nots.GetNext();
+                var nt = new NoteOnOffMessage(OutputDevice, chans.GetNext(), (Pitch)note.Note, note.Velocity, note.Time / div, Clock, 4 * note.Value / div);
                 Clock.Schedule(nt);
             }
 

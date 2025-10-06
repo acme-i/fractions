@@ -110,14 +110,14 @@ namespace fractions.examples
             foreach (var p in pitches.Take(12*42+1))
             {
 
-                var a = new NoteOnMessage(outputDevice, leftChan.Next(), melodi1.Next(), leftVol.Next(), time, leftPan.Next());
+                var a = new NoteOnMessage(outputDevice, leftChan.GetNext(), melodi1.GetNext(), leftVol.GetNext(), time, leftPan.GetNext());
 
                 a.BeforeSending += (e) =>
                 {
                     Console.WriteLine(e.Time);
                 };
 
-                var b = new NoteOnMessage(outputDevice, rightChan.Next(), melodi2.Next(), rightVol.Next(), time, rightPan.Next());
+                var b = new NoteOnMessage(outputDevice, rightChan.GetNext(), melodi2.GetNext(), rightVol.GetNext(), time, rightPan.GetNext());
 
                 if (time % 2 == 0)
                     clock.Schedule(a);

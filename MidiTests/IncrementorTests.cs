@@ -97,8 +97,8 @@ namespace fractions.tests
             Assert.AreEqual(0, original.Value);
             Assert.AreEqual(true, original.Increasing);
 
-            original.Next();
-            original.Next();
+            original.GetNext();
+            original.GetNext();
             Assert.AreEqual(40, original.Value);
 
             var inc = new Incrementor(original);
@@ -119,17 +119,17 @@ namespace fractions.tests
             Assert.AreEqual(IncrementMethod.Cyclic, inc.Method);
             Assert.AreEqual(true, inc.Increasing);
             Assert.AreEqual(0, inc.Value);
-            Assert.AreEqual(20, inc.Next());
-            Assert.AreEqual(40, inc.Next());
-            Assert.AreEqual(60, inc.Next());
-            Assert.AreEqual(80, inc.Next());
-            Assert.AreEqual(100, inc.Next());
-            Assert.AreEqual(80, inc.Next());
-            Assert.AreEqual(60, inc.Next());
-            Assert.AreEqual(40, inc.Next());
-            Assert.AreEqual(20, inc.Next());
-            Assert.AreEqual(0, inc.Next());
-            Assert.AreEqual(20, inc.Next());
+            Assert.AreEqual(20, inc.GetNext());
+            Assert.AreEqual(40, inc.GetNext());
+            Assert.AreEqual(60, inc.GetNext());
+            Assert.AreEqual(80, inc.GetNext());
+            Assert.AreEqual(100, inc.GetNext());
+            Assert.AreEqual(80, inc.GetNext());
+            Assert.AreEqual(60, inc.GetNext());
+            Assert.AreEqual(40, inc.GetNext());
+            Assert.AreEqual(20, inc.GetNext());
+            Assert.AreEqual(0, inc.GetNext());
+            Assert.AreEqual(20, inc.GetNext());
         }
 
         [TestCase(0, 9, 1, IncrementMethod.Cyclic)]
@@ -169,13 +169,13 @@ namespace fractions.tests
             Assert.AreEqual(IncrementMethod.MaxMin, inc.Method);
             Assert.AreEqual(false, inc.Increasing);
             Assert.AreEqual(100, inc.Value);
-            Assert.AreEqual(80, inc.Next());
-            Assert.AreEqual(60, inc.Next());
-            Assert.AreEqual(40, inc.Next());
-            Assert.AreEqual(20, inc.Next());
-            Assert.AreEqual(0, inc.Next());
-            Assert.AreEqual(100, inc.Next());
-            Assert.AreEqual(80, inc.Next());
+            Assert.AreEqual(80, inc.GetNext());
+            Assert.AreEqual(60, inc.GetNext());
+            Assert.AreEqual(40, inc.GetNext());
+            Assert.AreEqual(20, inc.GetNext());
+            Assert.AreEqual(0, inc.GetNext());
+            Assert.AreEqual(100, inc.GetNext());
+            Assert.AreEqual(80, inc.GetNext());
         }
 
         [Test]
@@ -185,21 +185,21 @@ namespace fractions.tests
             Assert.AreEqual(IncrementMethod.MinMax, inc.Method);
             Assert.AreEqual(true, inc.Increasing);
             Assert.AreEqual(0, inc.Value);
-            Assert.AreEqual(20, inc.Next());
-            Assert.AreEqual(40, inc.Next());
-            Assert.AreEqual(60, inc.Next());
-            Assert.AreEqual(80, inc.Next());
-            Assert.AreEqual(100, inc.Next());
-            Assert.AreEqual(0, inc.Next());
-            Assert.AreEqual(20, inc.Next());
+            Assert.AreEqual(20, inc.GetNext());
+            Assert.AreEqual(40, inc.GetNext());
+            Assert.AreEqual(60, inc.GetNext());
+            Assert.AreEqual(80, inc.GetNext());
+            Assert.AreEqual(100, inc.GetNext());
+            Assert.AreEqual(0, inc.GetNext());
+            Assert.AreEqual(20, inc.GetNext());
         }
 
         [Test]
         public void CloneTest()
         {
             var inc = new Incrementor(0, 100, 20, IncrementMethod.Cyclic);
-            inc.Next();
-            inc.Next();
+            inc.GetNext();
+            inc.GetNext();
             var clone = inc.Clone();
             Assert.AreEqual(inc.Value, clone.Value);
             Assert.AreEqual(inc.Step, clone.Step);
@@ -223,25 +223,25 @@ namespace fractions.tests
             Assert.AreEqual(true, inc.Increasing);
             Assert.AreEqual(0, inc.Value);
 
-            pan = inc.Next();
+            pan = inc.GetNext();
             Assert.AreEqual(20, pan);
 
-            pan = inc.Next();
+            pan = inc.GetNext();
             Assert.AreEqual(40, pan);
 
-            pan = inc.Next();
+            pan = inc.GetNext();
             Assert.AreEqual(60, pan);
 
-            pan = inc.Next();
+            pan = inc.GetNext();
             Assert.AreEqual(80, pan);
 
-            pan = inc.Next();
+            pan = inc.GetNext();
             Assert.AreEqual(100, pan);
 
-            pan = inc.Next();
+            pan = inc.GetNext();
             Assert.AreEqual(0, pan);
 
-            pan = inc.Next();
+            pan = inc.GetNext();
             Assert.AreEqual(20, pan);
         }
 
@@ -255,22 +255,22 @@ namespace fractions.tests
             Assert.AreEqual(false, inc.Increasing);
             Assert.AreEqual(100, inc.Value);
 
-            pan = inc.Next();
+            pan = inc.GetNext();
             Assert.AreEqual(80, pan);
 
-            pan = inc.Next();
+            pan = inc.GetNext();
             Assert.AreEqual(60, pan);
 
-            pan = inc.Next();
+            pan = inc.GetNext();
             Assert.AreEqual(40, pan);
 
-            pan = inc.Next();
+            pan = inc.GetNext();
             Assert.AreEqual(20, pan);
 
-            pan = inc.Next();
+            pan = inc.GetNext();
             Assert.AreEqual(0, pan);
 
-            pan = inc.Next();
+            pan = inc.GetNext();
             Assert.AreEqual(100, pan);
         }
 
@@ -279,16 +279,16 @@ namespace fractions.tests
         {
             var inc = new Incrementor(0, 9, 1, IncrementMethod.MinMax);
             Assert.AreEqual(0.0, inc.Value);
-            Assert.AreEqual(1.0, inc.Next());
-            Assert.AreEqual(2.0, inc.Next());
-            Assert.AreEqual(3.0, inc.Next());
-            Assert.AreEqual(4.0, inc.Next());
-            Assert.AreEqual(5.0, inc.Next());
-            Assert.AreEqual(6.0, inc.Next());
-            Assert.AreEqual(7.0, inc.Next());
-            Assert.AreEqual(8.0, inc.Next());
-            Assert.AreEqual(9.0, inc.Next());
-            Assert.AreEqual(0.0, inc.Next());
+            Assert.AreEqual(1.0, inc.GetNext());
+            Assert.AreEqual(2.0, inc.GetNext());
+            Assert.AreEqual(3.0, inc.GetNext());
+            Assert.AreEqual(4.0, inc.GetNext());
+            Assert.AreEqual(5.0, inc.GetNext());
+            Assert.AreEqual(6.0, inc.GetNext());
+            Assert.AreEqual(7.0, inc.GetNext());
+            Assert.AreEqual(8.0, inc.GetNext());
+            Assert.AreEqual(9.0, inc.GetNext());
+            Assert.AreEqual(0.0, inc.GetNext());
         }
 
         [Test]
@@ -296,16 +296,16 @@ namespace fractions.tests
         {
             var inc = new Incrementor(0, 9, 1, IncrementMethod.MaxMin);
             Assert.AreEqual(9.0, inc.Value);
-            Assert.AreEqual(8.0, inc.Next());
-            Assert.AreEqual(7.0, inc.Next());
-            Assert.AreEqual(6.0, inc.Next());
-            Assert.AreEqual(5.0, inc.Next());
-            Assert.AreEqual(4.0, inc.Next());
-            Assert.AreEqual(3.0, inc.Next());
-            Assert.AreEqual(2.0, inc.Next());
-            Assert.AreEqual(1.0, inc.Next());
-            Assert.AreEqual(0.0, inc.Next());
-            Assert.AreEqual(9.0, inc.Next());
+            Assert.AreEqual(8.0, inc.GetNext());
+            Assert.AreEqual(7.0, inc.GetNext());
+            Assert.AreEqual(6.0, inc.GetNext());
+            Assert.AreEqual(5.0, inc.GetNext());
+            Assert.AreEqual(4.0, inc.GetNext());
+            Assert.AreEqual(3.0, inc.GetNext());
+            Assert.AreEqual(2.0, inc.GetNext());
+            Assert.AreEqual(1.0, inc.GetNext());
+            Assert.AreEqual(0.0, inc.GetNext());
+            Assert.AreEqual(9.0, inc.GetNext());
         }
 
 
@@ -316,9 +316,9 @@ namespace fractions.tests
         {
             var inc = new Incrementor(min, max, step, IncrementMethod.Bit);
             Assert.AreEqual(min, inc.Value);
-            Assert.AreEqual(max, inc.Next());
-            Assert.AreEqual(min, inc.Next());
-            Assert.AreEqual(max, inc.Next());
+            Assert.AreEqual(max, inc.GetNext());
+            Assert.AreEqual(min, inc.GetNext());
+            Assert.AreEqual(max, inc.GetNext());
         }
 
         [Test]
@@ -344,7 +344,7 @@ namespace fractions.tests
             var oldRight = inc.Increasing;
             var oldValue = inc.Value;
             var oldPreviousValue = inc.PreviousValue;
-            inc.Peek();
+            var _ = inc.Peek;
             Assert.AreEqual(oldRight, inc.Increasing);
             Assert.AreEqual(oldValue, inc.Value);
             Assert.AreEqual(oldPreviousValue, inc.PreviousValue);
@@ -354,21 +354,21 @@ namespace fractions.tests
         public void IncrementMethod_Cyclic()
         {
             var inc = new Incrementor(2, 8, 2, IncrementMethod.Cyclic);
-            Assert.AreEqual(4, inc.Next());
-            Assert.AreEqual(6, inc.Next());
-            Assert.AreEqual(8, inc.Next());
-            Assert.AreEqual(6, inc.Next());
-            Assert.AreEqual(4, inc.Next());
-            Assert.AreEqual(2, inc.Next());
-            Assert.AreEqual(4, inc.Next());
+            Assert.AreEqual(4, inc.GetNext());
+            Assert.AreEqual(6, inc.GetNext());
+            Assert.AreEqual(8, inc.GetNext());
+            Assert.AreEqual(6, inc.GetNext());
+            Assert.AreEqual(4, inc.GetNext());
+            Assert.AreEqual(2, inc.GetNext());
+            Assert.AreEqual(4, inc.GetNext());
 
             inc = new Incrementor(3, 8, 2, IncrementMethod.Cyclic);
-            Assert.AreEqual(5, inc.Next());
-            Assert.AreEqual(7, inc.Next());
-            Assert.AreEqual(7, inc.Next());
-            Assert.AreEqual(5, inc.Next());
-            Assert.AreEqual(3, inc.Next());
-            Assert.AreEqual(5, inc.Next());
+            Assert.AreEqual(5, inc.GetNext());
+            Assert.AreEqual(7, inc.GetNext());
+            Assert.AreEqual(7, inc.GetNext());
+            Assert.AreEqual(5, inc.GetNext());
+            Assert.AreEqual(3, inc.GetNext());
+            Assert.AreEqual(5, inc.GetNext());
         }
 
         [Test]
@@ -399,7 +399,7 @@ namespace fractions.tests
                     }
                 }
 
-                Assert.AreEqual(expected, inc.Next());
+                Assert.AreEqual(expected, inc.GetNext());
             }
         }
 
@@ -417,14 +417,14 @@ namespace fractions.tests
             while (true)
             {
                 if (value + step <= max)
-                    Assert.AreEqual(value + step, inc.Next());
+                    Assert.AreEqual(value + step, inc.GetNext());
                 else
                     break;
 
                 value = inc.Value;
             }
             var expected = min +  (max - (max % (value + step)));
-            Assert.AreEqual(expected, inc.Next());
+            Assert.AreEqual(expected, inc.GetNext());
         }
 
         #endregion

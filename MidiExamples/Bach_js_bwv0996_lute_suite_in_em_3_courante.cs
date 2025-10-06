@@ -99,7 +99,7 @@ namespace fractions.examples
             var rightChans = new Enumerate<Channel>(rChans, step: 1);
 
             foreach (var x in Channels.InstrumentChannels)
-                outputDevice.SendProgramChange(x, instrList.Next());
+                outputDevice.SendProgramChange(x, instrList.GetNext());
 
             foreach (var x in lChans)
                 outputDevice.SendControlChange(x, Control.ReverbLevel, 0);
@@ -116,8 +116,8 @@ namespace fractions.examples
             var eOut = Interpolator.EaseOutFunctions();
             for (var part = 0; part < eIn.Count; part++)
             {
-                var sIn = steps.Next();
-                var sOut = steps.Next();
+                var sIn = steps.GetNext();
+                var sOut = steps.GetNext();
                 var ppoints = Interpolator.InOutCurve(0.10, 0.90, sIn, sOut, eIn[part], eOut[part]);
                 var vpoints = Interpolator.InOutCurve(0.80, 1.00, sIn, sOut, eIn[part], eOut[part]);
                 pcurve.AddRange(ppoints.Select(e => e * 127));
@@ -136,23 +136,23 @@ namespace fractions.examples
             var noteE = new Enumerate<NoteOnOffMessage>(notes, step: 1);
             for (var i = 0; i < notes.Count - 1; i++)
             {
-                var note = noteE.Next();
-                var next = noteE.Peek();
+                var note = noteE.GetNext();
+                var next = noteE.Peek;
                 
                 if (note.Pitch < Pitch.C3)
                 {
-                    note.Channel = leftChans.Next();
-                    note.Pan = leftPan.Next();
-                    note.Velocity = leftVol.Next();
+                    note.Channel = leftChans.GetNext();
+                    note.Pan = leftPan.GetNext();
+                    note.Velocity = leftVol.GetNext();
                 }
                 else
                 {
-                    note.Channel = rightChans.Next();
-                    note.Pan = rightPan.Next();
-                    note.Velocity = rightVol.Next();
+                    note.Channel = rightChans.GetNext();
+                    note.Pan = rightPan.GetNext();
+                    note.Velocity = rightVol.GetNext();
                 }
 
-                var nEcho = nEchoes.Next();
+                var nEcho = nEchoes.GetNext();
                 if (playEchoes && nEcho > 0 && note.Pitch > (Pitch.C4 - 3) && note.Time != next.Time)
                 {
                     var leftC = new Enumerate<double>(leftPan, IncrementMethod.Cyclic, 2);
@@ -161,7 +161,7 @@ namespace fractions.examples
                     var rightV = new Enumerate<double>(rightVol, IncrementMethod.Cyclic, 2);
                     var minDur = (next.Time - note.Time) / nEcho;
                     var j = i + 1;
-                    var fract = fractions.Next();
+                    var fract = fractions.GetNext();
                     var diff = next.Time - note.Time;
                     var p = note.Pitch;
                     for (var x = 0f; x < nEcho; x++)
@@ -174,17 +174,17 @@ namespace fractions.examples
 
                         if (j % 2 == 0)
                         {
-                            clone.Channel = leftChans.Next();
+                            clone.Channel = leftChans.GetNext();
                             clone.Pitch = p.OctaveAbove();
-                            clone.Pan = (note.Pan + leftC.Next()) / 2f;
-                            clone.Velocity = leftV.Next() * nEcho / (1.125f + x);
+                            clone.Pan = (note.Pan + leftC.GetNext()) / 2f;
+                            clone.Velocity = leftV.GetNext() * nEcho / (1.125f + x);
                         }
                         else
                         {
-                            clone.Channel = rightChans.Next();
+                            clone.Channel = rightChans.GetNext();
                             clone.Pitch = p.OctaveAbove().OctaveAbove();
-                            clone.Pan = (note.Pan + rightC.Next()) / 2f;
-                            clone.Velocity = rightV.Next() * nEcho / (1.125f + x);
+                            clone.Pan = (note.Pan + rightC.GetNext()) / 2f;
+                            clone.Velocity = rightV.GetNext() * nEcho / (1.125f + x);
                         }
                         j++;
                         clone.Duration = Math.Max(clone.Duration, minDur);

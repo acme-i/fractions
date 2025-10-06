@@ -42,7 +42,6 @@ namespace fractions.examples
 
         static int MelodiLength = 258;
         static int MinRev = 8;
-        static int MaxRev = 70;
         static int MinVol = 10;
         static int MaxVol = 120;
         static int MaxLeft = 10;
@@ -159,9 +158,9 @@ namespace fractions.examples
 
             Play();
 
-            Clock.MinPitch(Channels.InstrumentChannels, Pitch.A1);
-            Clock.MaxPitch(Channels.InstrumentChannels, Pitch.G5);
-            //Clock.MaxDuration(Channels.InstrumentChannels, 8f);
+            Clock.SetMinPitch(Channels.InstrumentChannels, Pitch.A1);
+            Clock.SetMaxPitch(Channels.InstrumentChannels, Pitch.G5);
+            //Clock.SetMaxDuration(Channels.InstrumentChannels, 8f);
             Clock.Cleanup();
             Clock.Start();
             Thread.Sleep(400000);
@@ -190,25 +189,25 @@ namespace fractions.examples
 
             foreach (var p in PanMapE.Values)
                 for (var i = 0; i < PanMapE.Values.Count / stepsAhead; i++)
-                    p.Next();
+                    p.GetNext();
             foreach (var v in VolMapE.Values)
                 for (var i = 0; i < VolMapE.Values.Count / stepsAhead; i++)
-                    v.Next();
+                    v.GetNext();
         }
 
         static (Enumerate<Pitch>, Enumerate<Pitch>) GetMelody(float time)
         {
-            Enumerate<Pitch> mel = melodies.Next();
-            Enumerate<Pitch> bas = melodies2.Next();
+            Enumerate<Pitch> mel = melodies.GetNext();
+            Enumerate<Pitch> bas = melodies2.GetNext();
             return (mel, bas);
         }
 
         static void AdvanceMelody()
         {
             foreach (var m in melodies)
-                m.Next();
+                m.GetNext();
             foreach (var m in melodies2)
-                m.Next();
+                m.GetNext();
         }
 
         static void Play()
@@ -236,12 +235,12 @@ namespace fractions.examples
             
             for (float i = 0; i < MelodiLength; i++)
             {
-                var fractions = shifts.Next();
-                for (var j = 0; j < times.Next(); j += 1)
+                var fractions = shifts.GetNext();
+                for (var j = 0; j < times.GetNext(); j += 1)
                 {
-                    var f = fractions.Next();
-                    var s = j % 2 == 0 ? scaler1.Next() : scaler2.Next();
-                    var k = j % 2 == 0 ? skips1.Next() : skips2.Next();
+                    var f = fractions.GetNext();
+                    var s = j % 2 == 0 ? scaler1.GetNext() : scaler2.GetNext();
+                    var k = j % 2 == 0 ? skips1.GetNext() : skips2.GetNext();
 
                     AdvanceMelody();
 
@@ -257,7 +256,7 @@ namespace fractions.examples
 
         static void PlayMelody1(float i, Fraction fraction, int scaler, int stepSize)
         {
-            var results = fraction.ResultsBetween(1, fraction.Base * scaler, stepSize, includeOne: true, moveIntoRange: true).Take(times.Next()).ToList();
+            var results = fraction.ResultsBetween(1, fraction.Base * scaler, stepSize, includeOne: true, moveIntoRange: true).Take(times.GetNext()).ToList();
 
             if (stepSize < results.Count)
             {
@@ -272,8 +271,8 @@ namespace fractions.examples
             var mels = GetMelody(i);
             var melodi1 = mels.Item1.Clone();
             var bass1 = mels.Item2.Clone();
-            var c = melodiChans.Next();
-            var baseNote = new NoteOnOffMessage(OutputDevice, c, melodi1.Current(), VolMap[c].Next(), i, Clock, results.First(), PanMap[c].Next());
+            var c = melodiChans.GetNext();
+            var baseNote = new NoteOnOffMessage(OutputDevice, c, melodi1.Current, VolMap[c].GetNext(), i, Clock, results.First(), PanMap[c].GetNext());
             Clock.Schedule(baseNote);
 
             var count = 1;
@@ -283,40 +282,40 @@ namespace fractions.examples
                 {
                     var n = baseNote.MakeTimeShiftedCopy(f) as NoteOnOffMessage;
                     n.Duration = f;
-                    n.Velocity = VolMap[n.Channel].Next() * 0.75;
-                    n.Pan = PanMap[n.Channel].Next();
+                    n.Velocity = VolMap[n.Channel].GetNext() * 0.75;
+                    n.Pan = PanMap[n.Channel].GetNext();
                     Clock.Schedule(n);
 
                     n.BeforeSendingNoteOnOff += (NoteOnOffMessage ne) =>
                     {
-                        OutputDevice.SendProgramChange(ne.Channel, instruments.Next());
-                        //celeste2.Incrementor.SetStepSize(celestest.Next());
-                        //tremelo2.Incrementor.SetStepSize(tremelost.Next());
-                        //reverb2.Incrementor.SetStepSize(reverbst.Next());
-                        OutputDevice.SendControlChange(ne.Channel, Control.CelesteLevel, celeste.Next());
-                        OutputDevice.SendControlChange(ne.Channel, Control.TremoloLevel, tremelo.Next());
-                        OutputDevice.SendControlChange(ne.Channel, Control.ReverbLevel, reverb.Next());
+                        OutputDevice.SendProgramChange(ne.Channel, instruments.GetNext());
+                        //celeste2.Incrementor.SetStepSize(celestest.GetNext());
+                        //tremelo2.Incrementor.SetStepSize(tremelost.GetNext());
+                        //reverb2.Incrementor.SetStepSize(reverbst.GetNext());
+                        OutputDevice.SendControlChange(ne.Channel, Control.CelesteLevel, celeste.GetNext());
+                        OutputDevice.SendControlChange(ne.Channel, Control.TremoloLevel, tremelo.GetNext());
+                        OutputDevice.SendControlChange(ne.Channel, Control.ReverbLevel, reverb.GetNext());
                     };
                 }
                 else
                 {
                     var n2 = baseNote.MakeTimeShiftedCopy(f) as NoteOnOffMessage;
-                    n2.Channel = melodi2Chans.Next();
+                    n2.Channel = melodi2Chans.GetNext();
                     n2.Duration = f;
-                    n2.Velocity = VolMapE[n2.Channel].Next() * 0.75;
-                    n2.Pitch = bass1.Current();
-                    n2.Pan = PanMapE[n2.Channel].Next();
+                    n2.Velocity = VolMapE[n2.Channel].GetNext() * 0.75;
+                    n2.Pitch = bass1.Current;
+                    n2.Pan = PanMapE[n2.Channel].GetNext();
                     Clock.Schedule(n2);
 
                     n2.BeforeSendingNoteOnOff += (NoteOnOffMessage n2e) =>
                     {
-                        OutputDevice.SendProgramChange(n2e.Channel, instruments2.Next());
-                        //celeste2.Incrementor.SetStepSize(celestest2.Next());
-                        //tremelo2.Incrementor.SetStepSize(tremelost2.Next());
-                        //reverb2.Incrementor.SetStepSize(reverbst2.Next());
-                        OutputDevice.SendControlChange(n2e.Channel, Control.CelesteLevel, celeste2.Next());
-                        OutputDevice.SendControlChange(n2e.Channel, Control.TremoloLevel, tremelo2.Next());
-                        OutputDevice.SendControlChange(n2e.Channel, Control.ReverbLevel, reverb2.Next());
+                        OutputDevice.SendProgramChange(n2e.Channel, instruments2.GetNext());
+                        //celeste2.Incrementor.SetStepSize(celestest2.GetNext());
+                        //tremelo2.Incrementor.SetStepSize(tremelost2.GetNext());
+                        //reverb2.Incrementor.SetStepSize(reverbst2.GetNext());
+                        OutputDevice.SendControlChange(n2e.Channel, Control.CelesteLevel, celeste2.GetNext());
+                        OutputDevice.SendControlChange(n2e.Channel, Control.TremoloLevel, tremelo2.GetNext());
+                        OutputDevice.SendControlChange(n2e.Channel, Control.ReverbLevel, reverb2.GetNext());
                     };
                 }
 
@@ -327,7 +326,7 @@ namespace fractions.examples
 
         static void PlayMelody2(float i, Fraction fraction, int scaler, int stepSize)
         {
-            var results = fraction.ResultsBetween(1, fraction.Base * scaler, stepSize, includeOne: true, moveIntoRange: true).Take(times.Next()).ToList();
+            var results = fraction.ResultsBetween(1, fraction.Base * scaler, stepSize, includeOne: true, moveIntoRange: true).Take(times.GetNext()).ToList();
 
             if (stepSize < results.Count)
             {
@@ -342,8 +341,8 @@ namespace fractions.examples
             var mels = GetMelody(i);
             var melodi2 = mels.Item1.Clone().OctaveBelow();
             var bass2 = mels.Item2.Clone().OctaveBelow();
-            var c = melodi2Chans.Next();
-            var baseNote = new NoteOnOffMessage(OutputDevice, melodi2Chans.Next(), melodi2.Current(), VolMapE[c].Next(), i, Clock, results.First(), PanMapE[c].Next());
+            var c = melodi2Chans.GetNext();
+            var baseNote = new NoteOnOffMessage(OutputDevice, melodi2Chans.GetNext(), melodi2.Current, VolMapE[c].GetNext(), i, Clock, results.First(), PanMapE[c].GetNext());
             Clock.Schedule(baseNote);
 
             var count = 1;
@@ -354,43 +353,43 @@ namespace fractions.examples
                 {
                     var n = baseNote.MakeTimeShiftedCopy(f) as NoteOnOffMessage;
                     n.Duration = f;
-                    n.Velocity = VolMap[n.Channel].Next() * 0.75;
-                    n.Pan = PanMap[n.Channel].Next();
+                    n.Velocity = VolMap[n.Channel].GetNext() * 0.75;
+                    n.Pan = PanMap[n.Channel].GetNext();
                     Clock.Schedule(n);
-                    OutputDevice.SendProgramChange(n.Channel, instruments.Next());
+                    OutputDevice.SendProgramChange(n.Channel, instruments.GetNext());
 
                     n.BeforeSendingNoteOnOff += (NoteOnOffMessage ne) =>
                     {
-                        //OutputDevice.SendProgramChange(ne.Channel, instruments.Next());
-                        //celeste2.Incrementor.SetStepSize(celestest.Next());
-                        //tremelo2.Incrementor.SetStepSize(tremelost.Next());
-                        //reverb2.Incrementor.SetStepSize(reverbst.Next());
-                        OutputDevice.SendControlChange(ne.Channel, Control.CelesteLevel, celeste.Next());
-                        OutputDevice.SendControlChange(ne.Channel, Control.TremoloLevel, tremelo.Next());
-                        OutputDevice.SendControlChange(ne.Channel, Control.ReverbLevel, reverb.Next());
+                        //OutputDevice.SendProgramChange(ne.Channel, instruments.GetNext());
+                        //celeste2.Incrementor.SetStepSize(celestest.GetNext());
+                        //tremelo2.Incrementor.SetStepSize(tremelost.GetNext());
+                        //reverb2.Incrementor.SetStepSize(reverbst.GetNext());
+                        OutputDevice.SendControlChange(ne.Channel, Control.CelesteLevel, celeste.GetNext());
+                        OutputDevice.SendControlChange(ne.Channel, Control.TremoloLevel, tremelo.GetNext());
+                        OutputDevice.SendControlChange(ne.Channel, Control.ReverbLevel, reverb.GetNext());
                     };
                 }
                 else
                 {
                     var n2 = baseNote.MakeTimeShiftedCopy(f) as NoteOnOffMessage;
-                    n2.Channel = bass2Chans.Next();
+                    n2.Channel = bass2Chans.GetNext();
                     n2.Duration = f;
-                    n2.Velocity = VolMapE[n2.Channel].Next() * 0.75;
-                    n2.Pitch = bass2.Current();
-                    n2.Pan = PanMapE[n2.Channel].Next();
+                    n2.Velocity = VolMapE[n2.Channel].GetNext() * 0.75;
+                    n2.Pitch = bass2.Current;
+                    n2.Pan = PanMapE[n2.Channel].GetNext();
                     Clock.Schedule(n2);
 
-                    OutputDevice.SendProgramChange(n2.Channel, instruments2.Next());
+                    OutputDevice.SendProgramChange(n2.Channel, instruments2.GetNext());
 
                     n2.BeforeSendingNoteOnOff += (NoteOnOffMessage n2e) =>
                     {
-                        //OutputDevice.SendProgramChange(n2e.Channel, instruments2.Next());
-                        //celeste2.Incrementor.SetStepSize(celestest2.Next());
-                        //tremelo2.Incrementor.SetStepSize(tremelost2.Next());
-                        //reverb2.Incrementor.SetStepSize(reverbst2.Next());
-                        OutputDevice.SendControlChange(n2e.Channel, Control.CelesteLevel, celeste2.Next());
-                        OutputDevice.SendControlChange(n2e.Channel, Control.TremoloLevel, tremelo2.Next());
-                        OutputDevice.SendControlChange(n2e.Channel, Control.ReverbLevel, reverb2.Next());
+                        //OutputDevice.SendProgramChange(n2e.Channel, instruments2.GetNext());
+                        //celeste2.Incrementor.SetStepSize(celestest2.GetNext());
+                        //tremelo2.Incrementor.SetStepSize(tremelost2.GetNext());
+                        //reverb2.Incrementor.SetStepSize(reverbst2.GetNext());
+                        OutputDevice.SendControlChange(n2e.Channel, Control.CelesteLevel, celeste2.GetNext());
+                        OutputDevice.SendControlChange(n2e.Channel, Control.TremoloLevel, tremelo2.GetNext());
+                        OutputDevice.SendControlChange(n2e.Channel, Control.ReverbLevel, reverb2.GetNext());
                     };
                 }
 

@@ -73,6 +73,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Devices\ClockExtensions.cs" />
+    <Compile Include="Enums\IAssertRange.cs" />
+    <Compile Include="Enums\PercussionRange.cs" />
+    <Compile Include="Enums\PercussionRangeExtensions.cs" />
+    <Compile Include="Enums\PitchRange.cs" />
+    <Compile Include="Enums\PitchRangeExtensions.cs" />
+    <Compile Include="Enums\EnumRange.cs" />
     <Compile Include="Extensions\ArrayExtensions.cs" />
     <Compile Include="Extensions\RandomExtensions.cs" />
     <Compile Include="Extensions\ReadOnlyCollectionExtensions.cs" />
@@ -143,6 +150,7 @@
     <Compile Include="Instruments\ScalePattern.cs" />
     <Compile Include="Devices\ShortMsg.cs" />
     <Compile Include="Messages\SysExMessage.cs" />
+    <Compile Include="Util\IncrementMethod.cs" />
     <Compile Include="Util\Incrementor.cs" />
     <Compile Include="Win32\HMIDIIN.cs" />
     <Compile Include="Win32\HMIDIOUT.cs" />

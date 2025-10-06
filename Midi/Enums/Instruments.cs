@@ -31,112 +31,93 @@ namespace fractions
 {
     public static class Instruments
     {
-        /// <summary>
-        /// Returns a list of all instruments
-        /// </summary>
-        public static List<Instrument> All
-        {
-            get
-            {
-                var instruments = Enum.GetValues(typeof(Instrument))
-                    .Cast<Instrument>()
-                    .ToList();
-                return instruments;
-            }
-        }
+        private static readonly Lazy<List<Instrument>> _all = new Lazy<List<Instrument>>(() =>
+            Enum.GetValues(typeof(Instrument))
+                .Cast<Instrument>()
+                .ToList()
+        );
 
-        /// <summary>
-        /// Returns a list of all pianos
-        /// </summary>
-        public static List<Instrument> Pianos
-        {
-            get
-            {
-                var instruments = Enum.GetValues(typeof(Instrument))
+        private static readonly Lazy<List<Instrument>> _pianos = new Lazy<List<Instrument>>(() =>
+            Enum.GetValues(typeof(Instrument))
                     .Cast<Instrument>()
                     .Where(i => Regex.IsMatch(i.Name(), "piano", RegexOptions.IgnoreCase))
-                    .ToList();
-                return instruments;
-            }
-        }
+                    .ToList()
+        );
 
-        /// <summary>
-        /// Returns a list of all guitars
-        /// </summary>
-        public static List<Instrument> Guitars
-        {
-            get
-            {
-                var instruments = Enum.GetValues(typeof(Instrument))
+        private static readonly Lazy<List<Instrument>> _guitars = new Lazy<List<Instrument>>(() =>
+            Enum.GetValues(typeof(Instrument))
                     .Cast<Instrument>()
                     .Where(i => Regex.IsMatch(i.Name(), "guitar", RegexOptions.IgnoreCase))
-                    .ToList();
-                return instruments;
-            }
-        }
+                    .ToList()
+        );
 
-        /// <summary>
-        /// Returns a list of all guitars
-        /// </summary>
-        public static List<Instrument> SoftGuitars
-        {
-            get
-            {
-                var instruments = Enum.GetValues(typeof(Instrument))
+        private static readonly Lazy<List<Instrument>> _softGuitars = new Lazy<List<Instrument>>(() =>
+            Enum.GetValues(typeof(Instrument))
                     .Cast<Instrument>()
                     .Where(i => Regex.IsMatch(i.Name(), "guitar", RegexOptions.IgnoreCase))
                     .Except(new[] {
                         Instrument.OverdrivenGuitar, Instrument.DistortionGuitar, Instrument.GuitarHarmonics,
                         Instrument.GuitarFretNoise, Instrument.AcousticGuitarSteel })
-                    .ToList();
-                return instruments;
-            }
-        }
+                    .ToList()
+        );
 
-        /// <summary>
-        /// Returns a list of all pads
-        /// </summary>
-        public static List<Instrument> Pads
-        {
-            get
-            {
-                var instruments = Enum.GetValues(typeof(Instrument))
-                    .Cast<Instrument>()
-                    .Where(i => Regex.IsMatch(i.Name(), "pad", RegexOptions.IgnoreCase))
-                    .ToList();
-                return instruments;
-            }
-        }
-
-        /// <summary>
-        /// Returns a list of all pads
-        /// </summary>
-        public static List<Instrument> Basses
-        {
-            get
-            {
-                var instruments = Enum.GetValues(typeof(Instrument))
+        private static readonly Lazy<List<Instrument>> _basses = new Lazy<List<Instrument>>(() =>
+            Enum.GetValues(typeof(Instrument))
                     .Cast<Instrument>()
                     .Where(i => Regex.IsMatch(i.Name(), "bass", RegexOptions.IgnoreCase))
                     .Except(new[] { Instrument.Bassoon })
-                    .ToList();
-                return instruments;
-            }
-        }
+                    .ToList()
+        );
+
+        private static readonly Lazy<List<Instrument>> _pads = new Lazy<List<Instrument>>(() =>
+            Enum.GetValues(typeof(Instrument))
+                    .Cast<Instrument>()
+                    .Where(i => Regex.IsMatch(i.Name(), "pad", RegexOptions.IgnoreCase))
+                    .ToList()
+        );
+
+        private static readonly Lazy<List<Instrument>> _softBasses = new Lazy<List<Instrument>>(() =>
+            new[] {
+                Instrument.AcousticBass, Instrument.ElectricBassFinger,
+                Instrument.ElectricBassPick, Instrument.FretlessBass
+            }.ToList()
+        );
+
+        /// <summary>
+        /// Returns a list of all instruments
+        /// </summary>
+        public static List<Instrument> All => _all.Value;
+
+
+        /// <summary>
+        /// Returns a list of all pianos
+        /// </summary>
+        public static List<Instrument> Pianos => _pianos.Value;
 
         /// <summary>
         /// Returns a list of all guitars
         /// </summary>
-        public static List<Instrument> SoftBasses
-        {
-            get
-            {
-                return new[] {
-                        Instrument.AcousticBass, Instrument.ElectricBassFinger,
-                        Instrument.ElectricBassPick, Instrument.FretlessBass
-                }.ToList();
-            }
-        }
+        public static List<Instrument> Guitars => _guitars.Value;
+
+        /// <summary>
+        /// Returns a list of all guitars
+        /// </summary>
+        public static List<Instrument> SoftGuitars => _softGuitars.Value;
+
+        /// <summary>
+        /// Returns a list of all pads
+        /// </summary>
+        public static List<Instrument> Pads = _pads.Value;
+
+        /// <summary>
+        /// Returns a list of all pads
+        /// </summary>
+        public static List<Instrument> Basses = _basses.Value;
+
+        /// <summary>
+        /// Returns a list of all guitars
+        /// </summary>
+        public static List<Instrument> SoftBasses = _softBasses.Value;
 
     }
 }

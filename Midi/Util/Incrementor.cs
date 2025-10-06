@@ -3,28 +3,6 @@
 
 namespace fractions
 {
-    /// <summary>
-    /// A way of oscilating between A and Z
-    /// </summary>
-    public enum IncrementMethod : int
-    {
-        /// <summary>
-        /// A-Z, A-Z etc
-        /// </summary>
-        MinMax = 0,
-        /// <summary>
-        /// Z-A, Z-A etc.
-        /// </summary>
-        MaxMin = 1,
-        /// <summary>
-        /// A-Z-A-Z-A etc.
-        /// </summary>
-        Cyclic = 2,
-        /// <summary>
-        /// A then Z then A then Z etc.
-        /// </summary>
-        Bit = 3
-    }
 
     /// <summary>
     /// A class that oscilates between two values
@@ -206,7 +184,7 @@ namespace fractions
         public double Max { get; private set; }
 
         /// <summary>
-        /// Step value to move towards min or max when calling Next()
+        /// Step value to move towards min or max when calling GetNext()
         /// </summary>
         public double Step { get; private set; }
 
@@ -240,10 +218,10 @@ namespace fractions
         }
 
         /// <summary>
-        /// Next value towards min or max
+        /// GetNext value towards min or max
         /// </summary>
         /// <returns>The new value</returns>
-        public double Next()
+        public double GetNext()
         {
             PreviousValue = Value;
 
@@ -323,21 +301,24 @@ namespace fractions
             return Value;
         }
 
-        /// <returns>Returns the next value Next() would return - without actually changing the Value</returns>
-        public double Peek()
+        /// <returns>Returns the next value GetNext() would return - without actually changing the Value</returns>
+        public double Peek
         {
-            var oldIncreasing = Increasing;
-            var oldPreviousValue = PreviousValue;
-            var oldValue = Value;
-            var peek = Next();
-            Value = oldValue;
-            PreviousValue = oldPreviousValue;
-            Increasing = oldIncreasing;
-            return peek;
+            get
+            {               
+                var oldIncreasing = Increasing;
+                var oldPreviousValue = PreviousValue;
+                var oldValue = Value;
+                var peek = GetNext();
+                Value = oldValue;
+                PreviousValue = oldPreviousValue;
+                Increasing = oldIncreasing;
+                return peek;
+            }
         }
 
-        /// <returns>Returns the next value Next() would return - without actually changing the Value</returns>
-        public double Peek(int repeat)
+        /// <returns>Returns the next value GetNext() would return - without actually changing the Value</returns>
+        public double PeekAt(int repeat)
         {
             if (Math.Sign(repeat) <= 0)
                 throw new ArgumentException("must be positive", nameof(repeat));
@@ -345,10 +326,10 @@ namespace fractions
             var oldIncreasing = Increasing;
             var oldPreviousValue = PreviousValue;
             var oldValue = Value;
-            var peek = Next();
+            var peek = GetNext();
             for (var i = 0; i < repeat - 1; i++)
             {
-                peek = Next();
+                peek = GetNext();
             }
             Value = oldValue;
             PreviousValue = oldPreviousValue;

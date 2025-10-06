@@ -171,9 +171,9 @@ namespace fractions.examples
             {
                 for (int y = 0; y < 3; y++)
                 {
-                    volMappers.Next().Add(x, new Enumerate<float>(vSteppers.Next(), IncrementMethod.Cyclic));
-                    panMappers.Next().Add(x, new Enumerate<float>(pSteppers.Next(), IncrementMethod.Cyclic));
-                    reverbMappers.Next().Add(x, new Enumerate<float>(rSteppers.Next(), IncrementMethod.Cyclic));
+                    volMappers.GetNext().Add(x, new Enumerate<float>(vSteppers.GetNext(), IncrementMethod.Cyclic));
+                    panMappers.GetNext().Add(x, new Enumerate<float>(pSteppers.GetNext(), IncrementMethod.Cyclic));
+                    reverbMappers.GetNext().Add(x, new Enumerate<float>(rSteppers.GetNext(), IncrementMethod.Cyclic));
                 }
             }
         }
@@ -214,11 +214,11 @@ namespace fractions.examples
             {
                 var result = PlayAt(i);
 
-                var nextEcho = echoes.Next();
+                var nextEcho = echoes.GetNext();
                 if (nextEcho > 1)
                 {
                     PlayEchos(i, nextEcho);
-                    for (var j = 4; j <= repeats.Next(); j += increments.Next())
+                    for (var j = 4; j <= repeats.GetNext(); j += increments.GetNext())
                     {
                         if ((i / j) > 1)
                             PlayEchos(i, j);
@@ -233,16 +233,16 @@ namespace fractions.examples
 
         private NoteOnOffMessage PlayAt(int i)
         {
-            var note = notes.Next();
-            var dur = durations.Next();
+            var note = notes.GetNext();
+            var dur = durations.GetNext();
             var chan = i % 2 == 0 ? channels : secondChannels;
-            var ch = chan.Next();
+            var ch = chan.GetNext();
             var pm = i % 2 == 0 ? PanMap[ch] : EchoPanMap[ch];
             var vol = i % 2 == 0 ? VolMap[ch] : EchoVolMap[ch];
             var instr = i % 4 != 0 ? mainInstruments : secondInstruments;
             var rev = i % 2 == 0 ? ReverbMap[ch] : EchoReverbMap[ch];
 
-            var nt = new NoteOnOffMessage(OutputDevice, ch, (Pitch)note.Note + 12, vol.Next(), note.Time / div, Clock, dur, pm.Next(), instr.Next(), rev.Next());
+            var nt = new NoteOnOffMessage(OutputDevice, ch, (Pitch)note.Note + 12, vol.GetNext(), note.Time / div, Clock, dur, pm.GetNext(), instr.GetNext(), rev.GetNext());
             Clock.Schedule(nt);
 
             return nt;
@@ -269,15 +269,15 @@ namespace fractions.examples
 
             for (int y = 0; y < i - 1; y++)
             {
-                notsClone.Next();
-                durClone.Next();
+                notsClone.GetNext();
+                durClone.GetNext();
             }
 
-            var note = notsClone.Next();
-            var dur = durClone.Next();
+            var note = notsClone.GetNext();
+            var dur = durClone.GetNext();
 
-            var noteDest = notsClone.Peek(max);
-            var durDest = durClone.Peek(max);
+            var noteDest = notsClone.PeekAt(max);
+            var durDest = durClone.PeekAt(max);
             var ps = i % 2 == 0 ? ps1 : ps2;
             var notesTimes = new Enumerate<float>(Interpolator.Interpolate(note.Time, noteDest.Time, max, 1));
             var noteDurs = new Enumerate<float>(Interpolator.Interpolate(dur, durDest, max, 1));
@@ -287,7 +287,7 @@ namespace fractions.examples
             for (var j = i; j < max; j++)
             {
                 var chan = j % 2 == 0 ? echoChannels : secondEchoChannels;
-                var ch = chan.Next();
+                var ch = chan.GetNext();
                 var pm = i % 2 == 0 ? EchoPanMap[ch] : EchoPanMap2[ch];
                 var vol = i % 2 == 0 ? EchoVolMap[ch] : EchoVolMap2[ch];
                 var instr = i % 2 == 0 ? echoMainInstruments : echoSecondInstruments;
@@ -297,22 +297,22 @@ namespace fractions.examples
                     new NoteOnOffMessage
                     (
                         OutputDevice, ch,
-                        (Pitch)notsClone.Next().Note + ps.Next(),
-                        vol.Next(),
-                        (notsClone.Current().Time + notesTimes.Next()) / div,
+                        (Pitch)notsClone.GetNext().Note + ps.GetNext(),
+                        vol.GetNext(),
+                        (notsClone.Current.Time + notesTimes.GetNext()) / div,
                         Clock,
-                        noteDurs.Next(),
-                        pm.Next(),
-                        instr.Next(),
-                        rev.Next()
+                        noteDurs.GetNext(),
+                        pm.GetNext(),
+                        instr.GetNext(),
+                        rev.GetNext()
                     )
                 );
 
-                note = notsClone.Next();
-                dur = durClone.Next();
+                note = notsClone.GetNext();
+                dur = durClone.GetNext();
             }
 
-            ps.Next();
+            ps.GetNext();
         }
     }
 }

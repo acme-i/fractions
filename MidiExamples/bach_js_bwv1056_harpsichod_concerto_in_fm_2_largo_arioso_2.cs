@@ -92,14 +92,14 @@ namespace fractions.examples
             foreach (var x in lChans)
             {
                 outputDevice.SendControlChange(x, Control.ReverbLevel, 0);
-                outputDevice.SendProgramChange(x, leftInstr.Next());
+                outputDevice.SendProgramChange(x, leftInstr.GetNext());
             }
 
             foreach (var x in rChans)
             {
                 outputDevice.SendControlChange(x, Control.ReverbLevel, 20);
                 outputDevice.SendControlChange(x, Control.Volume, 100);
-                outputDevice.SendProgramChange(x, rightInstr.Next());
+                outputDevice.SendProgramChange(x, rightInstr.GetNext());
             }
 
             clock = new Clock(48);
@@ -111,8 +111,8 @@ namespace fractions.examples
             var eOut = Interpolator.EaseOutFunctions();
             for (var part = 0; part < eIn.Count; part++)
             {
-                var sIn = steps.Next();
-                var sOut = steps.Next();
+                var sIn = steps.GetNext();
+                var sOut = steps.GetNext();
                 var ppoints = Interpolator.InOutCurve( 4/10f, 6 / 10f, sIn, sOut, eIn[part], eOut[part]);
                 var vpoints = Interpolator.InOutCurve(0.70, 0.9, sIn, sOut, eIn[part], eOut[part]);
                 pcurve.AddRange(ppoints.Select(e => e * DeviceBase.ControlChangeMax));
@@ -141,29 +141,29 @@ namespace fractions.examples
 
             for (var i = 0; i < notes.Count - 1; i++)
             {
-                var note = noteE.Next();
-                var next = noteE.Peek();
+                var note = noteE.GetNext();
+                var next = noteE.Peek;
 
                 if ((int)note.Pitch <= 48)
                 {
-                    note.Channel = leftChans.Next();
-                    note.Pan = leftPan.Next();
-                    note.Velocity = leftVol.Next();
+                    note.Channel = leftChans.GetNext();
+                    note.Pan = leftPan.GetNext();
+                    note.Velocity = leftVol.GetNext();
                 }
                 else
                 {
-                    note.Channel = rightChans.Next();
-                    note.Pan = rightPan.Next();
-                    note.Velocity = rightVol.Next();
+                    note.Channel = rightChans.GetNext();
+                    note.Pan = rightPan.GetNext();
+                    note.Velocity = rightVol.GetNext();
                 }
                 clock.Schedule(note);
 
 
-                var nEcho = i % 2 != 0 ? nEchoes.Next() : nEchoes2.Next();
+                var nEcho = i % 2 != 0 ? nEchoes.GetNext() : nEchoes2.GetNext();
                 var minDur = (next.Time - note.Time) / nEcho;
                 for (var P_ = 0; playEchoes && P_ <= 48 && (int)nEcho > 0 && note.Time != next.Time; P_ += 12)
                 {
-                    var fract = i % 2 == 0 ? fractions.Next() : fractions2.Next();
+                    var fract = i % 2 == 0 ? fractions.GetNext() : fractions2.GetNext();
                     var diff = next.Time - note.Time;
                     var p = note.Pitch + P_;
                     var j = i + 1;
@@ -173,13 +173,13 @@ namespace fractions.examples
                         clone.Time += diff * (fract * (x + 1f));
                         clone.BeforeSendingNoteOnOff += m =>
                         {
-                            outputDevice.SendProgramChange(m.Channel, rightInstr.Next());
+                            outputDevice.SendProgramChange(m.Channel, rightInstr.GetNext());
                         };
                         if (clone.Time > next.Time)
                             break;
-                        clone.Pan = rightC.Next(); // * (nEcho / (x + 1));
-                        clone.Channel = rightChans.Next();
-                        clone.Velocity = rightV.Next(); // * (nEcho / (x + 1));
+                        clone.Pan = rightC.GetNext(); // * (nEcho / (x + 1));
+                        clone.Channel = rightChans.GetNext();
+                        clone.Velocity = rightV.GetNext(); // * (nEcho / (x + 1));
                         clone.Duration = Math.Max(clone.Duration, minDur);
                         clock.Schedule(clone);
                     }

@@ -64,8 +64,8 @@ namespace fractions.examples
             List<(EaseFunction easeIn, EaseFunction easeOut)> efs = Interpolator.EaseFunctions();
             foreach (var ef in efs)
             {
-                var sIn = stepsIn.Next();
-                var sOut = stepsOut.Next();
+                var sIn = stepsIn.GetNext();
+                var sOut = stepsOut.GetNext();
                 var ppoints = Interpolator.InOutCurve(0.30, 0.70, sIn, sOut, ef.easeIn, ef.easeOut);
                 var vpoints = Interpolator.InOutCurve(0.50, 0.90, sIn, sOut, ef.easeIn, ef.easeOut);
                 pcurve.AddRange(ppoints.Select(e => e * DeviceBase.ControlChangeMax));
@@ -120,15 +120,15 @@ namespace fractions.examples
 
                 if (i % 4 == 0)
                 {
-                    lInstr.Next();
-                    rInstr.Next();
+                    lInstr.GetNext();
+                    rInstr.GetNext();
                 }
 
-                leftPan.Next();
-                rightPan.Next();
+                leftPan.GetNext();
+                rightPan.GetNext();
 
-                leftVol.Next();
-                rightVol.Next();
+                leftVol.GetNext();
+                rightVol.GetNext();
             }
 
             clock.Start();
@@ -157,25 +157,25 @@ namespace fractions.examples
             var nec = noteE.Clone();
             for (var i = 0; i < notes.Count - 1; i++)
             {
-                var note = nec.Next().MakeTimeShiftedCopy(offSet) as NoteOnOffMessage;
+                var note = nec.GetNext().MakeTimeShiftedCopy(offSet) as NoteOnOffMessage;
                 if (i % 2 == 0)
                 {
-                    note.Channel = leftChans.Next();
-                    note.Pan = leftPan.Next();
-                    note.Velocity = leftVol.Next() * volMult;
+                    note.Channel = leftChans.GetNext();
+                    note.Pan = leftPan.GetNext();
+                    note.Velocity = leftVol.GetNext() * volMult;
                     note.BeforeSendingNoteOnOff += (e) =>
                     {
-                        outputDevice.SendProgramChange(e.Channel, lInstr.Next());
+                        outputDevice.SendProgramChange(e.Channel, lInstr.GetNext());
                     };
                 }
                 else
                 {
-                    note.Channel = rightChans.Next();
-                    note.Pan = rightPan.Next();
-                    note.Velocity = rightVol.Next() * volMult;
+                    note.Channel = rightChans.GetNext();
+                    note.Pan = rightPan.GetNext();
+                    note.Velocity = rightVol.GetNext() * volMult;
                     note.BeforeSendingNoteOnOff += (e) =>
                     {
-                        outputDevice.SendProgramChange(e.Channel, rInstr.Next());
+                        outputDevice.SendProgramChange(e.Channel, rInstr.GetNext());
                     };
                 }
 

@@ -42,29 +42,29 @@ namespace fractions
         /// Returns the current, but does not advance
         /// </summary>
         /// <returns></returns>
-        public T Current()
+        public T Current
         {
-            return collection[(int)Incrementor.Value];
+            get => collection[(int)Incrementor.Value];
         }
 
-        public T Min()
+        public T Min
         {
-            return collection.Min();
+            get => collection.Min();
         }
 
-        public T Max()
+        public T Max
         {
-            return collection.Max();
+            get => collection.Max();
         }
 
         /// <summary>
         /// Returns the current, then advances
         /// </summary>
         /// <returns></returns>
-        public T Next()
+        public T GetNext()
         {
             var current = collection[(int)Incrementor.Value];
-            Incrementor.Next();
+            Incrementor.GetNext();
             return current;
         }
 
@@ -72,18 +72,18 @@ namespace fractions
         /// Returns the next, then advances back one step
         /// </summary>
         /// <returns></returns>
-        public T Peek()
+        public T Peek
         {
-            return collection[(int)Incrementor.Peek()];
+            get => collection[(int)Incrementor.Peek];
         }
 
         /// <summary>
         /// Returns the next value steps ahead, then advances back to current
         /// </summary>
         /// <returns></returns>
-        public T Peek(int steps)
+        public T PeekAt(int steps)
         {
-            return collection[(int)Incrementor.Peek(steps)];
+            return collection[(int)Incrementor.PeekAt(steps)];
         }
 
         public void Set(IEnumerable<T> others)

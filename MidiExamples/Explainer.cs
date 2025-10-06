@@ -134,37 +134,37 @@ namespace fractions.examples
             Console.WriteLine($"Play C3 on time. Length {MelodiLength}, Duration 1, Velocity 80");
             for (int time = 0; time < MelodiLength; time++)
             {
-                Clock.Schedule(new NoteOnOffMessage(OutputDevice, Channel.Channel1, Melodi1.Next(), 80, time, Clock, 1));
+                Clock.Schedule(new NoteOnOffMessage(OutputDevice, Channel.Channel1, Melodi1.GetNext(), 80, time, Clock, 1));
             }
 
             Console.WriteLine($"Play C3 on time panning left to right");
-            var start = new NoteOnOffMessage(OutputDevice, Channel.Channel1, Melodi1.Next(), 80, 5, Clock, 1, 0);
+            var start = new NoteOnOffMessage(OutputDevice, Channel.Channel1, Melodi1.GetNext(), 80, 5, Clock, 1, 0);
             var notes = LinearInterpolator<NoteOnOffMessage>.Interpolate(start, 80, 127, 4, 1, 1, 1, 1);
             notes.ForEach((NoteOnOffMessage n) =>
             {
-                n.Pitch = Melodi1.Next();
+                n.Pitch = Melodi1.GetNext();
                 Clock.Schedule(n);
             });
 
-            var start1 = new NoteOnOffMessage(OutputDevice, Channel.Channel1, Melodi1.Next(), 80, 10, Clock, 1, 0);
+            var start1 = new NoteOnOffMessage(OutputDevice, Channel.Channel1, Melodi1.GetNext(), 80, 10, Clock, 1, 0);
             var notes1 = LinearInterpolator<NoteOnOffMessage>.Interpolate(start1, 64, 127, 64, 1 / 64F, 1, 1, 1);
             notes1.ForEach((NoteOnOffMessage n) =>
             {
                 n.BeforeSendingNoteOnOff += (NoteOnOffMessage a) =>
                 {
-                    a.Pitch = Melodi1.Next();
+                    a.Pitch = Melodi1.GetNext();
                 };
             });
 
-            var start2 = new NoteOnOffMessage(OutputDevice, Channel.Channel1, Melodi1.Next(), 64, 11, Clock, 1, 127);
+            var start2 = new NoteOnOffMessage(OutputDevice, Channel.Channel1, Melodi1.GetNext(), 64, 11, Clock, 1, 127);
             var notes2 = LinearInterpolator<NoteOnOffMessage>.Interpolate(start2, 80, 0, 64, 1 / 64F, 1, 1, 1);
             notes2.ForEach((NoteOnOffMessage n) =>
             {
-                //n.Pitch = Melodi2.Next();
+                //n.Pitch = Melodi2.GetNext();
                 n.BeforeSendingNoteOnOff += (NoteOnOffMessage a) =>
                 {
                     //OutputDevice.SendControlChange(a.Channel, Control.Pan, (int)a.Pan);
-                    a.Pitch = Melodi1.Next();
+                    a.Pitch = Melodi1.GetNext();
                 };
                 Clock.Schedule(n);
             });
@@ -177,15 +177,15 @@ namespace fractions.examples
             var panMets = new Enumerate<int>(Enumerable.Range(0, 3), IncrementMethod.Cyclic);
             for (var i = 0; i < 1000; i++)
             {
-                var nt = new NoteOnOffMessage(OutputDevice, Channel.Channel1, Melodi1.Next(), volumes.Next(), 12 + i, Clock, 1, 127 - pans.Next());
-                var st = steps.Next();
-                var nts = LinearInterpolator<NoteOnOffMessage>.Interpolate(nt, volumes.Next(), pans.Next(), st, 1F / st, volMets.Next(), durMets.Next(), panMets.Next());
+                var nt = new NoteOnOffMessage(OutputDevice, Channel.Channel1, Melodi1.GetNext(), volumes.GetNext(), 12 + i, Clock, 1, 127 - pans.GetNext());
+                var st = steps.GetNext();
+                var nts = LinearInterpolator<NoteOnOffMessage>.Interpolate(nt, volumes.GetNext(), pans.GetNext(), st, 1F / st, volMets.GetNext(), durMets.GetNext(), panMets.GetNext());
                 nts.ForEach((NoteOnOffMessage n) =>
                 {
-                    //n.Velocity = volumes.Next();
+                    //n.Velocity = volumes.GetNext();
                     n.BeforeSendingNoteOnOff += (NoteOnOffMessage a) =>
                     {
-                        a.Pitch = Melodi1.Next();
+                        a.Pitch = Melodi1.GetNext();
                         //OutputDevice.SendControlChange(a.Channel, Control.Pan, (int)a.Pan);
                         //OutputDevice.SendControlChange(a.Channel, Control.ReverbLevel, 127 - (int)a.Velocity);
                     };

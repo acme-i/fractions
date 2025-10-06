@@ -58,7 +58,7 @@ namespace fractions.examples
             var rand = new Random(seed);
 
             //string[] files = Directory.GetFiles(@".\midifiles\", "*.mid");
-            //string path = files[rand.Next(files.Count())];
+            //string path = files[rand.GetNext(files.Count())];
             var path = @".\midifiles\bach_js_bwv1067_orchestral_suite_2_in_bm_5_polonaise_double.mid";
 
             Console.WriteLine(path);
@@ -80,14 +80,14 @@ namespace fractions.examples
             {
                 outputDevice.SendControlChange(x, Control.ReverbLevel, 0);
                 outputDevice.SendControlChange(x, Control.Volume, DeviceBase.ControlChangeMax);
-                outputDevice.SendProgramChange(x, leftInstr.Next());
+                outputDevice.SendProgramChange(x, leftInstr.GetNext());
             }
 
             foreach (var x in rChans)
             {
                 outputDevice.SendControlChange(x, Control.ReverbLevel, 100);
                 outputDevice.SendControlChange(x, Control.Volume, DeviceBase.ControlChangeMax);
-                outputDevice.SendProgramChange(x, rightInstr.Next());
+                outputDevice.SendProgramChange(x, rightInstr.GetNext());
             }
 
             clock = new Clock(BPM);
@@ -102,8 +102,8 @@ namespace fractions.examples
             var efs = Interpolator.EaseFunctions();
             foreach ((EaseFunction easeIn, EaseFunction easeOut) in efs)
             {
-                var sIn = stepsIn.Next();
-                var sOut = stepsOut.Next();
+                var sIn = stepsIn.GetNext();
+                var sOut = stepsOut.GetNext();
                 var ppoints = Interpolator.InOutCurve(rand.Next(10, 50)/100f, rand.Next(51, 90) / 100f, sIn, sOut, easeIn, easeOut);
                 var vpoints = Interpolator.InOutCurve(rand.Next(50, 70) / 100f, rand.Next(71, 90) / 100f, sIn, sOut, easeIn, easeOut);
                 pcurve.AddRange(ppoints.Select(e => e * DeviceBase.ControlChangeMax));
@@ -155,31 +155,31 @@ namespace fractions.examples
 
             for (var i = 0; i < notes.Count - 1; i++)
             {
-                var note = noteE.Next();
-                var next = noteE.Peek();
+                var note = noteE.GetNext();
+                var next = noteE.Peek;
 
                 if (i % 2 == 0)
                 {
-                    note.Channel = leftChans.Next();
-                    note.Pan = leftPan.Next();
-                    note.Velocity = leftVol.Next();
+                    note.Channel = leftChans.GetNext();
+                    note.Pan = leftPan.GetNext();
+                    note.Velocity = leftVol.GetNext();
                 }
                 else
                 {
-                    note.Channel = rightChans.Next();
-                    note.Pan = rightPan.Next();
-                    note.Velocity = rightVol.Next();
+                    note.Channel = rightChans.GetNext();
+                    note.Pan = rightPan.GetNext();
+                    note.Velocity = rightVol.GetNext();
                 }
 
-                var denom = i % 2 == 0 ? denoms.Next() : denoms2.Next();
-                var enumerator = i % 2 == 0 ? enumes.Next() : enumes2.Next();
-                var maxEchos = i % 2 == 0 ? maxEchos1.Next() : maxEchos2.Next();
-                var nEchoes = new Enumerate<float>(leftFractionLists.Next().Select(f => enumerator / f.Over(denom)), IncrementMethod.MinMax);
-                var nEchoes2 = new Enumerate<float>(rightFractionLists.Next().Select(f => enumerator / f.Over(denom)), IncrementMethod.MaxMin);
+                var denom = i % 2 == 0 ? denoms.GetNext() : denoms2.GetNext();
+                var enumerator = i % 2 == 0 ? enumes.GetNext() : enumes2.GetNext();
+                var maxEchos = i % 2 == 0 ? maxEchos1.GetNext() : maxEchos2.GetNext();
+                var nEchoes = new Enumerate<float>(leftFractionLists.GetNext().Select(f => enumerator / f.Over(denom)), IncrementMethod.MinMax);
+                var nEchoes2 = new Enumerate<float>(rightFractionLists.GetNext().Select(f => enumerator / f.Over(denom)), IncrementMethod.MaxMin);
 
                 var mods = new Enumerate<int>(new[] { 2, 3, 5, 7, 11, 13 }, IncrementMethod.MinMax);
 
-                var nEcho = i % 2 != 0 ? nEchoes.Next() : nEchoes2.Next();
+                var nEcho = i % 2 != 0 ? nEchoes.GetNext() : nEchoes2.GetNext();
 
                 if (nEcho > 0 && note.Time != next.Time)
                 {
@@ -188,14 +188,14 @@ namespace fractions.examples
                     var leftV = leftVol.Clone();
                     var rightV = rightVol.Clone();
                     var minDur = (next.Time - note.Time) / nEcho;
-                    var fractions = new Enumerate<float>(leftFractionLists.Next().Select(f => f.Over(nEcho)), IncrementMethod.Cyclic);
-                    var fractions2 = new Enumerate<float>(rightFractionLists.Next().Select(f => f.Over(nEcho)), IncrementMethod.Cyclic);
-                    var fract = i % 2 == 0 ? fractions.Next() : fractions2.Next();
+                    var fractions = new Enumerate<float>(leftFractionLists.GetNext().Select(f => f.Over(nEcho)), IncrementMethod.Cyclic);
+                    var fractions2 = new Enumerate<float>(rightFractionLists.GetNext().Select(f => f.Over(nEcho)), IncrementMethod.Cyclic);
+                    var fract = i % 2 == 0 ? fractions.GetNext() : fractions2.GetNext();
 
                     if (i % 2 == 0)
-                        fractions2.Next();
+                        fractions2.GetNext();
                     else
-                        fractions.Next();
+                        fractions.GetNext();
 
                     var diff = next.Time - note.Time;
                     var p = note.Pitch;
@@ -211,13 +211,13 @@ namespace fractions.examples
                         if (clone.Time > next.Time)
                             break;
 
-                        clone.Pan = rightP.Next();
-                        clone.Channel = rightChans.Next();
-                        clone.Velocity = rightV.Next();
+                        clone.Pan = rightP.GetNext();
+                        clone.Channel = rightChans.GetNext();
+                        clone.Velocity = rightV.GetNext();
                         clone.Reverb = 127-clone.Velocity;
                         clone.Duration = Math.Max(clone.Duration, minDur);
 
-                        if (j++ % mods.Next() == 0)
+                        if (j++ % mods.GetNext() == 0)
                         {
                             clone.Pitch = p.OctaveAbove();
                         }
