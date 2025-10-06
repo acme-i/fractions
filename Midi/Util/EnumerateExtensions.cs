@@ -11,6 +11,11 @@ namespace fractions
             return new Enumerate<T>(iEnumerable, method, step, startIndex, name);
         }
 
+        public static Enumerate<T> AsMaxMinEnumeration<T>(this IEnumerable<T> iEnumerable, int step = 1, int startIndex = 0, string name = null)
+        {
+            return new Enumerate<T>(iEnumerable, IncrementMethod.MaxMin, step, startIndex, name);
+        }
+
         public static Enumerate<T> AsEnumeration<T>(this IEnumerable<T> iEnumerable, Incrementor incrementor, string name = null)
         {
             return new Enumerate<T>(iEnumerable, incrementor, name);
