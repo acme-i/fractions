@@ -140,21 +140,10 @@ namespace fractions.examples
                 Instrument.ElectricPiano1,
             };
 
-        private Enumerate<Instrument> mainInstr = new Enumerate<Instrument>(
-            instruments_,
-            IncrementMethod.Cyclic);
-
-        private Enumerate<Instrument> secondInstr = new Enumerate<Instrument>(
-            instruments_.Reverse<Instrument>(),
-            IncrementMethod.Cyclic);
-
-        private Enumerate<Instrument> echoMainInstr = new Enumerate<Instrument>(
-            Instruments.SoftGuitars,
-            IncrementMethod.Cyclic);
-
-        private Enumerate<Instrument> echoSecondInstr = new Enumerate<Instrument>(
-            Instruments.SoftGuitars.Reverse<Instrument>(),
-            IncrementMethod.Cyclic);
+        private readonly Enumerate<Instrument> mainInstr = instruments_.AsCycle();
+        private readonly Enumerate<Instrument> secondInstr = instruments_.AsCycle().AsReversed();
+        private readonly Enumerate<Instrument> echoMainInstr = Instruments.SoftGuitars.AsCycle();
+        private readonly Enumerate<Instrument> echoSecondInstr = Instruments.SoftGuitars.AsCycle().AsReversed();
 
         private void Setup()
         {
@@ -171,32 +160,32 @@ namespace fractions.examples
             {
                 var s = (int)x;
 
-                var vv = new Enumerate<float>(vSteps, IncrementMethod.Cyclic);
+                var vv = vSteps.AsCycle();
                 for (var i = 0; i < s; i++)
                     vv.GetNext();
                 VolMap.Add(x, vv);
 
-                var tempv2 = new Enumerate<float>(vSteps2, IncrementMethod.Cyclic);
+                var tempv2 = vSteps2.AsCycle();
                 for (var i = 0; i < s + voffset; i++)
                     tempv2.GetNext();
                 EchoVolMap.Add(x, tempv2);
 
-                var pp = new Enumerate<float>(pSteps, IncrementMethod.Cyclic);
+                var pp = pSteps.AsCycle();
                 for (var i = 0; i < s; i++)
                     pp.GetNext();
                 PanMap.Add(x, pp);
 
-                var tempp = new Enumerate<float>(pSteps, IncrementMethod.Cyclic);
+                var tempp = pSteps.AsCycle();
                 for (var i = 0; i < s + poffset; i++)
                     tempp.GetNext();
                 EchoPanMap.Add(x, tempp);
 
-                var tempv = new Enumerate<float>(vSteps, IncrementMethod.Cyclic);
+                var tempv = vSteps.AsCycle();
                 for (var i = 0; i < s + voffset; i++)
                     tempv.GetNext();
                 EchoVolMap2.Add(x, tempv);
 
-                var temppp = new Enumerate<float>(pSteps2, IncrementMethod.Cyclic);
+                var temppp = pSteps2.AsCycle();
                 for (var i = 0; i < s + poffset; i++)
                     temppp.GetNext();
                 EchoPanMap2.Add(x, temppp);
@@ -204,13 +193,13 @@ namespace fractions.examples
             }
         }
 
-        static string path = @".\midifiles\bach_js_bwv0999_prelude_in_cm_for_lute.mid";
-        static MidiFile file = new MidiFile(path);
-        static float div = file.TicksPerQuarterNote + 0f;
+        static readonly string path = @".\midifiles\bach_js_bwv0999_prelude_in_cm_for_lute.mid";
+        static readonly MidiFile file = new MidiFile(path);
+        static readonly float div = file.TicksPerQuarterNote + 0f;
 
         static (IEnumerable<MidiEvent> OnEvents, IEnumerable<MidiEvent> OffEvents, IEnumerable<float> Durations) result = file.GetEventsAndDurations();
-        static Enumerate<MidiEvent> nots = result.OnEvents.AsEnumeration();
-        static Enumerate<float> durs = result.Durations.AsEnumeration();
+        static readonly Enumerate<MidiEvent> nots = result.OnEvents.AsEnumeration();
+        static readonly Enumerate<float> durs = result.Durations.AsEnumeration();
 
         private void Play()
         {
@@ -246,7 +235,7 @@ namespace fractions.examples
             var resultTimes = new List<int>(times);
             resultTimes.AddRange(times.Select(t => t * 2));
 
-            var echos = new Enumerate<int>(resultTimes, IncrementMethod.MinMax);
+            var echos = resultTimes.AsEnumeration();
             for (var i = 0; i < result.Durations.Count(); i++)
             {
                 PlayAt(i);
@@ -280,8 +269,8 @@ namespace fractions.examples
             Clock.Schedule(nt);
         }
 
-        Enumerate<int> ps1 = new Enumerate<int>(new[] { 12, 0 });
-        Enumerate<int> ps2 = new Enumerate<int>(new[] { 0, 12 });
+        readonly Enumerate<int> ps1 = new[] { 12, 0 }.AsEnumeration();
+        readonly Enumerate<int> ps2 = new[] { 0, 12 }.AsEnumeration();
 
         private void PlayEchos(int i, int max)
         {
@@ -295,10 +284,13 @@ namespace fractions.examples
             var durDest = durClone.PeekAt(max);
             var ps = (i + 1) % 2 == 0 ? ps1 : ps2;
 
-            var notesTimes = new Enumerate<float>(Interpolator.Interpolate(note.Time, noteDest.Time, max, 1));
-            var noteDurs = new Enumerate<float>(Interpolator.Interpolate(dur, durDest, max, 1));
+            var notesTimes = Interpolator.Interpolate(note.Time, noteDest.Time, max, 1).AsEnumeration();
+            var noteDurs = Interpolator.Interpolate(dur, durDest, max, 1).AsEnumeration();
             var sm = max;
-            var scalers = new Enumerate<float>(Enumerable.Range(1, sm).Select(x => x / (float)(sm * 1.25f)).ToList(), IncrementMethod.MaxMin);
+            var scalers = Enumerable.Range(1, sm)
+                .Select(x => x / (float)(sm * 1.25f))
+                .AsEnumeration(IncrementMethod.MaxMin);
+
             max = i + max;
 
             for (var j = i; j < max; j++)

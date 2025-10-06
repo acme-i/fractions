@@ -73,7 +73,7 @@ namespace fractions.examples
             }
 
             Enumerate<double> leftPan = pcurve.AsCycle();
-            Enumerate<double> leftVol = new Enumerate<double>(vcurve, IncrementMethod.Cyclic);
+            Enumerate<double> leftVol = vcurve.AsCycle();
 
             Enumerate<double> rightPan = new Enumerate<double>(pcurve, IncrementMethod.Cyclic, 1, pcurve.Count / 2);
             Enumerate<double> rightVol = new Enumerate<double>(vcurve, IncrementMethod.Cyclic, 1, vcurve.Count / 2);

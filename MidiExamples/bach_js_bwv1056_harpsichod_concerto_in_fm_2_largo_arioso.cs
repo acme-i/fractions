@@ -114,22 +114,22 @@ namespace fractions.examples
                 vcurve.AddRange(vpoints.Select(e => e * DeviceBase.ControlChangeMax));
             }
             var leftPan = pcurve.AsCycle();
-            var leftVol = new Enumerate<double>(vcurve, IncrementMethod.Cyclic);
+            var leftVol = vcurve.AsCycle();
 
-            var rightPan = new Enumerate<double>(pcurve, IncrementMethod.Cyclic, pcurve.Count / 2);
-            var rightVol = new Enumerate<double>(vcurve, IncrementMethod.Cyclic, vcurve.Count / 2);
+            var rightPan = pcurve.AsCycle(startIndex: pcurve.Count / 2);
+            var rightVol = vcurve.AsCycle(startIndex: vcurve.Count / 2);
 
-            var fractions = new Enumerate<float>(new[] { 1 / 4f, 1 / 8f, 1 / 16f }, IncrementMethod.Cyclic);
-            var fractions2 = new Enumerate<float>(new[] { 1 / 8f, 1 / 16f, 1 / 32f }, IncrementMethod.Cyclic);
+            var fractions = new[] { 1 / 4f, 1 / 8f, 1 / 16f }.AsCycle();
+            var fractions2 = new[] { 1 / 8f, 1 / 16f, 1 / 32f }.AsCycle();
             
-            var nEchoes = new Enumerate<float>(new[] { 1f, 2f, 1f, 4f, 1f, 8f, 1f, 16f }, IncrementMethod.Cyclic);
-            var nEchoes2 = new Enumerate<float>(new[] { 1f, 2f, 1f, 4f, 1f, 8f, 1f, 16f }, IncrementMethod.Cyclic);
+            var nEchoes = new[] { 1f, 2f, 1f, 4f, 1f, 8f, 1f, 16f }.AsCycle();
+            var nEchoes2 = new[] { 1f, 2f, 1f, 4f, 1f, 8f, 1f, 16f }.AsCycle();
             
             var playEchoes = true;
 
             var notes = file.GetNotes(outputDevice, clock);
 
-            var noteE = new Enumerate<NoteOnOffMessage>(notes, step: 1);
+            var noteE = notes.AsEnumeration();
             for (var i = 0; i < notes.Count - 1; i++)
             {
                 var note = noteE.GetNext();
@@ -151,10 +151,10 @@ namespace fractions.examples
 
                 var nEcho = i % 2 != 0 ? nEchoes.GetNext() : nEchoes2.GetNext();
 
-                var leftP = new Enumerate<double>(leftPan, IncrementMethod.Cyclic);
-                var rightP = new Enumerate<double>(rightPan, IncrementMethod.Cyclic);
-                var leftV = new Enumerate<double>(leftVol, IncrementMethod.Cyclic);
-                var rightV = new Enumerate<double>(rightVol, IncrementMethod.Cyclic);
+                var leftP = leftPan.AsCycle();
+                var rightP = rightPan.AsCycle();
+                var leftV = leftVol.AsCycle();
+                var rightV = rightVol.AsCycle();
 
                 for (var P_ = 0; playEchoes && P_ <= 48 && (int)nEcho > 0 && note.Time != next.Time; P_ += 12)
                 {

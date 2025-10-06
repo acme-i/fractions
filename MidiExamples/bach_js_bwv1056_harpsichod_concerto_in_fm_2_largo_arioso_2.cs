@@ -61,12 +61,12 @@ namespace fractions.examples
             Console.WriteLine(path);
             Console.WriteLine(seed);
 
-            var leftInstr = new Enumerate<Instrument>(new[] {
+            var leftInstr = new[] {
                 Instrument.Contrabass, Instrument.ElectricPiano1, Instrument.AcousticGuitarNylon, Instrument.ElectricPiano2,
                 Instrument.Contrabass, Instrument.ElectricPiano2, Instrument.AcousticGuitarNylon, Instrument.ElectricPiano1,
                 Instrument.Contrabass, Instrument.SlapBass1, Instrument.SynthStrings2, Instrument.ElectricGuitarJazz,
-            }, step: 1);
-            var rightInstr = new Enumerate<Instrument>(new[] {
+            }.AsEnumeration();
+            var rightInstr = new[] {
                 Instrument.ElectricPiano1, Instrument.ElectricGuitarMuted, Instrument.ElectricPiano1, Instrument.AcousticBass,
                 Instrument.ElectricPiano1, Instrument.ElectricPiano1, Instrument.ElectricPiano1, Instrument.AcousticBass,
 
@@ -78,24 +78,20 @@ namespace fractions.examples
 
                 Instrument.ElectricPiano1, Instrument.AcousticBass, Instrument.ElectricGuitarMuted, Instrument.ElectricPiano1,
                 Instrument.ElectricPiano1, Instrument.ElectricPiano1, Instrument.AcousticBass, Instrument.ElectricPiano1,
-            }, step: 1);
+            }.AsEnumeration();
 
             var file = new MidiFile(path);
             var div = (float)file.TicksPerQuarterNote;
             var chans = Channels.InstrumentChannels.AsEnumeration();
 
-            var lChans = Channels.Range(Channel.Channel1, Channel.Channel9);
-            var rChans = Channels.Range(Channel.Channel11, Channel.Channel16);
-            var leftChans = new Enumerate<Channel>(lChans, step: 1);
-            var rightChans = new Enumerate<Channel>(rChans, step: 1);
-
-            foreach (var x in lChans)
+            var leftChans = Channels.Range(Channel.Channel1, Channel.Channel9).AsEnumeration();
+            foreach (var x in leftChans)
             {
                 outputDevice.SendControlChange(x, Control.ReverbLevel, 0);
                 outputDevice.SendProgramChange(x, leftInstr.GetNext());
             }
-
-            foreach (var x in rChans)
+            var rightChans = Channels.Range(Channel.Channel11, Channel.Channel16).AsEnumeration();
+            foreach (var x in rightChans)
             {
                 outputDevice.SendControlChange(x, Control.ReverbLevel, 20);
                 outputDevice.SendControlChange(x, Control.Volume, 100);
@@ -104,7 +100,7 @@ namespace fractions.examples
 
             clock = new Clock(48);
 
-            var steps = new Enumerate<int>(new[] { 1, 2, 4, 8, 16 }, IncrementMethod.MinMax, 1);
+            var steps = new[] { 1, 2, 4, 8, 16 }.AsEnumeration();
             var pcurve = new List<double>();
             var vcurve = new List<double>();
             var eIn = Interpolator.EaseInFunctions();
@@ -119,25 +115,25 @@ namespace fractions.examples
                 vcurve.AddRange(vpoints.Select(e => e * DeviceBase.ControlChangeMax));
             }
             var leftPan = pcurve.AsCycle();
-            var leftVol = new Enumerate<double>(vcurve, IncrementMethod.Cyclic);
+            var leftVol = vcurve.AsCycle();
 
-            var rightPan = new Enumerate<double>(pcurve, IncrementMethod.Cyclic, 1, pcurve.Count / 2);
-            var rightVol = new Enumerate<double>(vcurve, IncrementMethod.Cyclic, 1, vcurve.Count / 2);
+            var rightPan = pcurve.AsCycle(startIndex: pcurve.Count / 2);
+            var rightVol = vcurve.AsCycle(startIndex: vcurve.Count / 2);
 
-            var fractions = new Enumerate<float>(new[] { 1 / 4f, 1 / 8f, 1 / 16f }, IncrementMethod.MinMax, 1);
-            var fractions2 = new Enumerate<float>(new[] { 1 / 2f, 1 / 4, 1 / 8f }, IncrementMethod.MinMax, 1);
-            var nEchoes = new Enumerate<float>(new[] { 1f, 2f, 1f, 4f, 1f, 8f, 1f, 16f }, IncrementMethod.MinMax, 1);
-            var nEchoes2 = new Enumerate<float>(new[] { 1f, 1f, 1f, 2f, 1f, 4f, 1f, 8f }, IncrementMethod.MinMax, 1);
+            var fractions = new[] { 1 / 4f, 1 / 8f, 1 / 16f }.AsEnumeration();
+            var fractions2 = new[] { 1 / 2f, 1 / 4, 1 / 8f }.AsEnumeration();
+            var nEchoes = new[] { 1f, 2f, 1f, 4f, 1f, 8f, 1f, 16f }.AsEnumeration();
+            var nEchoes2 = new[] { 1f, 1f, 1f, 2f, 1f, 4f, 1f, 8f }.AsEnumeration();
             var playEchoes = true;
 
             var notes = file.GetNotes(outputDevice, clock);
 
-            var noteE = new Enumerate<NoteOnOffMessage>(notes, step: 1);
+            var noteE = notes.AsEnumeration();
 
-            var leftC = new Enumerate<double>(leftPan, IncrementMethod.Cyclic);
-            var rightC = new Enumerate<double>(rightPan, IncrementMethod.Cyclic);
-            var leftV = new Enumerate<double>(leftVol, IncrementMethod.Cyclic);
-            var rightV = new Enumerate<double>(rightVol, IncrementMethod.Cyclic);
+            var leftC = leftPan.AsCycle();
+            var rightC = rightPan.AsCycle();
+            var leftV = leftVol.AsCycle();
+            var rightV = rightVol.AsCycle();
 
             for (var i = 0; i < notes.Count - 1; i++)
             {

@@ -108,7 +108,7 @@ namespace fractions.examples
             var leftVol = vcurve.Select(v => v * 0.75).AsCycle();
 
             var rightPan = new Enumerate<double>(pcurve.Select(p => 127 - p), IncrementMethod.Cyclic);
-            var rightVol = new Enumerate<double>(vcurve, IncrementMethod.Cyclic);
+            var rightVol = vcurve.AsCycle();
             var fractions = new Enumerate<float>(new[] { 1 / 4f, 1 / 8f, 1 / 16f, 1 / 32f, 1 / 64f }, IncrementMethod.MinMax);
             var fractions2 = new Enumerate<float>(new[] { 1 / 4f, 1 / 8f, 1 / 16f, 1 / 32f, 1 / 64f }.Reverse(), IncrementMethod.MinMax);
             var nEchoes = new Enumerate<float>(new[] { 2f, 4f, 8f }, IncrementMethod.Cyclic);

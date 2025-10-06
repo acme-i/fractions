@@ -127,32 +127,32 @@ namespace fractions.examples
             {
                 var s = (int)x;
 
-                fen = new Enumerate<float>(vSteps, IncrementMethod.Cyclic);
+                fen = vSteps.AsCycle();
                 for (var i = 0; i < s; i++)
                     fen.GetNext();
                 VolMap.Add(x, fen);
 
-                fen = new Enumerate<float>(vSteps2, IncrementMethod.Cyclic);
+                fen = vSteps2.AsCycle();
                 for (var i = 0; i < s + voffset; i++)
                     fen.GetNext();
                 EchoVolMap.Add(x, fen);
 
-                fen = new Enumerate<float>(vSteps, IncrementMethod.Cyclic);
+                fen = vSteps.AsCycle();
                 for (var i = 0; i < s + (int)x + voffset; i++)
                     fen.GetNext();
                 EchoVolMap2.Add(x, fen);
 
-                fen = new Enumerate<float>(pSteps, IncrementMethod.Cyclic);
+                fen = pSteps.AsCycle();
                 for (var i = 0; i < s; i++)
                     fen.GetNext();
                 PanMap.Add(x, fen);
 
-                fen = new Enumerate<float>(pSteps, IncrementMethod.Cyclic);
+                fen = pSteps.AsCycle();
                 for (var i = 0; i < s + poffset; i++)
                     fen.GetNext();
                 EchoPanMap.Add(x, fen);
 
-                fen = new Enumerate<float>(pSteps2, IncrementMethod.Cyclic);
+                fen = pSteps2.AsCycle();
                 for (var i = 0; i < s + (int)x + poffset; i++)
                     fen.GetNext();
                 EchoPanMap2.Add(x, fen);

@@ -108,7 +108,7 @@ namespace fractions.examples
             }
 
             var leftPan = pcurve.AsCycle();
-            var leftVol = new Enumerate<double>(vcurve, IncrementMethod.Cyclic);
+            var leftVol = vcurve.AsCycle();
 
             var rightPan = new Enumerate<double>(pcurve, IncrementMethod.Cyclic, 1, pcurve.Count / 2);
             var rightVol = new Enumerate<double>(vcurve, IncrementMethod.Cyclic, 1, vcurve.Count / 2);

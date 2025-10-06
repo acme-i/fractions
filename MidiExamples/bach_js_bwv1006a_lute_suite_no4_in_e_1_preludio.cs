@@ -109,13 +109,13 @@ namespace fractions.examples
             var leftVol = vcurve.Select(v => v * 0.75).AsCycle();
 
             var rightPan = new Enumerate<double>(pcurve.Select(p => 127 - p), IncrementMethod.Cyclic);
-            var rightVol = new Enumerate<double>(vcurve, IncrementMethod.Cyclic);
+            var rightVol = vcurve.AsCycle();
             var fractions = new Enumerate<float>(new[] { 1 / 2f, 1 / 3f, 1 / 6f, 1 / 4f, 1 / 8f, 1 / 12f, 1 / 16f, 1 / 32f }, IncrementMethod.Cyclic);
             var nEchoes = new Enumerate<float>(new[] { 1f, 2f, 4f, 16f, 32f, 64f }, IncrementMethod.Cyclic);
             var playEchoes = false;
 
             var notes = file.GetNotes(outputDevice, clock);
-            var noteE = new Enumerate<NoteOnOffMessage>(notes, step: 1);
+            var noteE = notes.AsEnumeration();
             for (var i = 0; i < notes.Count - 1; i++)
             {
                 var note = noteE.GetNext();
