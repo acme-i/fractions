@@ -62,16 +62,16 @@ namespace fractions.examples
             Console.WriteLine(path);
             Console.WriteLine(seed);
 
-            var leftInstr = new Enumerate<Instrument>(new[] {
+            var leftInstr = new[] {
                 Instrument.SlapBass1, Instrument.ElectricPiano1, Instrument.Vibraphone, Instrument.ElectricPiano1,
                 Instrument.SlapBass1, Instrument.ElectricPiano1, Instrument.ElectricPiano1, Instrument.Vibraphone,
                 Instrument.SlapBass1, Instrument.Vibraphone, Instrument.ElectricPiano1, Instrument.ElectricPiano1,
-            }, step: 1);
-            var rightInstr = new Enumerate<Instrument>(new[] {
+            }.AsEnumeration();
+            var rightInstr = new[] {
                 Instrument.StringEnsemble1, Instrument.ElectricBassPick, Instrument.ElectricPiano1, Instrument.ElectricBassPick,
                 Instrument.StringEnsemble1, Instrument.ElectricBassPick, Instrument.ElectricBassPick, Instrument.ElectricPiano1,
                 Instrument.StringEnsemble1, Instrument.ElectricPiano1, Instrument.ElectricBassPick, Instrument.ElectricBassPick,
-            }, step: 1);
+            }.AsEnumeration();
 
             var file = new MidiFile(path);
             var div = (float)file.TicksPerQuarterNote;

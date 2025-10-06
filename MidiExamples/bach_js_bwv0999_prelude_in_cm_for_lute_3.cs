@@ -75,8 +75,8 @@ namespace fractions.examples
             Enumerate<double> leftPan = pcurve.AsCycle();
             Enumerate<double> leftVol = vcurve.AsCycle();
 
-            Enumerate<double> rightPan = new Enumerate<double>(pcurve, IncrementMethod.Cyclic, 1, pcurve.Count / 2);
-            Enumerate<double> rightVol = new Enumerate<double>(vcurve, IncrementMethod.Cyclic, 1, vcurve.Count / 2);
+            Enumerate<double> rightPan = pcurve.AsCycle(startIndex: pcurve.Count / 2);
+            Enumerate<double> rightVol = vcurve.AsCycle(startIndex: vcurve.Count / 2);
 
             var lInstr = new Enumerate<Instrument>(new[] {
                 Instrument.SlapBass1, Instrument.ElectricPiano1, Instrument.Vibraphone, Instrument.ElectricPiano1,
