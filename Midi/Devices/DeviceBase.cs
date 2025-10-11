@@ -84,12 +84,6 @@ namespace fractions
             return (float)Math.Min(Math.Max(value, min), max);
         }
 
-        /// <returns>The value clamped between [min; max]</returns>
-        public static double ClampDouble(double value, double min, double max)
-        {
-            return Math.Min(Math.Max(value, min), max);
-        }
-
         /// <returns>The value clamped between [ControlChangeMin; ControlChangeMax]</returns>
         public static int ClampControlChange(double value)
         {

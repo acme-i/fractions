@@ -70,18 +70,16 @@ namespace fractions.examples
             var div = (float)file.TicksPerQuarterNote;
             var chans = Channels.InstrumentChannels.AsEnumeration();
 
-            var lChans = Channels.Range(Channel.Channel1, Channel.Channel9);
-            var rChans = Channels.Range(Channel.Channel11, Channel.Channel16);
-            var leftChans = new Enumerate<Channel>(lChans);
-            var rightChans = new Enumerate<Channel>(rChans);
+            var leftChans = Channels.Range(Channel.Channel1, Channel.Channel9).AsEnumeration();
+            var rightChans = Channels.Range(Channel.Channel11, Channel.Channel16).AsEnumeration();
 
-            foreach (var x in lChans)
+            foreach (var x in leftChans)
             {
                 outputDevice.SendControlChange(x, Control.ReverbLevel, 0);
                 outputDevice.SendProgramChange(x, leftInstr.GetNext());
             }
 
-            foreach (var x in rChans)
+            foreach (var x in rightChans)
             {
                 outputDevice.SendControlChange(x, Control.ReverbLevel, 127);
                 outputDevice.SendControlChange(x, Control.Volume, 100);
@@ -104,15 +102,18 @@ namespace fractions.examples
                 pcurve.AddRange(ppoints.Select(e => e * 127));
                 vcurve.AddRange(vpoints.Select(e => e * 120));
             }
+
             var leftPan = pcurve.AsCycle();
             var leftVol = vcurve.Select(v => v * 0.75).AsCycle();
-
-            var rightPan = new Enumerate<double>(pcurve.Select(p => 127 - p), IncrementMethod.Cyclic);
+            var rightPan = pcurve.Select(p => 127 - p).AsCycle();
             var rightVol = vcurve.AsCycle();
-            var fractions = new Enumerate<float>(new[] { 1 / 4f, 1 / 8f, 1 / 16f, 1 / 32f, 1 / 64f }, IncrementMethod.MinMax);
-            var fractions2 = new Enumerate<float>(new[] { 1 / 4f, 1 / 8f, 1 / 16f, 1 / 32f, 1 / 64f }.Reverse(), IncrementMethod.MinMax);
-            var nEchoes = new Enumerate<float>(new[] { 2f, 4f, 8f }, IncrementMethod.Cyclic);
-            var nEchoes2 = new Enumerate<float>(new[] { 2f * 1 / 3f, 4f * 1 / 3f, 8f * 1 / 3f }, IncrementMethod.Cyclic);
+
+            var fractions = new[] { 1 / 4f, 1 / 8f, 1 / 16f, 1 / 32f, 1 / 64f }.AsEnumeration();
+            var fractions2 = fractions.AsEnumeration(method: IncrementMethod.MaxMin);
+
+            var nEchoes = new[] { 2f, 4f, 8f }.AsCycle();
+            var nEchoes2 = new[] { 2f * 1 / 3f, 4f * 1 / 3f, 8f * 1 / 3f }.AsCycle();
+
             var playEchoes = true;
 
             var notes = file.GetNotes(outputDevice, clock);
@@ -136,17 +137,19 @@ namespace fractions.examples
                 }
 
                 var nEcho = i % 3 != 0 ? nEchoes.GetNext() : nEchoes2.GetNext();
-                if (playEchoes && nEcho > 0 && note.Pitch >= (Pitch)Pitch.C3 && note.Time != next.Time)
+                if (playEchoes && nEcho > 0 && note.Pitch >= Pitch.C3 && note.Time != next.Time)
                 {
-                    var leftC = new Enumerate<double>(leftPan, IncrementMethod.Cyclic, 2);
-                    var rightC = new Enumerate<double>(rightPan, IncrementMethod.Cyclic, 2);
-                    var leftV = new Enumerate<double>(leftVol, IncrementMethod.Cyclic, 2);
-                    var rightV = new Enumerate<double>(rightVol, IncrementMethod.Cyclic, 2);
+                    var leftC = leftPan.AsCycle(step: 2);
+                    var rightC = rightPan.AsCycle(step: 2);
+                    var leftV = leftVol.AsCycle(step: 2);
+                    var rightV = rightVol.AsCycle(step: 2);
+                    
                     var minDur = (next.Time - note.Time) / nEcho;
                     var fract = i % 2 == 0 ? fractions.GetNext() : fractions2.GetNext();
                     var diff = next.Time - note.Time;
                     var p = note.Pitch;
                     var j = i + 1;
+
                     for (var x = 0f; x < nEcho; x++)
                     {
                         var clone = note.Clone() as NoteOnOffMessage;
@@ -163,7 +166,7 @@ namespace fractions.examples
                         {
                             clone.Pitch = p.OctaveAbove();
                         }
-                        if (j % 3 == 0)
+                        else if (j % 3 == 0)
                         {
                             clone.Pitch = p.OctaveAbove();
                             clone.Pan = 127f - ((note.Pan + rightC.GetNext()) / 2f);
