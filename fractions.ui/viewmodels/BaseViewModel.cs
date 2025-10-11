@@ -108,10 +108,8 @@ public abstract partial class BaseViewModel : ObservableObject
         if (!string.IsNullOrEmpty(title))
         {
             var toRemove = _unwantedChars.ToList();
-            toRemove.Add('\t');
-            toRemove.Add('\n');
-            toRemove.Add('\r');
-            title = title.ReplaceAll(toRemove.Distinct().ToArray(), " ").Trim();
+            toRemove.AddRange([ '\t', '\r', '\n']);
+            title = title.ReplaceAll([.. toRemove.Distinct()], " ").Trim();
         }
 
         return string.IsNullOrWhiteSpace(title)
@@ -183,15 +181,11 @@ public abstract partial class BaseViewModel : ObservableObject
         Exception? result = default;
         try
         {
-            switch (key)
+            this.Settings.Version = key switch
             {
-                case nameof(this.Settings.Version):
-                    this.Settings.Version = value?.ToString() ?? "1.0";
-                    break;
-
-                default:
-                    throw new ApplicationException($"Don't know how to save a {key} yet...");
-            }
+                nameof(this.Settings.Version) => value?.ToString() ?? "1.0",
+                _ => throw new ApplicationException($"Don't know how to save a {key} yet..."),
+            };
         }
         catch (Exception ex)
         {
@@ -229,8 +223,6 @@ public abstract partial class BaseViewModel : ObservableObject
 
     protected void ReportChanges(int inserted, string nounPlural = "updates")
     {
-        if (!IsVisible) return;
-
         if (inserted > 0)
         {
             StatusMessage = $"{inserted} {nounPlural}...";

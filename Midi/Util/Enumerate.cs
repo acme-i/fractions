@@ -15,7 +15,7 @@ namespace fractions
 
             this.collection = source.ToList();
             this.Incrementor = new Incrementor(source.Incrementor, newStepValue);
-            this.Name = name ?? Guid.NewGuid().ToString();
+            //this.Name = string.Copy(name) ?? Guid.NewGuid().ToString();
         }
 
         public Enumerate(IEnumerable<T> collection, IncrementMethod method = IncrementMethod.MinMax, int step = 1, int startIndex = 0, string name = null)
@@ -25,7 +25,7 @@ namespace fractions
 
             this.collection = collection.ToList();
             this.Incrementor = new Incrementor(Math.Max(0, startIndex), 0, this.collection.Count - 1, Math.Min(Math.Max(1, step), this.collection.Count - 1), method);
-            this.Name = name ?? Guid.NewGuid().ToString();
+            //this.Name = string.Copy(name) ?? Guid.NewGuid().ToString();
         }
 
         public Enumerate(IEnumerable<T> collection, Incrementor source, string name = null)
@@ -34,7 +34,7 @@ namespace fractions
 
             this.collection = collection.ToList();
             this.Incrementor = source.Clone();
-            this.Name = name ?? Guid.NewGuid().ToString();
+            //this.Name = string.Copy(name) ?? Guid.NewGuid().ToString();
         }
         
         public string Name { get; set; } = string.Empty;

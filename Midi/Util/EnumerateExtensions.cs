@@ -60,13 +60,13 @@ namespace fractions
         /// <returns>Scales by amount</returns>
         public static Enumerate<int> Scale(this Enumerate<int> input, double amount)
         {
-            return (input?.Any() == false || amount == 1)
-                ? input
-                : new Enumerate<int>(
-                    input.Select(p => (int)Math.Round(p * amount)), 
-                    input.Incrementor, 
-                    $"{input.Name}*{amount:2}"
-                );
+            if (amount <= 1) return input;
+
+            return new Enumerate<int>(
+                input.collection.Select(p => (int)Math.Round(p * amount)), 
+                input.Incrementor, 
+                $"{input.Name}*{amount:2}"
+            );
         }
     }
 }

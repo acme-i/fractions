@@ -50,16 +50,13 @@ namespace fractions.examples
 
         private bool inited = false;
 
-        private readonly Enumerate<Channel> chans = new Enumerate<Channel>(Channels.InstrumentChannels, IncrementMethod.MinMax, 1, 0);
-
-        private readonly Instrument[] instrList = new[] {
+        private readonly Enumerate<Channel> chans = Channels.InstrumentChannels.AsEnumeration();
+        private readonly Enumerate<Instrument> instrList = new[] {
             Instrument.ElectricPiano1,
             Instrument.ElectricPiano1,
             Instrument.ElectricGuitarMuted,
             Instrument.ElectricPiano1,
-        };
-
-        private Enumerate<Instrument> instrs;
+        }.AsEnumeration();
 
         private void Setup(IOutputDevice outputDevice)
         {
@@ -74,9 +71,11 @@ namespace fractions.examples
 
                 var voffset = 8;
                 var poffset = 8;
-                foreach (var channel in Channels.InstrumentChannels)
+                foreach (var channel in chans)
                 {
                     var s = (int)channel;
+
+                    OutputDevice.SendProgramChange(channel, instrList.GetNext());
 
                     var vv = vSteps.AsCycle();
                     for (var i = 0; i < s; i++)
@@ -118,10 +117,9 @@ namespace fractions.examples
             var result = file.GetEventsAndDurations();
             var durResult = durFile.GetEventsAndDurations();
 
-            instrs = new Enumerate<Instrument>(instrList, IncrementMethod.Cyclic, 1, 0);
             var max = result.OnEvents.Count();
-            var nots = new Enumerate<MidiEvent>(result.OnEvents, IncrementMethod.MinMax, 1, 0);
-            var durs = new Enumerate<float>(durResult.Durations, IncrementMethod.MinMax, 1, 0);
+            var nots = result.OnEvents.AsEnumeration();
+            var durs = durResult.Durations.AsEnumeration();
 
             for (var i = 0; i < max; i++)
             {

@@ -58,6 +58,7 @@
     <Compile Include="bach_js_bwv0578_fugue_in_gm_little_fugue_3.cs" />
     <Compile Include="bach_js_bwv0999_prelude_in_cm_for_lute_3.cs" />
     <Compile Include="bach_js_bwv1006a_lute_suite_no4_in_e_1_preludio.cs" />
+    <Compile Include="bach_js_bwv1006a_lute_suite_no4_in_e_1_preludio_3.cs" />
     <Compile Include="bach_js_bwv1056_harpsichod_concerto_in_fm_2_largo_arioso_2.cs" />
     <Compile Include="bach_js_bwv1067_orchestral_suite_2_in_bm_5_polonaise_double_2.cs" />
     <Compile Include="bach_js_bwv1067_orchestral_suite_2_in_bm_5_polonaise_double.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="BasicExample.cs" />
     <Compile Include="bach_js_bwv0999_prelude_in_cm_for_lute_2.cs" />
     <Compile Include="bach_js_bwv1006a_lute_suite_no4_in_e_1_preludio_2.cs" />
+    <Compile Include="FractionsExample2b.cs" />
     <Compile Include="FractionsExample7.cs" />
     <Compile Include="FractionsExample6.cs" />
     <Compile Include="FractionsExample5.cs" />
