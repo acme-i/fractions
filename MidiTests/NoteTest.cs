@@ -142,10 +142,43 @@ namespace fractions.tests
         }
 
         [Test]
-        public void ClampVelocityTest()
+        public void ClampControlChange()
         {
-            Assert.AreEqual(DeviceBase.ClampControlChange(DeviceBase.ControlChangeMin - 1), DeviceBase.ControlChangeMin);
-            Assert.AreEqual(DeviceBase.ClampControlChange(DeviceBase.ControlChangeMax + 1), DeviceBase.ControlChangeMax);
+            var min = (int)Control.MinControl - 1;
+            var max = (int)Control.MaxControl + 1;
+
+            Assert.AreEqual((int)Control.MinControl, min.ClampControlChange());
+            Assert.AreEqual((int)Control.MaxControl, max.ClampControlChange());
+        }
+
+        [Test]
+        public void ClampControlChangeInfinities()
+        {
+            var min = double.NegativeInfinity;
+            var max = double.PositiveInfinity;
+
+            Assert.AreEqual((int)Control.MinControl, min.ClampControlChange());
+            Assert.AreEqual((int)Control.MaxControl, max.ClampControlChange());
+        }
+
+        [Test]
+        public void ClampPitchBendTest()
+        {
+            var min = (int)PitchBendMessage.PitchBendMin - 1;
+            var max = (int)PitchBendMessage.PitchBendMax + 1;
+
+            Assert.AreEqual((int)PitchBendMessage.PitchBendMin, min.ClampPitchBend());
+            Assert.AreEqual((int)PitchBendMessage.PitchBendMax, max.ClampPitchBend());
+        }
+
+        [Test]
+        public void ClampPitchBendTestWithInfinities()
+        {
+            var min = double.NegativeInfinity;
+            var max = double.PositiveInfinity;
+
+            Assert.AreEqual((int)PitchBendMessage.PitchBendMin, min.ClampPitchBend());
+            Assert.AreEqual((int)PitchBendMessage.PitchBendMax, max.ClampPitchBend());
         }
 
         [Test]

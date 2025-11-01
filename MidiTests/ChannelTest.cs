@@ -48,7 +48,7 @@ namespace fractions.tests
         {
             Assert.AreEqual(true, Channel.Channel10.IsPercussion());
             Assert.True(Channel.Channel10.IsValid());
-            Assert.DoesNotThrow(() => Channel.Channel10.Validate());
+            Assert.DoesNotThrow(() => Channel.Channel10.ThrowIfInvalid());
 
             Assert.IsTrue(Channels.PercussionChannels.Contains(Channel.Channel10));
 
@@ -65,12 +65,12 @@ namespace fractions.tests
             foreach (var c in Channels.All)
             {
                 Assert.True(c.IsValid(), $"Expected channel {(int)c} to be valid");
-                Assert.DoesNotThrow(() => c.Validate());
+                Assert.DoesNotThrow(() => c.ThrowIfInvalid());
             }
             Assert.False(((Channel)(-1)).IsValid());
-            Assert.Throws(typeof(ArgumentOutOfRangeException), () => ((Channel)(-1)).Validate());
+            Assert.Throws(typeof(ArgumentOutOfRangeException), () => ((Channel)(-1)).ThrowIfInvalid());
             Assert.False(((Channel)17).IsValid());
-            Assert.Throws(typeof(ArgumentOutOfRangeException), () => ((Channel)17).Validate());
+            Assert.Throws(typeof(ArgumentOutOfRangeException), () => ((Channel)17).ThrowIfInvalid());
         }
 
         [Test]

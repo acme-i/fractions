@@ -40,21 +40,21 @@ namespace fractions
         ///     Opens this output device.
         /// </summary>
         /// <exception cref="InvalidOperationException">The device is already open.</exception>
-        /// <exception cref="DeviceException">The device cannot be opened.</exception>
+        /// <exception cref="MidiDeviceException">The device cannot be opened.</exception>
         void Open();
 
         /// <summary>
         ///     Closes this output device.
         /// </summary>
         /// <exception cref="InvalidOperationException">The device is not open.</exception>
-        /// <exception cref="DeviceException">The device cannot be closed.</exception>
+        /// <exception cref="MidiDeviceException">The device cannot be closed.</exception>
         void Close();
 
         /// <summary>
         ///     Silences all notes on this output device.
         /// </summary>
         /// <exception cref="InvalidOperationException">The device is not open.</exception>
-        /// <exception cref="DeviceException">The message cannot be sent.</exception>
+        /// <exception cref="MidiDeviceException">The message cannot be sent.</exception>
         void SilenceAllNotes();
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace fractions
         ///     out-of-range.
         /// </exception>
         /// <exception cref="InvalidOperationException">The device is not open.</exception>
-        /// <exception cref="DeviceException">The message cannot be sent.</exception>
+        /// <exception cref="MidiDeviceException">The message cannot be sent.</exception>
         void SendNoteOn(Channel channel, Pitch pitch, int velocity);
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace fractions
         ///     out-of-range.
         /// </exception>
         /// <exception cref="InvalidOperationException">The device is not open.</exception>
-        /// <exception cref="DeviceException">The message cannot be sent.</exception>
+        /// <exception cref="MidiDeviceException">The message cannot be sent.</exception>
         void SendNoteOff(Channel channel, Pitch pitch, int velocity);
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace fractions
         ///     percussion or velocity is out-of-range.
         /// </exception>
         /// <exception cref="InvalidOperationException">The device is not open.</exception>
-        /// <exception cref="DeviceException">The message cannot be sent.</exception>
+        /// <exception cref="MidiDeviceException">The message cannot be sent.</exception>
         void SendPercussion(Percussion percussion, int velocity);
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace fractions
         ///     out-of-range.
         /// </exception>
         /// <exception cref="InvalidOperationException">The device is not open.</exception>
-        /// <exception cref="DeviceException">The message cannot be sent.</exception>
+        /// <exception cref="MidiDeviceException">The message cannot be sent.</exception>
         void SendControlChange(Channel channel, Control control, int value);
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace fractions
         ///     channel or value is out-of-range.
         /// </exception>
         /// <exception cref="InvalidOperationException">The device is not open.</exception>
-        /// <exception cref="DeviceException">The message cannot be sent.</exception>
+        /// <exception cref="MidiDeviceException">The message cannot be sent.</exception>
         void SendPitchBend(Channel channel, int value);
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace fractions
         ///     channel or instrument is out-of-range.
         /// </exception>
         /// <exception cref="InvalidOperationException">The device is not open.</exception>
-        /// <exception cref="DeviceException">The message cannot be sent.</exception>
+        /// <exception cref="MidiDeviceException">The message cannot be sent.</exception>
         /// <remarks>
         ///     A Program Change message is used to switch among instrument settings, generally
         ///     instrument voices.  An instrument conforming to General Midi 1 will have the
@@ -150,7 +150,7 @@ namespace fractions
         ///     Sends a System Exclusive (sysex) message to this MIDI output device.
         /// </summary>
         /// <param name="data">The message to send (as byte array)</param>
-        /// <exception cref="DeviceException">The message cannot be sent.</exception>
+        /// <exception cref="MidiDeviceException">The message cannot be sent.</exception>
         void SendSysEx(byte[] data);
 
         /// <summary>

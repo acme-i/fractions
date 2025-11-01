@@ -43,13 +43,11 @@ namespace fractions.tests
         public void Validity()
         {
             Assert.True(Control.Volume.IsValid());
-            Control.Volume.Validate();
             Assert.True(Control.AllNotesOff.IsValid());
-            Control.AllNotesOff.Validate();
             Assert.False(((Control)(-1)).IsValid());
-            Assert.Throws(typeof(ArgumentOutOfRangeException), () => ((Control)(-1)).Validate());
+            Assert.Throws(typeof(ArgumentOutOfRangeException), () => ((Control)(-1)).ThrowIfInvalid());
             Assert.False(((Control)128).IsValid());
-            Assert.Throws(typeof(ArgumentOutOfRangeException), () => ((Control)128).Validate());
+            Assert.Throws(typeof(ArgumentOutOfRangeException), () => ((Control)128).ThrowIfInvalid());
         }
 
         #endregion Methods

@@ -45,7 +45,7 @@ namespace fractions
         public PercussionMessage(IDeviceBase device, Percussion percussion, int velocity, float time, object tag = null)
             : base(device, time)
         {
-            percussion.Validate();
+            percussion.ThrowIfInvalid();
             Percussion = percussion;
             Velocity = velocity;
             Tag = tag;
@@ -73,7 +73,7 @@ namespace fractions
         public override void SendNow()
         {
             BeforeSendingPercussion?.Invoke(this);
-            (Device as IOutputDevice)?.SendNoteOn(Channel.Channel10, (Pitch)Percussion, DeviceBase.ClampControlChange(Velocity));
+            (Device as IOutputDevice)?.SendNoteOn(Channel.Channel10, (Pitch)Percussion, Velocity.ClampControlChange());
             AfterSendingPercussion?.Invoke(this);
         }
 

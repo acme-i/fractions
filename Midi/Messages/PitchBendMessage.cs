@@ -26,6 +26,13 @@ namespace fractions
     /// <summary>Pitch Bend message</summary>
     public class PitchBendMessage : ChannelMessage, ICloneable
     {
+        /// <summary>Max. posible pitch bend (16383)</summary>
+        public const int PitchBendMax = 16383;
+        /// <summary>Centered pitch bend (8192)</summary>
+        public const int PitchBendCentered = 8192;
+        /// <summary>Min. posible pitch bend (0)</summary>
+        public const int PitchBendMin = 0;
+
         #region Constructors
 
         /// <summary>
@@ -65,7 +72,7 @@ namespace fractions
         ///     Sends this message immediately.
         /// </summary>
         public override void SendNow() =>
-            (Device as IOutputDevice)?.SendPitchBend(Channel, DeviceBase.ClampPitchBend(Value));
+            (Device as IOutputDevice)?.SendPitchBend(Channel, Value.ClampPitchBend());
 
         public object Clone()
         {

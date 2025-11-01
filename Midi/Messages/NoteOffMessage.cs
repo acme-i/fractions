@@ -31,7 +31,7 @@ namespace fractions
         public override void SendNow()
         {
             BeforeSendingNoteOff?.Invoke(this);
-            (Device as IOutputDevice)?.SendNoteOff(Channel, Pitch, DeviceBase.ClampControlChange(Velocity));
+            (Device as IOutputDevice)?.SendNoteOff(Channel, Pitch, Velocity.ClampControlChange());
             AfterSendingNoteOff?.Invoke(this);
         }
 

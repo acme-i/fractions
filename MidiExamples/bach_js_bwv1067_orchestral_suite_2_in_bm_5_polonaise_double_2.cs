@@ -79,14 +79,14 @@ namespace fractions.examples
             foreach (var x in lChans)
             {
                 outputDevice.SendControlChange(x, Control.ReverbLevel, 0);
-                outputDevice.SendControlChange(x, Control.Volume, DeviceBase.ControlChangeMax);
+                outputDevice.SendControlChange(x, Control.Volume, (int)Control.MaxControl);
                 outputDevice.SendProgramChange(x, leftInstr.GetNext());
             }
 
             foreach (var x in rChans)
             {
                 outputDevice.SendControlChange(x, Control.ReverbLevel, 100);
-                outputDevice.SendControlChange(x, Control.Volume, DeviceBase.ControlChangeMax);
+                outputDevice.SendControlChange(x, Control.Volume, (int)Control.MaxControl);
                 outputDevice.SendProgramChange(x, rightInstr.GetNext());
             }
 
@@ -106,8 +106,8 @@ namespace fractions.examples
                 var sOut = stepsOut.GetNext();
                 var ppoints = Interpolator.InOutCurve(rand.Next(10, 50)/100f, rand.Next(51, 90) / 100f, sIn, sOut, easeIn, easeOut);
                 var vpoints = Interpolator.InOutCurve(rand.Next(50, 70) / 100f, rand.Next(71, 90) / 100f, sIn, sOut, easeIn, easeOut);
-                pcurve.AddRange(ppoints.Select(e => e * DeviceBase.ControlChangeMax));
-                vcurve.AddRange(vpoints.Select(e => e * DeviceBase.ControlChangeMax));
+                pcurve.AddRange(ppoints.Select(e => e * (int)Control.MaxControl));
+                vcurve.AddRange(vpoints.Select(e => e * (int)Control.MaxControl));
             }
 
             var leftPan = new Enumerate<double>(pcurve, IncrementMethod.Cyclic, 14);

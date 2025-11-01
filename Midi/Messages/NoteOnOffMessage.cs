@@ -115,17 +115,17 @@ namespace fractions
             {
                 if (Pan >= 0)
                 {
-                    outputDevice.SendControlChange(Channel, Control.Pan, DeviceBase.ClampControlChange(Pan));
+                    outputDevice.SendControlChange(Channel, Control.Pan, Pan.ClampControlChange());
                 }
                 if (Reverb is double reverb)
                 {
-                    outputDevice.SendControlChange(Channel, Control.ReverbLevel, DeviceBase.ClampControlChange(reverb));
+                    outputDevice.SendControlChange(Channel, Control.ReverbLevel, reverb.ClampControlChange());
                 }
                 if (Instrument is Instrument instrument)
                 {
                     outputDevice.SendProgramChange(Channel, instrument);
                 }
-                outputDevice.SendNoteOn(Channel, Pitch, DeviceBase.ClampControlChange(Velocity));
+                outputDevice.SendNoteOn(Channel, Pitch, Velocity.ClampControlChange());
             }
             Clock.Schedule(new NoteOffMessage(Device, Channel, Pitch, Velocity, Time + Duration));
             AfterSendingNoteOnOff?.Invoke(this);

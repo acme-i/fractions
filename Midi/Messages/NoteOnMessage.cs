@@ -56,13 +56,13 @@ namespace fractions
             {
                 if (Math.Sign(Pan) >= 0)
                 {
-                    device.SendControlChange(Channel, Control.Pan, DeviceBase.ClampControlChange(Pan));
+                    device.SendControlChange(Channel, Control.Pan, Pan.ClampControlChange());
                 }
                 if (Instrument is Instrument instrument)
                 {
                     device.SendProgramChange(Channel, instrument);
                 }
-                device.SendNoteOn(Channel, Pitch, DeviceBase.ClampControlChange(Velocity));
+                device.SendNoteOn(Channel, Pitch, Velocity.ClampControlChange());
             }
 
             AfterSending?.Invoke(this);

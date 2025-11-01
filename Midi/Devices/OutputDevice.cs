@@ -132,12 +132,13 @@ namespace fractions
 
         /// <summary>Closes this output device</summary>
         /// <exception cref="InvalidOperationException">The device is not open.</exception>
-        /// <exception cref="DeviceException">The device cannot be closed.</exception>
+        /// <exception cref="MidiDeviceException">The device cannot be closed.</exception>
         public void Close()
         {
             lock (objectLock)
             {
-                CheckOpen();
+                InvalidOperationExceptionExtensions.ThrowIfTrue(!isOpen, "Device is not open.");
+
                 CheckReturnCode(Win32API.midiOutClose(handle));
                 isOpen = false;
             }
@@ -145,12 +146,13 @@ namespace fractions
 
         /// <summary>Opens this output device</summary>
         /// <exception cref="InvalidOperationException">The device is already open.</exception>
-        /// <exception cref="DeviceException">The device cannot be opened.</exception>
+        /// <exception cref="MidiDeviceException">The device cannot be opened.</exception>
         public void Open()
         {
             lock (objectLock)
             {
-                CheckNotOpen();
+                InvalidOperationExceptionExtensions.ThrowIfTrue(isOpen, "Device is open.");
+
                 CheckReturnCode(Win32API.midiOutOpen(out handle, deviceId, null, (UIntPtr)0));
                 isOpen = true;
             }
@@ -164,13 +166,13 @@ namespace fractions
         /// channel, control, or value is out-of-range.
         ///</exception>
         /// <exception cref="InvalidOperationException">The device is not open.</exception>
-        /// <exception cref="DeviceException">The message cannot be sent.</exception>
+        /// <exception cref="MidiDeviceException">The message cannot be sent.</exception>
         public void SendControlChange(Channel channel, Control control, int value)
         {
             lock (objectLock)
             {
-                CheckOpen();
-                CheckReturnCode(Win32API.midiOutShortMsg(handle, ShortMsg.EncodeControlChange(channel, control, ClampControlChange(value))));
+                InvalidOperationExceptionExtensions.ThrowIfTrue(!isOpen, "Device is not open.");
+                CheckReturnCode(Win32API.midiOutShortMsg(handle, ShortMsg.EncodeControlChange(channel, control, value.ClampControlChange())));
             }
         }
 
@@ -182,13 +184,13 @@ namespace fractions
         /// channel, note, or velocity is out-of-range.
         ///</exception>
         /// <exception cref="InvalidOperationException">The device is not open.</exception>
-        /// <exception cref="DeviceException">The message cannot be sent.</exception>
+        /// <exception cref="MidiDeviceException">The message cannot be sent.</exception>
         public void SendNoteOff(Channel channel, Pitch pitch, int velocity)
         {
             lock (objectLock)
             {
-                CheckOpen();
-                CheckReturnCode(Win32API.midiOutShortMsg(handle, ShortMsg.EncodeNoteOff(channel, pitch, ClampControlChange(velocity))));
+                InvalidOperationExceptionExtensions.ThrowIfTrue(!isOpen, "Device is not open.");
+                CheckReturnCode(Win32API.midiOutShortMsg(handle, ShortMsg.EncodeNoteOff(channel, pitch, velocity.ClampControlChange())));
             }
         }
 
@@ -200,13 +202,13 @@ namespace fractions
         /// channel, pitch, or velocity is out-of-range.
         ///</exception>
         /// <exception cref="InvalidOperationException">The device is not open.</exception>
-        /// <exception cref="DeviceException">The message cannot be sent.</exception>
+        /// <exception cref="MidiDeviceException">The message cannot be sent.</exception>
         public void SendNoteOn(Channel channel, Pitch pitch, int velocity)
         {
             lock (objectLock)
             {
-                CheckOpen();
-                CheckReturnCode(Win32API.midiOutShortMsg(handle, ShortMsg.EncodeNoteOn(channel, pitch, ClampControlChange(velocity))));
+                InvalidOperationExceptionExtensions.ThrowIfTrue(!isOpen, "Device is not open.");
+                CheckReturnCode(Win32API.midiOutShortMsg(handle, ShortMsg.EncodeNoteOn(channel, pitch, velocity.ClampControlChange())));
             }
         }
 
@@ -219,13 +221,13 @@ namespace fractions
         /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">percussion or velocity is out-of-range.</exception>
         /// <exception cref="InvalidOperationException">The device is not open.</exception>
-        /// <exception cref="DeviceException">The message cannot be sent.</exception>
+        /// <exception cref="MidiDeviceException">The message cannot be sent.</exception>
         public void SendPercussion(Percussion percussion, int velocity)
         {
             lock (objectLock)
             {
-                CheckOpen();
-                CheckReturnCode(Win32API.midiOutShortMsg(handle, ShortMsg.EncodeNoteOn(Channel.Channel10, (Pitch)percussion, ClampControlChange(velocity))));
+                InvalidOperationExceptionExtensions.ThrowIfTrue(!isOpen, "Device is not open.");
+                CheckReturnCode(Win32API.midiOutShortMsg(handle, ShortMsg.EncodeNoteOn(Channel.Channel10, (Pitch)percussion, velocity.ClampControlChange())));
             }
         }
 
@@ -234,13 +236,13 @@ namespace fractions
         /// <param name="value"> The pitch bend value, 0..16383, 8192 is centered</param>
         /// <exception cref="ArgumentOutOfRangeException">channel or value is out-of-range.</exception>
         /// <exception cref="InvalidOperationException">The device is not open.</exception>
-        /// <exception cref="DeviceException">The message cannot be sent.</exception>
+        /// <exception cref="MidiDeviceException">The message cannot be sent.</exception>
         public void SendPitchBend(Channel channel, int value)
         {
             lock (objectLock)
             {
-                CheckOpen();
-                CheckReturnCode(Win32API.midiOutShortMsg(handle, ShortMsg.EncodePitchBend(channel, ClampPitchBend(value))));
+                InvalidOperationExceptionExtensions.ThrowIfTrue(!isOpen, "Device is not open.");
+                CheckReturnCode(Win32API.midiOutShortMsg(handle, ShortMsg.EncodePitchBend(channel, value.ClampPitchBend())));
             }
         }
 
@@ -249,7 +251,7 @@ namespace fractions
         /// <param name="instrument"> The instrument</param>
         /// <exception cref="ArgumentOutOfRangeException">channel or instrument is out-of-range.</exception>
         /// <exception cref="InvalidOperationException">The device is not open.</exception>
-        /// <exception cref="DeviceException">The message cannot be sent.</exception>
+        /// <exception cref="MidiDeviceException">The message cannot be sent.</exception>
         /// <remarks>
         /// A Program Change message is used to switch among instrument settings, generally
         /// instrument voices. An instrument conforming to General Midi 1 will have the instruments
@@ -260,7 +262,7 @@ namespace fractions
         {
             lock (objectLock)
             {
-                CheckOpen();
+                InvalidOperationExceptionExtensions.ThrowIfTrue(!isOpen, "Device is not open.");
                 CheckReturnCode(Win32API.midiOutShortMsg(handle, ShortMsg.EncodeProgramChange(channel, instrument)));
             }
         }
@@ -316,7 +318,7 @@ namespace fractions
         {
             lock (objectLock)
             {
-                CheckOpen();
+                InvalidOperationExceptionExtensions.ThrowIfTrue(!isOpen, "Device is not open.");
 
                 var parameter14 = new Int14(parameter);
                 var value14 = new Int14(value);
@@ -337,12 +339,12 @@ namespace fractions
 
         /// <summary>Silences all notes on this output device</summary>
         /// <exception cref="InvalidOperationException">The device is not open.</exception>
-        /// <exception cref="DeviceException">The message cannot be sent.</exception>
+        /// <exception cref="MidiDeviceException">The message cannot be sent.</exception>
         public void SilenceAllNotes()
         {
             lock (objectLock)
             {
-                CheckOpen();
+                InvalidOperationExceptionExtensions.ThrowIfTrue(!isOpen, "Device is not open.");
                 CheckReturnCode(Win32API.midiOutReset(handle));
             }
         }
@@ -364,9 +366,9 @@ namespace fractions
                 rc = Win32API.midiOutGetErrorText(rc, errorMsg);
                 if (rc != MMRESULT.MMSYSERR_NOERROR)
                 {
-                    throw new DeviceException("no error details");
+                    throw new MidiDeviceException("no error details");
                 }
-                throw new DeviceException(errorMsg.ToString());
+                throw new MidiDeviceException(errorMsg.ToString());
             }
         }
 
@@ -384,24 +386,6 @@ namespace fractions
                 result.Add(new OutputDevice((UIntPtr)deviceId, caps));
             }
             return result;
-        }
-
-        /// <summary>Throws a MidiDeviceException if this device is open</summary>
-        private void CheckNotOpen()
-        {
-            if (isOpen)
-            {
-                throw new InvalidOperationException("device open");
-            }
-        }
-
-        /// <summary>Throws a MidiDeviceException if this device is not open</summary>
-        private void CheckOpen()
-        {
-            if (!isOpen)
-            {
-                throw new InvalidOperationException("device not open");
-            }
         }
 
         #endregion Private Methods

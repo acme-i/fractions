@@ -6,7 +6,7 @@ namespace fractions
     ///     Base class for messages relevant to a specific device channel.
     /// </summary>
     [DebuggerDisplay("Channel = {Channel}, Time = {Time}")]
-    public abstract class ChannelMessage : DeviceMessage
+    public abstract class ChannelMessage : DeviceMessage, IChannelMessage, IDeviceMessage
     {
         #region Constructors
 
@@ -16,7 +16,7 @@ namespace fractions
         protected ChannelMessage(IDeviceBase device, Channel channel, float time, object tag = null)
             : base(device, time, tag)
         {
-            channel.Validate();
+            channel.ThrowIfInvalid();
             Channel = channel;
         }
 

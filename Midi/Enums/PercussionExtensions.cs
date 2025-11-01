@@ -101,19 +101,19 @@ namespace fractions
         /// <param name="percussion"> The percussion</param>
         public static string Name(this Percussion percussion)
         {
-            percussion.Validate();
+            percussion.ThrowIfInvalid();
             return PercussionNames[(int)percussion - 35];
         }
 
         /// <summary>Throws an exception if percussion is not valid</summary>
         /// <param name="percussion"> The percussion to validate</param>
         /// <exception cref="ArgumentOutOfRangeException">The percussion is out-of-range.</exception>
-        public static void Validate(this Percussion percussion)
+        public static void ThrowIfInvalid(this Percussion percussion)
         {
-            if (!percussion.IsValid())
-            {
-                throw new ArgumentOutOfRangeException(nameof(percussion));
-            }
+            ArgumentOutOfRangeExceptionExtensions.ThrowIfTrue(
+                !percussion.IsValid(), 
+                $"Pitch must me between {Percussion.BassDrum2} and {Percussion.OpenTriangle}, but was {percussion}"
+            );
         }
 
         #endregion Methods

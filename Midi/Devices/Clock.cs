@@ -150,11 +150,8 @@ namespace fractions
         /// <exception cref="ArgumentOutOfRangeException">beatsPerMinute is non-positive</exception>
         public Clock(float beatsPerMinute)
         {
-            if (beatsPerMinute <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(beatsPerMinute));
-            }
-
+            beatsPerMinute.ThrowIfLessThanOrEqualTo(0f, nameof(beatsPerMinute));
+            
             timingLock = new object();
             this.beatsPerMinute = beatsPerMinute;
             millisecondsPerBeat = 60000f / beatsPerMinute;
@@ -276,16 +273,12 @@ namespace fractions
         /// <seealso cref="Stop" />
         public void Reset()
         {
-            if (isSchedulerThread)
-            {
-                throw new InvalidOperationException("Clock is running.");
-            }
+            InvalidOperationExceptionExtensions.ThrowIfTrue(isSchedulerThread, "Clock is running.");
+
             lock (runLock)
             {
-                if (isRunning)
-                {
-                    throw new InvalidOperationException("Clock is running.");
-                }
+                InvalidOperationExceptionExtensions.ThrowIfTrue(isRunning, "Clock is running.");
+
                 stopwatch.Reset();
                 millisecondFudge = 0;
                 lock (threadLock)
@@ -366,16 +359,11 @@ namespace fractions
         /// <seealso cref="Reset" />
         public void Start()
         {
-            if (isSchedulerThread)
-            {
-                throw new InvalidOperationException("Clock already running.");
-            }
+            InvalidOperationExceptionExtensions.ThrowIfTrue(isSchedulerThread, "Clock already running.");
+
             lock (runLock)
             {
-                if (isRunning)
-                {
-                    throw new InvalidOperationException("Clock already running.");
-                }
+                InvalidOperationExceptionExtensions.ThrowIfTrue(isRunning, "Clock already running.");
 
                 // Start the stopwatch.
                 stopwatch.Start();
@@ -419,16 +407,11 @@ namespace fractions
         /// <seealso cref="Reset" />
         public void Stop()
         {
-            if (isSchedulerThread)
-            {
-                throw new InvalidOperationException("Can't call Stop() from the scheduler thread.");
-            }
+            InvalidOperationExceptionExtensions.ThrowIfTrue(isSchedulerThread, "Can't call Stop() from the scheduler thread.");
+
             lock (runLock)
             {
-                if (!isRunning)
-                {
-                    throw new InvalidOperationException("Clock is not running.");
-                }
+                InvalidOperationExceptionExtensions.ThrowIfTrue(!isRunning, "Clock is not running.");
 
                 // Tell the thread to stop, wait for it to terminate, then discard it. By the time
                 // this is done, we know that the scheduler will not invoke any more messages.

@@ -44,8 +44,7 @@ namespace fractions
         /// </summary>
         /// <param name="callback">The callback to invoke when this message is "sent".</param>
         /// <param name="time">The timestamp for this message.</param>
-        public CallbackMessage(CallbackType callback, float time)
-            : base(time)
+        public CallbackMessage(CallbackType callback, float time) : base(time)
         {
             Callback = callback ?? throw new ArgumentNullException(nameof(callback));
         }
@@ -66,8 +65,7 @@ namespace fractions
         /// <summary>
         ///     Returns a copy of this message, shifted in time by the specified amount.
         /// </summary>
-        public override Message MakeTimeShiftedCopy(float delta) =>
-            new CallbackMessage(Callback, Time + delta);
+        public override Message MakeTimeShiftedCopy(float delta) => new CallbackMessage(Callback, Time + delta);
 
         /// <summary>
         ///     Sends this message immediately, ignoring the beatTime.

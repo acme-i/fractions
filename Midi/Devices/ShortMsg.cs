@@ -131,12 +131,9 @@ namespace fractions
         /// <returns> A value that can be passed to midiOutShortMsg. </returns>
         public static uint EncodeControlChange(Channel channel, Control control, int value)
         {
-            channel.Validate();
-            control.Validate();
-            if (value < 0 || value > 127)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value));
-            }
+            channel.ThrowIfInvalid();
+            control.ThrowIfInvalid();
+            value.ThrowIfOutOfRange(0, 127, nameof(value));
             return (uint)(0xB0 | (int)channel | ((int)control << 8) | (value << 16));
         }
 
@@ -147,14 +144,12 @@ namespace fractions
         /// <returns> A value that can be passed to midiOutShortMsg. </returns>
         public static uint EncodeNoteOff(Channel channel, Pitch pitch, int velocity)
         {
-            channel.Validate();
-            if (!pitch.IsInMidiRange())
-            {
-                throw new ArgumentOutOfRangeException(nameof(pitch), "Pitch out of MIDI range.");
-            }
+            channel.ThrowIfInvalid();
+            pitch.ThrowIfOutOfRange(nameof(pitch));
+            
             if (velocity < 0 || velocity > 127)
             {
-                velocity = DeviceBase.ClampControlChange(velocity);
+                velocity = velocity.ClampControlChange();
                 //throw new ArgumentOutOfRangeException(nameof(velocity), "Velocity is out of range.");
             }
             return (uint)(0x80 | ((int)channel) | ((int)pitch << 8) | (velocity << 16));
@@ -168,16 +163,12 @@ namespace fractions
         /// <exception cref="ArgumentOutOfRangeException">pitch is not in MIDI range.</exception>
         public static uint EncodeNoteOn(Channel channel, Pitch pitch, int velocity)
         {
-            channel.Validate();
-            if (!pitch.IsInMidiRange())
-            {
-                throw new ArgumentOutOfRangeException(nameof(pitch), "Pitch out of MIDI range.");
-            }
-            if (velocity < DeviceBase.ControlChangeMin || velocity > DeviceBase.ControlChangeMax)
-            {
-                velocity = DeviceBase.ClampControlChange(velocity);
-                //throw new ArgumentOutOfRangeException(nameof(velocity), "Velocity is out of range.");
-            }
+            channel.ThrowIfInvalid();
+            pitch.ThrowIfOutOfRange(nameof(pitch));
+
+            velocity = velocity.ClampControlChange();
+            //throw new ArgumentOutOfRangeException(nameof(velocity), "Velocity is out of range.");
+
             return (uint)(0x90 | ((int)channel) | ((int)pitch << 8) | (velocity << 16));
         }
 
@@ -187,11 +178,9 @@ namespace fractions
         /// <returns> A value that can be passed to midiOutShortMsg. </returns>
         public static uint EncodePitchBend(Channel channel, int value)
         {
-            channel.Validate();
-            if (value < DeviceBase.PitchBendMin || value > DeviceBase.PitchBendMax)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), "Value is out of range.");
-            }
+            channel.ThrowIfInvalid();
+            value.ThrowIfOutOfRange(PitchBendMessage.PitchBendMin, PitchBendMessage.PitchBendMax, nameof(value));
+
             return (uint)(0xE0 | (int)channel | ((value & 0x7f) << 8) | ((value & 0x3f80) << 9));
         }
 
@@ -201,8 +190,8 @@ namespace fractions
         /// <returns> A value that can be passed to midiOutShortMsg. </returns>
         public static uint EncodeProgramChange(Channel channel, Instrument instrument)
         {
-            channel.Validate();
-            instrument.Validate();
+            channel.ThrowIfInvalid();
+            instrument.ThrowIfInvalid();
             return (uint)(0xC0 | (int)channel | ((int)instrument << 8));
         }
 

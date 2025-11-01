@@ -22,18 +22,18 @@
 namespace fractions
 {
     /// <summary>Exception thrown when an operation on a MIDI device cannot be satisfied</summary>
-    public class DeviceException : System.ApplicationException
+    public class MidiDeviceException : System.ApplicationException
     {
         #region Constructors
 
         /// <summary><see cref="System.ApplicationException()"/></summary>
-        public DeviceException() : base() { }
+        public MidiDeviceException() : base() { }
 
         /// <summary><see cref="System.ApplicationException(string)"/></summary>
-        public DeviceException(string message) : base(message) { }
+        public MidiDeviceException(string message) : base(message) { }
 
         /// <summary><see cref="System.ApplicationException(string, System.Exception)"/></summary>
-        public DeviceException(string message, System.Exception innerException) : base(message, innerException) { }
+        public MidiDeviceException(string message, System.Exception innerException) : base(message, innerException) { }
 
         #endregion Constructors
     }

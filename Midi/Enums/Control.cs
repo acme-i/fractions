@@ -46,7 +46,7 @@ namespace fractions
     ///         <see cref="ControlExtensions" />.
     ///     </para>
     /// </remarks>
-    public enum Control
+    public enum Control : int
     {
         /// <summary>General MIDI Control--See MIDI spec for details</summary>
         ModulationWheel = 1,

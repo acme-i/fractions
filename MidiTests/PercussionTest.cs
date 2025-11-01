@@ -43,13 +43,13 @@ namespace fractions.tests
         public void IsValidTest()
         {
             Assert.True(Percussion.BassDrum2.IsValid());
-            Percussion.BassDrum2.Validate();
+            Percussion.BassDrum2.ThrowIfInvalid();
             Assert.True(Percussion.OpenTriangle.IsValid());
-            Percussion.OpenTriangle.Validate();
+            Percussion.OpenTriangle.ThrowIfInvalid();
             Assert.False(((Percussion)34).IsValid());
-            Assert.Throws(typeof(ArgumentOutOfRangeException), () => ((Percussion)34).Validate());
+            Assert.Throws(typeof(ArgumentOutOfRangeException), () => ((Percussion)34).ThrowIfInvalid());
             Assert.False(((Percussion)82).IsValid());
-            Assert.Throws(typeof(ArgumentOutOfRangeException), () => ((Percussion)82).Validate());
+            Assert.Throws(typeof(ArgumentOutOfRangeException), () => ((Percussion)82).ThrowIfInvalid());
         }
 
         [Test]

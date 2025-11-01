@@ -46,7 +46,7 @@ namespace fractions.examples
             foreach (var x in Channels.InstrumentChannels)
             {
                 outputDevice.SendControlChange(x, Control.ReverbLevel, 0);
-                outputDevice.SendControlChange(x, Control.Volume, DeviceBase.ControlChangeMax);
+                outputDevice.SendControlChange(x, Control.Volume, (int)Control.MaxControl);
             }
 
             clock = new Clock(BPM);
@@ -68,8 +68,8 @@ namespace fractions.examples
                 var sOut = stepsOut.GetNext();
                 var ppoints = Interpolator.InOutCurve(0.30, 0.70, sIn, sOut, ef.easeIn, ef.easeOut);
                 var vpoints = Interpolator.InOutCurve(0.50, 0.90, sIn, sOut, ef.easeIn, ef.easeOut);
-                pcurve.AddRange(ppoints.Select(e => e * DeviceBase.ControlChangeMax));
-                vcurve.AddRange(vpoints.Select(e => e * DeviceBase.ControlChangeMax));
+                pcurve.AddRange(ppoints.Select(e => e * (int)Control.MaxControl));
+                vcurve.AddRange(vpoints.Select(e => e * (int)Control.MaxControl));
             }
 
             Enumerate<double> leftPan = pcurve.AsCycle();

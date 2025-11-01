@@ -91,7 +91,7 @@ namespace fractions
         ///     Opens this input device.
         /// </summary>
         /// <exception cref="InvalidOperationException">The device is already open.</exception>
-        /// <exception cref="DeviceException">The device cannot be opened.</exception>
+        /// <exception cref="MidiDeviceException">The device cannot be opened.</exception>
         /// <remarks>
         ///     Note that Open() establishes a connection to the device, but no messages will
         ///     be received until <see cref="InputDevice.StartReceiving(Clock)" /> is called.
@@ -105,7 +105,7 @@ namespace fractions
         ///     The device is not open or is still
         ///     receiving.
         /// </exception>
-        /// <exception cref="DeviceException">The device cannot be closed.</exception>
+        /// <exception cref="MidiDeviceException">The device cannot be closed.</exception>
         void Close();
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace fractions
         ///     The device is not open or is already
         ///     receiving.
         /// </exception>
-        /// <exception cref="DeviceException">The device cannot start receiving.</exception>
+        /// <exception cref="MidiDeviceException">The device cannot start receiving.</exception>
         void StartReceiving(Clock clock);
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace fractions
         ///     The device is not open or is already
         ///     receiving.
         /// </exception>
-        /// <exception cref="DeviceException">The device cannot start receiving.</exception>
+        /// <exception cref="MidiDeviceException">The device cannot start receiving.</exception>
         /// <remarks>
         ///     <para>
         ///         This method launches a background thread to listen for input events, and as events
@@ -175,7 +175,7 @@ namespace fractions
         ///     The device is not open; is not receiving;
         ///     or called from within an event handler (ie, from the background thread).
         /// </exception>
-        /// <exception cref="DeviceException">The device cannot start receiving.</exception>
+        /// <exception cref="MidiDeviceException">The device cannot start receiving.</exception>
         void StopReceiving();
     }
 

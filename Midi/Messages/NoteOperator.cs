@@ -7,11 +7,12 @@ namespace fractions
         public static double Plus(double left, double right)
         {
             var value = left + right;
-            if (value > DeviceBase.ControlChangeMax)
+            var max = (double)Control.MaxControl;
+            if (value > max)
             {
-                value = DeviceBase.ControlChangeMax - value;
+                value = max - value;
             }
-            return DeviceBase.ClampControlChange(value);
+            return value.ClampControlChange();
         }
 
         public static NoteMessage Multiply(NoteMessage left, double right, NoteProperty property = NoteProperty.Velocity)
@@ -20,11 +21,12 @@ namespace fractions
             if (1.0 != right && clone.Velocity > 0)
             {
                 var value = clone.Velocity * Math.Abs(right);
-                if (value > DeviceBase.ControlChangeMax)
+                var max = (double)Control.MaxControl;
+                if (value > max)
                 {
-                    value = DeviceBase.ControlChangeMax - (value % DeviceBase.ControlChangeMax);
+                    value = max - (value % max);
                 }
-                clone.Velocity = DeviceBase.ClampControlChange(value);
+                clone.Velocity = value.ClampControlChange();
             }
             return clone;
         }
@@ -54,11 +56,11 @@ namespace fractions
         public static double Minus(double left, double right)
         {
             var value = left - right;
-            if (value < DeviceBase.ControlChangeMin)
+            if (value < (double)Control.MinControl)
             {
                 value = Math.Abs(value);
             }
-            return DeviceBase.ClampControlChange(value);
+            return value.ClampControlChange();
         }
 
         public static NoteMessage Minus(NoteMessage left, double right, NoteProperty property = NoteProperty.Velocity)

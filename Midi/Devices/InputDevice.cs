@@ -114,20 +114,19 @@ namespace fractions
 
         /// <summary>Opens this input device</summary>
         /// <exception cref="InvalidOperationException">The device is already open.</exception>
-        /// <exception cref="DeviceException">The device cannot be opened.</exception>
+        /// <exception cref="MidiDeviceException">The device cannot be opened.</exception>
         /// <remarks>
         /// Note that Open() establishes a connection to the device, but no messages will be
         /// received until <see cref="StartReceiving(Clock)" /> is called.
         /// </remarks>
         public void Open()
         {
-            if (isInsideInputHandler)
-            {
-                throw new InvalidOperationException("Device is open.");
-            }
+            InvalidOperationExceptionExtensions.ThrowIfTrue(isInsideInputHandler, "Device is open.");
+
             lock (this)
             {
-                CheckNotOpen();
+                InvalidOperationExceptionExtensions.ThrowIfTrue(isOpen, "Device is open.");
+
                 CheckReturnCode(Win32API.midiInOpen(out handle, deviceId, inputCallbackDelegate, (UIntPtr)0));
                 isOpen = true;
             }
@@ -137,16 +136,14 @@ namespace fractions
         /// <exception cref="InvalidOperationException">
         /// The device is not open or is still receiving.
         ///</exception>
-        /// <exception cref="DeviceException">The device cannot be closed.</exception>
+        /// <exception cref="MidiDeviceException">The device cannot be closed.</exception>
         public void Close()
         {
-            if (isInsideInputHandler)
-            {
-                throw new InvalidOperationException("Device is receiving.");
-            }
+            InvalidOperationExceptionExtensions.ThrowIfTrue(isInsideInputHandler, "Device is receiving.");
+
             lock (this)
             {
-                CheckOpen();
+                InvalidOperationExceptionExtensions.ThrowIfTrue(!isOpen, "Device is not open.");
 
                 isClosing = true;
                 if (longMsgBuffers.Count > 0)
@@ -176,7 +173,7 @@ namespace fractions
         /// <exception cref="InvalidOperationException">
         ///     The device is not open or is already receiving.
         ///</exception>
-        /// <exception cref="DeviceException">
+        /// <exception cref="MidiDeviceException">
         ///     The device cannot start receiving.
         /// </exception>
         /// <remarks>
@@ -208,13 +205,11 @@ namespace fractions
         /// <param name="handleSysEx"></param>
         public void StartReceiving(Clock clock, bool handleSysEx)
         {
-            if (isInsideInputHandler)
-            {
-                throw new InvalidOperationException("Device is receiving.");
-            }
+            InvalidOperationExceptionExtensions.ThrowIfTrue(isInsideInputHandler, "Device is receiving.");
+
             lock (this)
             {
-                CheckOpen();
+                InvalidOperationExceptionExtensions.ThrowIfTrue(!isOpen, "Device is not open.");
                 CheckNotReceiving();
 
                 if (handleSysEx)
@@ -247,13 +242,11 @@ namespace fractions
         /// The device is not open; is not receiving; or called from within an event handler (ie,
         /// from the background thread).
         ///</exception>
-        /// <exception cref="DeviceException">The device cannot start receiving.</exception>
+        /// <exception cref="MidiDeviceException">The device cannot start receiving.</exception>
         public void StopReceiving()
         {
-            if (isInsideInputHandler)
-            {
-                throw new InvalidOperationException("Can't call StopReceiving() from inside an input handler.");
-            }
+            InvalidOperationExceptionExtensions.ThrowIfTrue(!isReceiving, "Can't call StopReceiving() from inside an input handler.");
+
             lock (this)
             {
                 CheckReceiving();
@@ -280,9 +273,9 @@ namespace fractions
                 rc = Win32API.midiInGetErrorText(rc, errorMsg);
                 if (rc != MMRESULT.MMSYSERR_NOERROR)
                 {
-                    throw new DeviceException("no error details");
+                    throw new MidiDeviceException("no error details");
                 }
-                throw new DeviceException(errorMsg.ToString());
+                throw new MidiDeviceException(errorMsg.ToString());
             }
         }
 
@@ -302,30 +295,12 @@ namespace fractions
             return result;
         }
 
-        /// <summary>Throws a MidiDeviceException if this device is open</summary>
-        private void CheckNotOpen()
-        {
-            if (isOpen)
-            {
-                throw new InvalidOperationException("Device is open.");
-            }
-        }
-
         /// <summary>Throws a MidiDeviceException if this device is receiving</summary>
         private void CheckNotReceiving()
         {
             if (isReceiving)
             {
-                throw new DeviceException("device receiving");
-            }
-        }
-
-        /// <summary>Throws a MidiDeviceException if this device is not open</summary>
-        private void CheckOpen()
-        {
-            if (!isOpen)
-            {
-                throw new InvalidOperationException("Device is not open.");
+                throw new MidiDeviceException("device receiving");
             }
         }
 
@@ -334,7 +309,7 @@ namespace fractions
         {
             if (!isReceiving)
             {
-                throw new DeviceException("device not receiving");
+                throw new MidiDeviceException("device not receiving");
             }
         }
 

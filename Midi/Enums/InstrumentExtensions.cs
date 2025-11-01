@@ -223,7 +223,7 @@ namespace fractions
         /// </exception>
         public static string Name(this Instrument instrument)
         {
-            instrument.Validate();
+            instrument.ThrowIfInvalid();
             return InstrumentNames[(int)instrument];
         }
 
@@ -234,12 +234,12 @@ namespace fractions
         /// <exception cref="ArgumentOutOfRangeException">
         ///     The instrument is out-of-range.
         /// </exception>
-        public static void Validate(this Instrument instrument)
+        public static void ThrowIfInvalid(this Instrument instrument)
         {
-            if (!instrument.IsValid())
-            {
-                throw new ArgumentOutOfRangeException(nameof(instrument));
-            }
+            ArgumentOutOfRangeExceptionExtensions.ThrowIfTrue(
+                !instrument.IsValid(),
+                $"Instrument must me between {Instrument.AcousticGrandPiano} and {Instrument.Gunshot}, but was {instrument}"
+            );
         }
 
         #endregion Methods

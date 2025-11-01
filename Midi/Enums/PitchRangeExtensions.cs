@@ -1,4 +1,6 @@
-﻿namespace fractions
+﻿using System;
+
+namespace fractions
 {
     public static class PitchRangeExtensions
     {

@@ -73,6 +73,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\DoubleExtensions.cs" />
+    <Compile Include="Extensions\IComparableExtensions.cs" />
     <Compile Include="Devices\ClockExtensions.cs" />
     <Compile Include="Enums\IAssertRange.cs" />
     <Compile Include="Enums\PercussionRange.cs" />
@@ -81,6 +83,7 @@
     <Compile Include="Enums\PitchRangeExtensions.cs" />
     <Compile Include="Enums\EnumRange.cs" />
     <Compile Include="Extensions\ArrayExtensions.cs" />
+    <Compile Include="Extensions\InvalidOperationExceptionExtensions.cs" />
     <Compile Include="Extensions\RandomExtensions.cs" />
     <Compile Include="Extensions\ReadOnlyCollectionExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
@@ -91,6 +94,9 @@
     <Compile Include="Devices\IInputDevice.cs" />
     <Compile Include="Devices\IOutputDevice.cs" />
     <Compile Include="Devices\LongMsg.cs" />
+    <Compile Include="Messages\IChannelMessage.cs" />
+    <Compile Include="Messages\IDeviceMessage.cs" />
+    <Compile Include="Messages\INoteMessage.cs" />
     <Compile Include="Messages\NoteMessageListExtensions.cs" />
     <Compile Include="Messages\NoteOperator.cs" />
     <Compile Include="Util\Enumerate.cs" />
@@ -123,7 +129,7 @@
     <Compile Include="Enums\Control.cs" />
     <Compile Include="Messages\ControlChangeMessage.cs" />
     <Compile Include="Devices\DeviceBase.cs" />
-    <Compile Include="Devices\DeviceException.cs" />
+    <Compile Include="Devices\MidiDeviceException.cs" />
     <Compile Include="Messages\DeviceMessage.cs" />
     <Compile Include="Enums\Instrument.cs" />
     <Compile Include="Enums\InstrumentExtensions.cs" />

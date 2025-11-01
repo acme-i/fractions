@@ -58,7 +58,7 @@ namespace fractions
         /// <exception cref="ArgumentOutOfRangeException">The control is out-of-range.</exception>
         public static string Name(this Control control)
         {
-            control.Validate();
+            control.ThrowIfInvalid();
             if (ControlNames.ContainsKey((int)control))
             {
                 return ControlNames[(int)control];
@@ -70,12 +70,13 @@ namespace fractions
         ///     Throws an exception if control is not valid.
         /// </summary>
         /// <param name="control">The control to validate.</param>
+        /// <param name="parameterName">The name of the parameter that is being validated.</param>
         /// <exception cref="ArgumentOutOfRangeException">The control is out-of-range.</exception>
-        public static void Validate(this Control control)
+        public static void ThrowIfInvalid(this Control control, string parameterName = "control")
         {
             if (!control.IsValid())
             {
-                throw new ArgumentOutOfRangeException(nameof(control));
+                throw new ArgumentOutOfRangeException(parameterName);
             }
         }
 

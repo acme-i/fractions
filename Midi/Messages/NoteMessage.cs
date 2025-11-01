@@ -5,7 +5,7 @@ namespace fractions
 {
     /// <summary>Base class for messages relevant to a specific note</summary>
     [DebuggerDisplay("Pitch = {Pitch}, Velocity = {Velocity}, Channel = {Channel}, Time = {Time}, Pan = {Pan}")]
-    public abstract class NoteMessage : ChannelMessage, ICloneable
+    public abstract class NoteMessage : ChannelMessage, INoteMessage
     {
         #region Constructors
 
@@ -15,20 +15,12 @@ namespace fractions
         {
             if (float.IsInfinity(time))
                 throw new ArgumentException(nameof(time));
-            if (double.IsPositiveInfinity(velocity))
-                velocity = 127;
-            if (double.IsNegativeInfinity(velocity))
-                velocity = 0;
             if (double.IsInfinity(pan))
                 pan = 63;
 
-            if (!pitch.IsInMidiRange())
-            {
-                pitch = pitch.ToMidiRange();
-            }
-            Pitch = pitch;
-            Velocity = DeviceBase.ClampControlChange(velocity);
-            Pan = DeviceBase.ClampControlChange(pan);
+            Pitch = pitch.ToMidiRange();
+            Velocity = velocity.ClampControlChange();
+            Pan = pan.ClampControlChange();
             Instrument = instrument;
             Reverb = reverb;
         }
@@ -71,11 +63,12 @@ namespace fractions
             if (1.0 != right && clone.Velocity > 0)
             {
                 var value = clone.Velocity * Math.Abs(right);
-                if (value > DeviceBase.ControlChangeMax)
+                var max = (double)Control.MaxControl;
+                if (value > max)
                 {
-                    value = DeviceBase.ControlChangeMax - (value % DeviceBase.ControlChangeMax);
+                    value = max - (value % max);
                 }
-                clone.Velocity = DeviceBase.ClampControlChange(value);
+                clone.Velocity = value.ClampControlChange();
             }
             return clone;
         }

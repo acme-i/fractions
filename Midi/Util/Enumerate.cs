@@ -156,7 +156,7 @@ namespace fractions
         private static void AssertCollection(IEnumerable<T> collection)
         {
             if (collection is null) throw new ArgumentNullException(nameof(collection));
-            if (collection.Count() <= 1) throw new ArgumentOutOfRangeException(nameof(collection), "collection must have at least 1 items");
+            collection.ThrowIfCountIsLessThan(1, nameof(collection));
         }
     }
 }

@@ -111,8 +111,8 @@ namespace fractions.examples
                 var sOut = steps.GetNext();
                 var ppoints = Interpolator.InOutCurve( 4/10f, 6 / 10f, sIn, sOut, eIn[part], eOut[part]);
                 var vpoints = Interpolator.InOutCurve(0.70, 0.9, sIn, sOut, eIn[part], eOut[part]);
-                pcurve.AddRange(ppoints.Select(e => e * DeviceBase.ControlChangeMax));
-                vcurve.AddRange(vpoints.Select(e => e * DeviceBase.ControlChangeMax));
+                pcurve.AddRange(ppoints.Select(e => e * (int)Control.MaxControl));
+                vcurve.AddRange(vpoints.Select(e => e * (int)Control.MaxControl));
             }
             var leftPan = pcurve.AsCycle();
             var leftVol = vcurve.AsCycle();

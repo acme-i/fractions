@@ -36,6 +36,14 @@ namespace fractions
 
         #region Methods
 
+        public static void ThrowIfInvalid(this Channel value)
+        {
+            ArgumentOutOfRangeExceptionExtensions.ThrowIfTrue(
+                !value.IsValid(),
+                $"Channel must be me greater than {Channel.Channel1} and {Channel.Channel16}, but was {value}"
+            );
+        }
+
         public static Channel Clamp(this Channel value)
         {
             return (Channel)Math.Min(Math.Max((int)value, (int)Channel.Channel1), (int)Channel.Channel16);
@@ -54,21 +62,9 @@ namespace fractions
         /// <exception cref="ArgumentOutOfRangeException">The channel is out-of-range.</exception>
         public static string Name(this Channel channel)
         {
-            channel.Validate();
-            return ChannelNames[(int)channel];
-        }
+            channel.ThrowIfInvalid();
 
-        /// <summary>
-        ///     Throws an exception if channel is not valid.
-        /// </summary>
-        /// <param name="channel">The channel to validate.</param>
-        /// <exception cref="ArgumentOutOfRangeException">The channel is out-of-range.</exception>
-        public static void Validate(this Channel channel)
-        {
-            if (!channel.IsValid())
-            {
-                throw new ArgumentOutOfRangeException(nameof(channel));
-            }
+            return ChannelNames[(int)channel];
         }
 
         public static bool IsPercussion(this Channel channel)

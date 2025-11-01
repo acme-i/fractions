@@ -59,6 +59,14 @@ namespace fractions
 
         #region Methods
 
+        public static void ThrowIfOutOfRange(this Pitch value, string parameterName)
+        {
+            ArgumentOutOfRangeExceptionExtensions.ThrowIfTrue(
+                !value.IsInMidiRange(), 
+                $"Pitch must be me greater than {Pitch.CNeg1} and {Pitch.G9}, but was {value}"
+            );
+        }
+
         public static Pitch Clamp(this Pitch value)
         {
             return (Pitch)Math.Min(Math.Max((int)value, 0), 127);
@@ -74,6 +82,8 @@ namespace fractions
 
         public static Pitch ToMidiRange(this Pitch pitch)
         {
+            if (pitch.IsInMidiRange()) return pitch;
+
             if (pitch > Pitch.G9)
             {
                 while (pitch > Pitch.G9)

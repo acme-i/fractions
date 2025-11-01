@@ -57,45 +57,5 @@ namespace fractions
         public string Name { get; }
 
         #endregion Properties
-
-        #region Class Members
-
-        /// <summary>Max. posible control change value (127)</summary>
-        public const int ControlChangeMax = 127;
-        /// <summary>Min. posible control change value (0)</summary>
-        public const int ControlChangeMin = 0;
-
-        /// <summary>Max. posible pitch bend (16383)</summary>
-        public const int PitchBendMax = 16383;
-        /// <summary>Centered pitch bend (8192)</summary>
-        public const int PitchBendCentered = 8192;
-        /// <summary>Min. posible pitch bend (0)</summary>
-        public const int PitchBendMin = 0;
-
-        /// <returns>The value clamped between [min; max]</returns>
-        public static double Clamp(double value, double min, double max)
-        {
-            return Math.Min(Math.Max(value, min), max);
-        }
-
-        /// <returns>The value clamped between [min; max]</returns>
-        public static float ClampFloat(double value, double min, double max)
-        {
-            return (float)Math.Min(Math.Max(value, min), max);
-        }
-
-        /// <returns>The value clamped between [ControlChangeMin; ControlChangeMax]</returns>
-        public static int ClampControlChange(double value)
-        {
-            return (int)Clamp(value, ControlChangeMin, ControlChangeMax);
-        }
-
-        /// <returns>The value clamped between [PitchBendMin; PitchBendMax]</returns>
-        public static int ClampPitchBend(double value)
-        {
-            return (int)Clamp(value, PitchBendMin, PitchBendMax);
-        }
-
-        #endregion
     }
 }

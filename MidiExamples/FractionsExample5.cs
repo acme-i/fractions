@@ -119,8 +119,6 @@ namespace fractions.examples
             var voffsets = new[] { 2, 8, 2, 16, 2, 32, 2, 64 }.AsCycle();
             var poffsets = new[] { 2, 4, 8, 12, 16, 18, 24 }.AsEnumeration();
 
-            Enumerate<float> fen;
-
             foreach (var x in channels)
             {
                 var s = (int)x;

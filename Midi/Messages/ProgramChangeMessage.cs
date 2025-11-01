@@ -18,7 +18,7 @@ namespace fractions
         public ProgramChangeMessage(IDeviceBase device, Channel channel, Instrument instrument, float time, object tag = null)
             : base(device, channel, time, tag)
         {
-            instrument.Validate();
+            instrument.ThrowIfInvalid();
             Instrument = instrument;
         }
 

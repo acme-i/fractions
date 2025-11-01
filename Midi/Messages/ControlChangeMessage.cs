@@ -19,7 +19,7 @@ namespace fractions
         public ControlChangeMessage(IDeviceBase device, Channel channel, Control control, int value, float time, object tag = null)
             : base(device, channel, time, tag)
         {
-            control.Validate();
+            control.ThrowIfInvalid();
             Control = control;
             Value = value;
         }
@@ -52,7 +52,7 @@ namespace fractions
         ///     Sends this message immediately.
         /// </summary>
         public override void SendNow() =>
-            (Device as IOutputDevice)?.SendControlChange(Channel, Control, DeviceBase.ClampControlChange(Value));
+            (Device as IOutputDevice)?.SendControlChange(Channel, Control, Value.ClampControlChange());
 
         public object Clone()
         {

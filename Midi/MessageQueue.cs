@@ -653,9 +653,9 @@ namespace fractions
                 .ToList()
                 .ForEach(m =>
                 {
-                    var mv = DeviceBase.ClampControlChange(m.Velocity);
+                    var mv = m.Velocity.ClampControlChange();
                     var newVelocity = Interpolator.Interpolate(mv, 0.0, 127.0, newMin, newMax, method);
-                    m.Velocity = DeviceBase.ClampControlChange(newVelocity);
+                    m.Velocity = newVelocity.ClampControlChange();
                 });
 
             if (channels.Contains(Channel.Channel10))
@@ -665,9 +665,9 @@ namespace fractions
                     .ToList()
                     .ForEach(m =>
                     {
-                        var mv = DeviceBase.ClampControlChange(m.Velocity);
+                        var mv = m.Velocity.ClampControlChange();
                         var newVelocity = Interpolator.Interpolate(mv, 0.0, 127.0, newMin, newMax, method);
-                        m.Velocity = DeviceBase.ClampControlChange(newVelocity);
+                        m.Velocity = newVelocity.ClampControlChange();
                     });
         }
 
