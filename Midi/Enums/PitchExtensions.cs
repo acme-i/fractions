@@ -63,13 +63,9 @@ namespace fractions
         {
             ArgumentOutOfRangeExceptionExtensions.ThrowIfTrue(
                 !value.IsInMidiRange(), 
-                $"Pitch must be me greater than {Pitch.CNeg1} and {Pitch.G9}, but was {value}"
+                $"Pitch must be >= {Pitch.CNeg1} and <= {Pitch.G9}, but was {value}",
+                parameterName
             );
-        }
-
-        public static Pitch Clamp(this Pitch value)
-        {
-            return (Pitch)Math.Min(Math.Max((int)value, 0), 127);
         }
 
         /// <summary>Returns true if pitch is in the MIDI range [1..127]</summary>
@@ -130,6 +126,8 @@ namespace fractions
             return PositionInOctaveToNotesPreferringSharps[pitch.PositionInOctave()];
         }
 
+
+
         /// <summary>Returns the note that would name this pitch if it used the given letter</summary>
         /// <param name="pitch"> The pitch being named</param>
         /// <param name="letter"> The letter to use in the name, in ['A'..'G']</param>
@@ -140,10 +138,8 @@ namespace fractions
         /// <exception cref="ArgumentOutOfRangeException">letter is out of range.</exception>
         public static Note NoteWithLetter(this Pitch pitch, char letter)
         {
-            if (letter < 'A' || letter > 'G')
-            {
-                throw new ArgumentOutOfRangeException(nameof(letter));
-            }
+            letter.ThrowIfOutOfRange(nameof(letter));
+
             var pitchNote = pitch.NotePreferringSharps();
             var letterNote = new Note(letter);
             var upTo = letterNote.SemitonesUpTo(pitchNote);

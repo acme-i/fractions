@@ -36,15 +36,36 @@ namespace fractions
             this.Incrementor = source.Clone();
             //this.Name = string.Copy(name) ?? Guid.NewGuid().ToString();
         }
-        
+
+        /// <summary>
+        /// Optional name for this instance
+        /// </summary>
         public string Name { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Gets the incrementor used by this instance
+        /// </summary>
         public Incrementor Incrementor { get; internal set; }
 
+        /// <summary>
+        /// Gets the length of the collection
+        /// </summary>
         public int Length { get { return collection.Count; } }
 
         /// <summary>
-        /// Returns the current, but does not advance
+        /// Gets the number of times GetNext has been called on this instance.
+        /// Counter starts at 0 and is only reset when Set is called.
+        /// </summary>
+        public long Counter { get; private set; } = 0;
+
+        /// <summary>
+        /// An unique identifier for this instance. This is needed to differentiate
+        /// instances when Enumerate are cloned.
+        /// </summary>
+        public Guid Id { get; private set; } = Guid.NewGuid();
+
+        /// <summary>
+        /// Returns the current, but does not advance the incrementor
         /// </summary>
         /// <returns></returns>
         public T Current
@@ -52,24 +73,31 @@ namespace fractions
             get => collection[(int)Incrementor.Value];
         }
 
+        /// <summary>
+        /// Returns the minimum value in the collection
+        /// </summary>
         public T Min
         {
             get => collection.Min();
         }
 
+        /// <summary>
+        /// Returns the maximum value in the collection
+        /// </summary>
         public T Max
         {
             get => collection.Max();
         }
 
         /// <summary>
-        /// Returns the current, then advances
+        /// Returns the current, then advances the incrementor
         /// </summary>
         /// <returns></returns>
         public T GetNext()
         {
             var current = collection[(int)Incrementor.Value];
             Incrementor.GetNext();
+            Counter++;
             return current;
         }
 
@@ -102,6 +130,10 @@ namespace fractions
             AddRange(others);
         }
 
+        /// <summary>
+        /// Adds a range of items to the collection
+        /// </summary>
+        /// <param name="others">Items to add to the collection</param>
         public void AddRange(IEnumerable<T> others)
         {
             if (collection is List<T> source)
@@ -111,6 +143,10 @@ namespace fractions
                     collection.Add(other);
         }
 
+        /// <summary>
+        /// Executes the specified action on each item in the collection.
+        /// </summary>
+        /// <param name="action">The action to execute on each item.</param>
         public void ForEach(Action<T> action)
         {
             if (action is null)
@@ -122,14 +158,22 @@ namespace fractions
                 collection.ToList().ForEach(c => action(c));
         }
 
+        /// <summary>
+        /// Reverses the order of the items in the collection.
+        /// </summary>
         public void Reverse()
         {
             collection = collection.Reverse().ToList();
         }
 
+        /// <summary>
+        /// Returns a clone of this instance.
+        /// The clone will have the same collection, incrementor state and name, but a different Id.
+        /// </summary>
+        /// <returns></returns>
         public Enumerate<T> Clone()
         {
-            return new Enumerate<T>(collection, Incrementor.Clone());
+            return new Enumerate<T>(collection, Incrementor.Clone(), Name);
         }
 
         public IEnumerator<T> GetEnumerator()

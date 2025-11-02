@@ -210,6 +210,15 @@ namespace fractions
             }
         }
 
+        public static void SetMaxDuration(this Clock clock, IEnumerable<Channel> channels, float max, PitchRange range)
+        {
+            lock (clock.threadLock)
+            {
+                clock.threadMessageQueue.SetMaxDuration(channels, max, range);
+                Monitor.Pulse(clock.threadLock);
+            }
+        }
+
         public static void SetOctaveAbove(this Clock clock, IEnumerable<Channel> sources)
         {
             lock (clock.threadLock)

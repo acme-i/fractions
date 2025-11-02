@@ -108,10 +108,8 @@ namespace fractions
         /// <exception cref="ArgumentOutOfRangeException">letter is out of range.</exception>
         public Note(char letter, int accidental)
         {
-            if (letter < 'A' || letter > 'G')
-            {
-                throw new ArgumentOutOfRangeException(nameof(letter));
-            }
+            letter.ThrowIfOutOfRange(nameof(letter));
+
             Letter = letter;
             Accidental = accidental;
             PositionInOctave = (LetterToNote[letter - 'A'] + accidental).PositionInOctave();

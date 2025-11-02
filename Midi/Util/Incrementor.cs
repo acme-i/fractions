@@ -10,7 +10,7 @@ namespace fractions
     public class Incrementor : ICloneable
     {
         /// <summary>
-        /// Clone
+        /// Used when cloning an Incrementor instance
         /// </summary>
         /// <param name="inc"><see cref="IncrementMethod"/></param>
         public Incrementor(Incrementor inc)
@@ -67,20 +67,48 @@ namespace fractions
         /// <param name="autoCorrect">auto correct min max, whenever min > max</param>
         public Incrementor(double value, double min, double max, double step, IncrementMethod method, bool autoCorrect = true)
         {
-            if (double.IsNaN(value))
-                value = min;
-            if (double.IsNaN(min))
-                throw new ArgumentException("min is NaN", nameof(min));
-            if (double.IsNaN(max))
-                throw new ArgumentException("max is NaN", nameof(max));
-            if (double.IsNaN(step))
-                throw new ArgumentException("step is NaN", nameof(step));
+            if (double.IsNaN(value)) value = min;
 
-            if (Equals(min, max))
+            ArgumentExceptionExtensions.ThrowIfTrue(double.IsNaN(min), "min is NaN", nameof(min));
+            ArgumentExceptionExtensions.ThrowIfTrue(double.IsNaN(max), "max is NaN", nameof(max));
+            ArgumentExceptionExtensions.ThrowIfTrue(double.IsNaN(step), "step is NaN", nameof(step));
+            ArgumentExceptionExtensions.ThrowIfTrue(Equals(min, max), "min cannot be equal to max", nameof(min));
+
+            ValidateState(ref value, ref min, ref max, ref step, autoCorrect);
+
+            Min = min;
+            Max = max;
+            Step = step;
+            Value = value;
+            Method = method;
+
+            var originalValue = value;
+            switch (Method)
             {
-                throw new ArgumentException("min cannot be equal to max", nameof(min));
+                case IncrementMethod.MaxMin:
+                    Value = Max;
+                    Increasing = false;
+                    break;
+                default:
+                    Value = Min;
+                    Increasing = true;
+                    break;
             }
 
+            if (value > max)
+                originalValue = max;
+
+            if (value < min)
+                originalValue = min;
+
+            if (originalValue != value)
+            {
+                Value = originalValue;
+            }
+        }
+
+        private void ValidateState(ref double value, ref double min, ref double max, ref double step, bool autoCorrect)
+        {
             if (Math.Sign(step) < 0)
             {
                 if (autoCorrect)
@@ -129,37 +157,6 @@ namespace fractions
                     step = (max - min) / 2.0;
                 else
                     throw new ArgumentException("Step size cannot be greater than max-min", nameof(step));
-            }
-
-
-            Min = min;
-            Max = max;
-            Step = step;
-            Value = value;
-            Method = method;
-
-            var originalValue = value;
-            switch (Method)
-            {
-                case IncrementMethod.MaxMin:
-                    Value = Max;
-                    Increasing = false;
-                    break;
-                default:
-                    Value = Min;
-                    Increasing = true;
-                    break;
-            }
-
-            if (originalValue > max)
-                originalValue = max;
-
-            if (value < min)
-                originalValue = min;
-
-            if (originalValue != value)
-            {
-                Value = originalValue;
             }
         }
 
@@ -305,7 +302,7 @@ namespace fractions
         public double Peek
         {
             get
-            {               
+            {
                 var oldIncreasing = Increasing;
                 var oldPreviousValue = PreviousValue;
                 var oldValue = Value;

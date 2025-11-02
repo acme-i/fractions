@@ -162,6 +162,34 @@ namespace fractions.tests
             Assert.AreEqual(false, inc.Increasing);
         }
 
+        [TestCase(-1, 0, 9)]
+        [TestCase(600, 3, 5)]
+        [TestCase(10, 2, 23)]
+        [TestCase(2, 2, 23)]
+        [TestCase(23, 2, 23)]
+        public void Ctor_Value_Is_Clamped_To_Min(int value, int min, int max)
+        {
+            var inc = new Incrementor(value, min, max, 1, IncrementMethod.MinMax);
+            Assert.True(inc.Value == min);
+
+            inc = new Incrementor(value, min, max, 1, IncrementMethod.Cyclic);
+            Assert.True(inc.Value == min);
+
+            inc = new Incrementor(value, min, max, 1, IncrementMethod.Bit);
+            Assert.True(inc.Value == min);
+        }
+
+        [TestCase(-1, 0, 9)]
+        [TestCase(600, 3, 5)]
+        [TestCase(10, 2, 23)]
+        [TestCase(2, 2, 23)]
+        [TestCase(23, 2, 23)]
+        public void Ctor_Value_Is_Clamped_To_Max(int value, int min, int max)
+        {
+            var inc = new Incrementor(value, min, max, 1, IncrementMethod.MaxMin);
+            Assert.True( inc.Value == max );
+        }
+
         [Test]
         public void Ctors_MaxMin()
         {

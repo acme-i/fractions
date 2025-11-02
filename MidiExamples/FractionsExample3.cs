@@ -25,8 +25,8 @@ namespace fractions.examples
         private readonly Dictionary<Channel, Enumerate<float>> EchoPanMap = new Dictionary<Channel, Enumerate<float>>();
         private readonly Dictionary<Channel, Enumerate<float>> EchoPanMap2 = new Dictionary<Channel, Enumerate<float>>();
 
-        private IOutputDevice OutputDevice = fractions.OutputDevice.InstalledDevices.FirstOrDefault();
-        private Clock Clock = new Clock(32);
+        private readonly IOutputDevice OutputDevice = fractions.OutputDevice.InstalledDevices.FirstOrDefault();
+        private readonly Clock Clock = new Clock(32);
 
         private readonly Enumerate<Channel> chans = new Enumerate<Channel>(
             new[] {
@@ -82,13 +82,13 @@ namespace fractions.examples
             instruments_.Reverse<Instrument>(),
             IncrementMethod.Cyclic);
 
-        static string path = @".\midifiles\bach_js_bwv0999_prelude_in_cm_for_lute.mid";
-        static MidiFile file = new MidiFile(path);
-        static float div = file.TicksPerQuarterNote + 0f;
+        static readonly string path = @".\midifiles\bach_js_bwv0999_prelude_in_cm_for_lute.mid";
+        static readonly MidiFile file = new MidiFile(path);
+        static readonly float div = file.TicksPerQuarterNote + 0f;
 
         static (IEnumerable<MidiEvent> OnEvents, IEnumerable<MidiEvent> OffEvents, IEnumerable<float> Durations) result = file.GetEventsAndDurations();
-        static Enumerate<MidiEvent> nots = result.OnEvents.AsEnumeration();
-        static Enumerate<float> durs = result.Durations.AsEnumeration();
+        static readonly Enumerate<MidiEvent> nots = result.OnEvents.AsEnumeration();
+        static readonly Enumerate<float> durs = result.Durations.AsEnumeration();
 
         public FractionsExample3() : base("FractionsExample3 - BWV0999: Prelude in Cm for Lute") { }
 
@@ -233,13 +233,13 @@ namespace fractions.examples
             Clock.Schedule(nt);
         }
 
-        Enumerate<int> ps1 = new Enumerate<int>(
+        readonly Enumerate<int> ps1 = new Enumerate<int>(
             new[] { 
                 12, 24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0,
                 24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12,
                 0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12, 24
             });
-        Enumerate<int> ps2 = new Enumerate<int>(
+        readonly Enumerate<int> ps2 = new Enumerate<int>(
             new[] {
                 24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12,
                 0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12,24,
@@ -257,11 +257,11 @@ namespace fractions.examples
             var durDest = durClone.PeekAt(max);
             var ps = i % 2 == 0 ? ps1 : ps2;
 
-            var scaler = new Enumerate<float>(Interpolator.Interpolate(1f, 1.5f, max, 0), IncrementMethod.Cyclic);
-            var notesTimes = new Enumerate<float>(Interpolator.Interpolate(note.Time, noteDest.Time, max, 1));
-            var noteDurs = new Enumerate<float>(Interpolator.Interpolate(dur, durDest, max, 1));
+            var scaler = Interpolator.Interpolate(1f, 1.5f, max, 0).AsCycle();
+            var notesTimes = Interpolator.Interpolate(note.Time, noteDest.Time, max, 1).AsEnumeration();
+            var noteDurs = Interpolator.Interpolate(dur, durDest, max, 1).AsEnumeration();
             var sm = max;
-            var scalers = new Enumerate<float>(Enumerable.Range(1, sm).Select(x => x / (float)(sm * scaler.GetNext())).ToList(), IncrementMethod.MaxMin);
+            var scalers = Enumerable.Range(1, sm).Select(x => x / (float)(sm * scaler.GetNext())).AsMaxMinEnumeration();
             max = i + max;
 
             for (var j = i; j < max; j++)

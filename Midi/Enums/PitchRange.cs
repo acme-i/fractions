@@ -4,8 +4,8 @@ namespace fractions
 {
     public class PitchRange : EnumRange<Pitch>
     {
-        public static readonly Pitch _minPitch = Pitch.CNeg1;
-        public static readonly Pitch _maxPitch = Pitch.G9;
+        private const Pitch _minPitch = Pitch.CNeg1;
+        private const Pitch _maxPitch = Pitch.G9;
 
         public PitchRange() : base(_minPitch, _maxPitch)
         {
