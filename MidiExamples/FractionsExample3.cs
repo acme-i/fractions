@@ -62,9 +62,13 @@ namespace fractions.examples
             }, IncrementMethod.MinMax);
 
         static Instrument[] instruments_ = new[] {
-                Instrument.Vibraphone,
-                Instrument.Xylophone,
-            };
+            Instrument.Vibraphone,
+            Instrument.Xylophone,
+            Instrument.Vibraphone,
+            Instrument.ElectricGrandPiano,
+            Instrument.Xylophone,
+            Instrument.ElectricGrandPiano,
+        };
 
         private Enumerate<Instrument> mainInstr = new Enumerate<Instrument>(
             instruments_,
@@ -233,18 +237,16 @@ namespace fractions.examples
             Clock.Schedule(nt);
         }
 
-        readonly Enumerate<int> ps1 = new Enumerate<int>(
-            new[] { 
-                12, 24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0,
-                24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12,
-                0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12, 24
-            });
-        readonly Enumerate<int> ps2 = new Enumerate<int>(
-            new[] {
-                24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12,
-                0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12,24,
-                12, 24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0,
-            });
+        readonly Enumerate<int> ps1 = new[] { 
+            12, 24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0,
+            24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12,
+            0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12, 24
+        }.AsEnumeration();
+        readonly Enumerate<int> ps2 = new[] {
+            24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12,
+            0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12,24,
+            12, 24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0,
+        }.AsEnumeration();
         private void PlayEchos(int i, int max)
         {
             var notsClone = nots.Clone();

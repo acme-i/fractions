@@ -48,9 +48,10 @@ namespace fractions.examples
         private static Clock clock;
         private static int BPM;
 
-        private static Enumerate<Pitch> melodi1, melodi2, melodi3;
+        private static Enumerate<Pitch> melodi1, melodi2;
         private static Enumerate<Channel> leftChan, rightChan;
         private static Enumerate<double> leftPan, leftVol, rightPan, rightVol;
+        private static Enumerate<float> durations;
         private static List<Pitch> pitches;
         private static MidiFile file;
 
@@ -59,16 +60,19 @@ namespace fractions.examples
             BPM = 320;
 
             var path = @".\midifiles\bach_js_bwv0999_prelude_in_cm_for_lute.mid";
-            
+
             file = new MidiFile(path);
 
-            var ons = file.GetEventsAndDurations().OnEvents.Where(f => f.MidiEventType == MidiEventType.NoteOn);
+            var result = file.GetEventsAndDurations();
 
-            pitches = ons.Select(o => (Pitch)o.Note).ToList();
+            pitches = result.OnEvents
+                .Select(o => (Pitch)o.Note)
+                .ToList();
 
-            melodi1 = new Enumerate<Pitch>(pitches, IncrementMethod.MinMax, 1);
-            melodi2 = new Enumerate<Pitch>(pitches, IncrementMethod.MinMax, 1);
-            melodi3 = new Enumerate<Pitch>(pitches, IncrementMethod.MinMax, 1);
+            durations = result.Durations.AsCycle();
+
+            melodi1 = pitches.AsEnumeration();
+            melodi2 = pitches.AsEnumeration();
 
             var pcurve = new List<double>();
             var vcurve = new List<double>();
@@ -82,14 +86,14 @@ namespace fractions.examples
                 vcurve.AddRange(vpoints.Select(e => Math.Max(0, Math.Min(127, e * 127))));
             }
 
-            leftChan = new Enumerate<Channel>(Channels.InstrumentChannels.Take(8), step: 1);
-            rightChan = new Enumerate<Channel>(Channels.InstrumentChannels.Skip(8).Take(7), step: 1);
+            leftChan = Channels.InstrumentChannels.Take(8).AsEnumeration();
+            rightChan = Channels.InstrumentChannels.Skip(8).Take(7).AsEnumeration();
 
             leftPan = pcurve.AsCycle();
             leftVol = vcurve.AsCycle();
 
-            rightPan = new Enumerate<double>(pcurve.AsEnumerable().Reverse(), IncrementMethod.Cyclic);
-            rightVol = new Enumerate<double>(vcurve.AsEnumerable().Reverse(), IncrementMethod.Cyclic);
+            rightPan = pcurve.Reverse<double>().AsCycle();
+            rightVol = vcurve.Reverse<double>().AsCycle();
 
             foreach (var c in Channels.InstrumentChannels)
             {
@@ -98,7 +102,7 @@ namespace fractions.examples
                 outputDevice.SendControlChange(c, Control.CelesteLevel, 0);
                 outputDevice.SendControlChange(c, Control.ReverbLevel, 100);
             }
-            
+
             clock = new Clock(BPM);
 
             Play();
@@ -107,19 +111,31 @@ namespace fractions.examples
         private static void Play()
         {
             var time = 1f;
-            foreach (var p in pitches.Take(12*42+1))
+            foreach (var p in pitches)
             {
+                var a = new NoteOnOffMessage(
+                    device: outputDevice,
+                    channel: leftChan.GetNext(),
+                    pitch: melodi1.GetNext(),
+                    velocity: leftVol.GetNext(),
+                    time: time,
+                    clock: clock,
+                    duration: durations.GetNext(),
+                    pan: leftPan.GetNext()
+                );
 
-                var a = new NoteOnMessage(outputDevice, leftChan.GetNext(), melodi1.GetNext(), leftVol.GetNext(), time, leftPan.GetNext());
+                var b = new NoteOnOffMessage(
+                    device: outputDevice,
+                    channel: rightChan.GetNext(),
+                    pitch: melodi2.GetNext(),
+                    velocity: rightVol.GetNext(),
+                    time: time,
+                    clock: clock,
+                    duration: durations.GetNext(),
+                    pan: rightPan.GetNext()
+                );
 
-                a.BeforeSending += (e) =>
-                {
-                    Console.WriteLine(e.Time);
-                };
-
-                var b = new NoteOnMessage(outputDevice, rightChan.GetNext(), melodi2.GetNext(), rightVol.GetNext(), time, rightPan.GetNext());
-
-                if (time % 2 == 0)
+                if ((int)time % 2 == 0)
                     clock.Schedule(a);
                 else
                     clock.Schedule(b);

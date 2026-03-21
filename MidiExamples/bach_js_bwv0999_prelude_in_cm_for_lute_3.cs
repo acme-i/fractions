@@ -78,16 +78,16 @@ namespace fractions.examples
             Enumerate<double> rightPan = pcurve.AsCycle(startIndex: pcurve.Count / 2);
             Enumerate<double> rightVol = vcurve.AsCycle(startIndex: vcurve.Count / 2);
 
-            var lInstr = new Enumerate<Instrument>(new[] {
+            var lInstr = new[] {
                 Instrument.SlapBass1, Instrument.ElectricPiano1, Instrument.Vibraphone, Instrument.ElectricPiano1,
                 Instrument.SlapBass1, Instrument.ElectricPiano1, Instrument.ElectricPiano1, Instrument.Vibraphone,
                 Instrument.SlapBass1, Instrument.Vibraphone, Instrument.ElectricPiano1, Instrument.ElectricPiano1,
-            }, step: 1);
-            var rInstr = new Enumerate<Instrument>(new[] {
+            }.AsEnumeration();
+            var rInstr = new[] {
                 Instrument.StringEnsemble1, Instrument.ElectricBassPick, Instrument.ElectricPiano1, Instrument.ElectricBassPick,
                 Instrument.StringEnsemble1, Instrument.ElectricBassPick, Instrument.ElectricBassPick, Instrument.ElectricPiano1,
                 Instrument.StringEnsemble1, Instrument.ElectricPiano1, Instrument.ElectricBassPick, Instrument.ElectricBassPick,
-            }, step: 1);
+            }.AsEnumeration();
 
             var steps = 8;
             var startTimes = Interpolator.Interpolate(0, 1, steps);
@@ -134,7 +134,7 @@ namespace fractions.examples
             clock.Start();
             Thread.Sleep(400000);
             clock.Stop();
-            
+
             // Close the output device.
             outputDevice.Close();
 
@@ -143,7 +143,7 @@ namespace fractions.examples
             ExampleUtil.PressAnyKeyToContinue();
         }
 
-        private void Goahead( 
+        private void Goahead(
             IEnumerable<Channel> lChans, IEnumerable<Channel> rChans,
             Enumerate<Instrument> lInstr, Enumerate<Instrument> rInstr,
             Enumerate<double> leftPan, Enumerate<double> leftVol,
@@ -151,8 +151,8 @@ namespace fractions.examples
             float offSet, float volMult
             )
         {
-            var leftChans = new Enumerate<Channel>(lChans, step: 1);
-            var rightChans = new Enumerate<Channel>(rChans, step: 1);
+            var leftChans = lChans.AsEnumeration();
+            var rightChans = rChans.AsEnumeration();
 
             var nec = noteE.Clone();
             for (var i = 0; i < notes.Count - 1; i++)
@@ -178,8 +178,6 @@ namespace fractions.examples
                         outputDevice.SendProgramChange(e.Channel, rInstr.GetNext());
                     };
                 }
-
-                
 
                 clock.Schedule(note);
             }

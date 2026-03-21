@@ -12,20 +12,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using CommunityToolkit.Mvvm.Messaging;
 
-namespace fractions.ui;
-
+namespace fractions.ui.views;
 /// <summary>
-/// Interaction logic for EnumerateUserControl.xaml
+/// Interaction logic for NoteOnOffListView.xaml
 /// </summary>
-public partial class EnumerateUserControl : UserControl
+public partial class NoteOnOffListView : UserControl
 {
-    private readonly IMessenger _messenger;
-
-    public EnumerateUserControl(IMessenger messenger)
+    public NoteOnOffListView()
     {
         InitializeComponent();
-        _messenger = messenger;
     }
 }

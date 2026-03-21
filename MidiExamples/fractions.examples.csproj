@@ -56,7 +56,6 @@
   <ItemGroup>
     <Compile Include="Arpeggiator.cs" />
     <Compile Include="bach_js_bwv0578_fugue_in_gm_little_fugue_3.cs" />
-    <Compile Include="bach_js_bwv0999_prelude_in_cm_for_lute_1.cs" />
     <Compile Include="bach_js_bwv0999_prelude_in_cm_for_lute_3.cs" />
     <Compile Include="bach_js_bwv1006a_lute_suite_no4_in_e_1_preludio.cs" />
     <Compile Include="bach_js_bwv1006a_lute_suite_no4_in_e_1_preludio_3.cs" />

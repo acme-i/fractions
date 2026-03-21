@@ -1,5 +1,4 @@
-﻿#region Usings
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -9,48 +8,22 @@ using fractions.ui.configuration;
 using fractions.ui.messages;
 
 namespace fractions.ui.viewmodels;
-#endregion
 
-public abstract partial class BaseViewModel : ObservableObject
+public partial class BaseViewModel : BaseObservableObject
 {
-    #region Fields
-    internal Dispatcher? Dispatcher;
-
-    private readonly List<char> _unwantedChars;
-
-    #endregion
-
-    #region CTOR
-
     public BaseViewModel(IMessenger messenger, Settings settings)
     {
         ArgumentNullException.ThrowIfNull(messenger);
 
         Messenger = messenger;
-        Settings = settings;
         statusMessage = string.Empty;
-        documentTitle = string.Empty;
-        _unwantedChars =
-        [
-            .. System.IO.Path.GetInvalidFileNameChars(),
-            .. System.IO.Path.GetInvalidPathChars(),
-            System.IO.Path.AltDirectorySeparatorChar,
-            System.IO.Path.DirectorySeparatorChar,
-        ];
     }
-
-    #endregion CTOR
-
-    #region Properties
 
     [ObservableProperty]
     private bool hasUserCancelled;
 
     [ObservableProperty]
     private IMessenger messenger;
-
-    [ObservableProperty]
-    private Settings settings;
 
     [ObservableProperty]
     protected bool isLoaded;
@@ -71,107 +44,31 @@ public abstract partial class BaseViewModel : ObservableObject
     [ObservableProperty]
     private string statusMessage;
 
-    private string documentTitle;
-
-    public string DocumentTitle
-    {
-        get
-        {
-            return documentTitle;
-        }
-        set
-        {
-            LastException = null;
-            try
-            {
-                if (GetDocumentTitle(value?.Trim()) is string newTitle)
-                {
-                    SetProperty(ref documentTitle, newTitle, nameof(DocumentTitle));
-                }
-            }
-            catch (Exception ex)
-            {
-                LastException = ex;
-            }
-        }
-    }
-
-    protected void UpdateStatusMessage(int updates)
-    {
-        StatusMessage = updates > 0 ? $"{updates} updates..." : "No updates...";
-    }
-
-    public string? GetDocumentTitle(string? documentTitle)
-    {
-        var title = documentTitle?.Trim();
-
-        if (!string.IsNullOrEmpty(title))
-        {
-            var toRemove = _unwantedChars.ToList();
-            toRemove.AddRange([ '\t', '\r', '\n']);
-            title = title.ReplaceAll([.. toRemove.Distinct()], " ").Trim();
-        }
-
-        return string.IsNullOrWhiteSpace(title)
-            ? null
-            : title;
-    }
-
-    #endregion
-
-    #region Commands
-
-    #region Reload
-
     protected bool firstLoad = true;
 
     protected bool isListDirty = true;
     public static readonly Task<int> DoNothing = Task.FromResult(0);
 
-    /// <summary>
-    /// Default implementation that does nothing
-    /// </summary>
-    /// <returns></returns>
     [RelayCommand]
-    public abstract Task<int> Reload(string? filter = null);
-
-    #endregion Reload
-
-    #endregion
-
-    #region CommunityToolkit Events
-
-    protected virtual async Task OnIsVisibleChangedInternal(bool value)
+    public Task<int> Reload(string? filter = null)
     {
-        if (firstLoad || value)
+        return DoNothing;
+    }
+
+    [ObservableProperty]
+    private Settings settings;
+
+    protected void ReportChanges(int inserted, string nounPlural = "updates")
+    {
+        if (inserted > 0)
         {
-            await Reload(null).ConfigureAwait(false);
+            StatusMessage = $"{inserted} {nounPlural}...";
+        }
+        else
+        {
+            StatusMessage = $"No changes...";
         }
     }
-
-    partial void OnIsVisibleChanged(bool value)
-    {
-        Task.Run(() => OnIsVisibleChangedInternal(value));
-    }
-
-    partial void OnLastExceptionChanged(Exception? value)
-    {
-        if (value is Exception ex)
-            Trace.TraceError(ex.ToString());
-
-        if (isVisible)
-            Messenger.Send(new LastExceptionChangedMessage(value));
-    }
-
-    partial void OnStatusMessageChanged(string value)
-    {
-        if (isVisible)
-            Messenger.Send(new StatusMessageUpdatedMessage(value));
-    }
-
-    #endregion Events
-
-    #region Helpers
 
     #region Settings
 
@@ -197,41 +94,20 @@ public abstract partial class BaseViewModel : ObservableObject
 
     #endregion Settings
 
-    #region Notify Property Changed
+    #region CommunityToolkit Events
 
-    protected void NotifyPropertyChangingOnUiThread(string propertyName)
+    protected virtual async Task OnIsVisibleChangedInternal(bool value)
     {
-        if (Dispatcher is not null && Dispatcher.CheckAccess() == false)
+        if (firstLoad || value)
         {
-            Dispatcher.Invoke(DispatcherPriority.Normal, new Action<string>(NotifyPropertyChangingOnUiThread), propertyName);
-            return;
-        }
-        OnPropertyChanging(new PropertyChangingEventArgs(propertyName));
-    }
-
-    protected void NotifyPropertyChangedOnUiThread(string propertyName)
-    {
-        if (Dispatcher is not null && Dispatcher.CheckAccess() == false)
-        {
-            Dispatcher.Invoke(DispatcherPriority.Normal, new Action<string>(NotifyPropertyChangedOnUiThread), propertyName);
-            return;
-        }
-        OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
-    }
-
-    #endregion Notify Property Changed
-
-    protected void ReportChanges(int inserted, string nounPlural = "updates")
-    {
-        if (inserted > 0)
-        {
-            StatusMessage = $"{inserted} {nounPlural}...";
-        }
-        else
-        {
-            StatusMessage = $"No changes...";
+            await Reload(null).ConfigureAwait(false);
         }
     }
 
-    #endregion Helpers
+    partial void OnIsVisibleChanged(bool value)
+    {
+        Task.Run(() => OnIsVisibleChangedInternal(value));
+    }
+
+    #endregion Events
 }

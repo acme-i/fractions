@@ -5,6 +5,7 @@ namespace fractions.ui.viewmodels
 {
     public interface IEnumerateViewModelOfT<T>
     {
+        string Name { get; set;  }
         Incrementor Incrementor { get; }
         int Length { get; }
         void AddRange(IEnumerable<T> others);
