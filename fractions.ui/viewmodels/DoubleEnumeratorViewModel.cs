@@ -5,4 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace fractions.ui.viewmodels;
 
-public class DoubleEnumeratorViewModel(Enumerate<double> source) : EnumerateViewModel<double>(source) { }
+public class DoubleEnumeratorViewModel(IMessenger messenger, Enumerate<double> source)
+    : EnumerateViewModel<double>(messenger, source)
+{
+}

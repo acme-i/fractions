@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace fractions.ui;
+namespace fractions.ui.views;
 
 /// <summary>
 /// Interaction logic for MainView.xaml
@@ -25,5 +25,15 @@ public partial class MainView : UserControl
     public MainView()
     {
         InitializeComponent();
+    }
+
+    private void NoteOnOffView_Loaded(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void UserControl_Loaded(object sender, RoutedEventArgs e)
+    {
+
     }
 }

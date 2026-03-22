@@ -3,10 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:fractions.ui.views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             xmlns:views="clr-namespace:fractions.ui.views"
+             xmlns:vm="clr-namespace:fractions.ui.viewmodels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:NoteOnOffListViewModel}" Height="419" Width="289">
     <Grid>
-            
+
     </Grid>
 </UserControl>

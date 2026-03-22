@@ -3,12 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:views="clr-namespace:fractions.ui.views"
              xmlns:vm="clr-namespace:fractions.ui.viewmodels"
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance Type=vm:NoteOnOffViewModel}">
-    <Grid>
-        <ComboBox HorizontalAlignment="Left" Width="120" ItemsSource="{Binding Pitches, ElementName=userControl}" />
-
+    <Grid VerticalAlignment="Top">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <views:ChannelSelectorView Grid.Column="0"/>
+        <views:PitchSelectorView Grid.Column="1"/>
     </Grid>
 </UserControl>

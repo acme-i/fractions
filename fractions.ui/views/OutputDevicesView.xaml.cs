@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,11 +15,11 @@ using System.Windows.Shapes;
 
 namespace fractions.ui.views;
 /// <summary>
-/// Interaction logic for NoteOnOffViewModel.xaml
+/// Interaction logic for OutputDevicesView.xaml
 /// </summary>
-public partial class NoteOnOffView : UserControl
+public partial class OutputDevicesView : UserControl
 {
-    public NoteOnOffView()
+    public OutputDevicesView()
     {
         InitializeComponent();
     }

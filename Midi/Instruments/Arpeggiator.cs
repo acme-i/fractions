@@ -24,7 +24,7 @@
 
 using System.Collections.Generic;
 
-namespace fractions.examples
+namespace fractions
 {
     public class Arpeggiator
     {

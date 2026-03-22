@@ -10,110 +10,110 @@ using System.Threading.Tasks;
 
 namespace fractions.ui.viewmodels;
 
-public partial class NoteOnOffViewModel : BaseObservableObject
+public partial class NoteOnOffViewModel : MessengerViewModel
 {
-    public NoteOnOffViewModel(IOutputDevice device, Clock clock) : base()
+    public NoteOnOffViewModel(IMessenger messenger, NoteOnOffMessage note) : base(messenger)
     {
-        _source = new NoteOnOffMessage(device, fractions.Channel.Channel1, fractions.Pitch.C4, 120, 0, clock, 4);
+        _note = note;
     }
 
-    private NoteOnOffMessage _source;
+    private NoteOnOffMessage _note;
 
     public int Channel
     {
-        get => (int)_source.Channel;
+        get => (int)_note.Channel;
         set
         {
             NotifyPropertyChangingOnUiThread(nameof(Channel));
-            _source.Channel = (Channel)value;
+            _note.Channel = (Channel)value;
             NotifyPropertyChangedOnUiThread(nameof(Channel));
         }
     }
 
     public int Pitch
     {
-        get => (int)_source.Pitch;
+        get => (int)_note.Pitch;
         set
         {
             NotifyPropertyChangingOnUiThread(nameof(Pitch));
-            _source.Pitch = (Pitch)value;
+            _note.Pitch = (Pitch)value;
             NotifyPropertyChangedOnUiThread(nameof(Pitch));
         }
     }
 
     public double Velocity
     {
-        get => _source.Velocity;
+        get => _note.Velocity;
         set
         {
             NotifyPropertyChangingOnUiThread(nameof(Velocity));
-            _source.Velocity = value;
+            _note.Velocity = value;
             NotifyPropertyChangedOnUiThread(nameof(Velocity));
         }
     }
 
     public double Pan
     {
-        get => _source.Pan;
+        get => _note.Pan;
         set
         {
             NotifyPropertyChangingOnUiThread(nameof(Pan));
-            _source.Pan = value;
+            _note.Pan = value;
             NotifyPropertyChangedOnUiThread(nameof(Pan));
         }
     }
 
     public double? Reverb
     {
-        get => _source.Reverb;
+        get => _note.Reverb;
         set
         {
             NotifyPropertyChangingOnUiThread(nameof(Reverb));
-            _source.Reverb = value;
+            _note.Reverb = value;
             NotifyPropertyChangedOnUiThread(nameof(Reverb));
         }
     }
 
     public Instrument? Instrument
     {
-        get => _source.Instrument;
+        get => _note.Instrument;
         set
         {
             NotifyPropertyChangingOnUiThread(nameof(Instrument));
-            _source.Instrument = value;
+            _note.Instrument = value;
             NotifyPropertyChangedOnUiThread(nameof(Instrument));
         }
     }
 
     public float Duration
     {
-        get => _source.Duration;
+        get => _note.Duration;
         set
         {
             NotifyPropertyChangingOnUiThread(nameof(Duration));
-            _source.Duration = value;
+            _note.Duration = value;
             NotifyPropertyChangedOnUiThread(nameof(Duration));
         }
     }
 
     public int MinOctave
     {
-        get => _source.MinOctave;
+        get => _note.MinOctave;
         set
         {
             NotifyPropertyChangingOnUiThread(nameof(MinOctave));
-            _source.MinOctave = value;
+            _note.MinOctave = value;
             NotifyPropertyChangedOnUiThread(nameof(MinOctave));
         }
     }
 
     public int MaxOctave
     {
-        get => _source.MaxOctave;
+        get => _note.MaxOctave;
         set
         {
             NotifyPropertyChangingOnUiThread(nameof(MaxOctave));
-            _source.MaxOctave = value;
+            _note.MaxOctave = value;
             NotifyPropertyChangedOnUiThread(nameof(MaxOctave));
         }
     }
@@ -121,6 +121,6 @@ public partial class NoteOnOffViewModel : BaseObservableObject
     [RelayCommand]
     public void SendNow()
     {
-        _source.SendNow();
+        _note.SendNow();
     }
 }

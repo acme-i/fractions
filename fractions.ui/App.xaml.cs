@@ -1,56 +1,52 @@
 ﻿#region Usings
-using CommunityToolkit.Mvvm.Messaging;
 using fractions.ui.configuration;
+using fractions.ui.viewmodels;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System.Windows;
-using Prism;
-using Prism.Ioc;
-using Prism.Modularity;
-using Prism.Regions;
-using Prism.Unity;
 #endregion
 
 namespace fractions.ui;
 
-public partial class App : PrismApplication
+public partial class App : System.Windows.Application
 {
     private static SettingsManager Manager = new("./settings.json");
     public static Settings Settings { get { return Manager.Settings; } }
     public static Settings GetSettings() { return Manager.Settings; }
-    public static IDictionary<string, int> RecentQeuee = new Dictionary<string, int>(1000);
+
+    public static IHost? AppHost { get; private set; }
 
     public App()
     {
+        AppHost = Host.CreateDefaultBuilder()
+            .ConfigureServices((hostContext, services) =>
+            {
+                // Infrastructure
+                services.AddSingleton<ISettings>(settings => Settings);
+
+                // ViewModels
+                services.AddTransient<MainViewModel>();
+
+                // Views
+                services.AddTransient<MainWindow>();
+            })
+            .Build();
     }
 
-    protected override Window CreateShell()
+    protected override async void OnStartup(StartupEventArgs e)
     {
-        return Container.Resolve<MainWindow>();
+        await AppHost!.StartAsync();
+
+
+        var startupForm = AppHost.Services.GetRequiredService<MainWindow>();
+        startupForm.Show();
+
+        base.OnStartup(e);
     }
 
-    protected override void InitializeShell(Window shell)
+    protected override async void OnExit(ExitEventArgs e)
     {
-        base.InitializeShell(shell);
-    }
-
-    protected override void RegisterTypes(IContainerRegistry containerRegistry)
-    {
-        containerRegistry.RegisterInstance(Manager.Settings);
-        containerRegistry.RegisterInstance<ISettings>(Manager.Settings);
-        containerRegistry.RegisterInstance<IMessenger>(WeakReferenceMessenger.Default);
-    }
-
-    protected override void ConfigureDefaultRegionBehaviors(IRegionBehaviorFactory regionBehaviors)
-    {
-        base.ConfigureDefaultRegionBehaviors(regionBehaviors);
-    }
-
-    protected override IModuleCatalog CreateModuleCatalog()
-    {
-        return new DirectoryModuleCatalog() { ModulePath = @"C:\dev\_acme_i\fractions\fractions.ui\modules" };
-    }
-
-    protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
-    {
-        moduleCatalog.AddModule<MainModule>();
+        await AppHost!.StopAsync();
+        base.OnExit(e);
     }
 }

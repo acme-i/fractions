@@ -73,6 +73,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\ChannelTypes.cs" />
     <Compile Include="Extensions\CharExtensions.cs" />
     <Compile Include="Extensions\DoubleExtensions.cs" />
     <Compile Include="Extensions\IComparableExtensions.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Extensions\RandomExtensions.cs" />
     <Compile Include="Extensions\ReadOnlyCollectionExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Instruments\Arpeggiator.cs" />
     <Compile Include="Interpolation\NoteInterpolator.cs" />
     <Compile Include="Interpolation\LinearInterpolator.cs" />
     <Compile Include="IO\MidiFile.cs" />

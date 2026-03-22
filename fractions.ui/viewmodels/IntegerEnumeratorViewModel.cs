@@ -1,8 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
-using fractions.ui.configuration;
 
 namespace fractions.ui.viewmodels;
 
-public class IntegerEnumeratorViewModel(Enumerate<int> source) : EnumerateViewModel<int>(source)
-{
-}
+public class IntegerEnumeratorViewModel(IMessenger messenger, Enumerate<int> source) : EnumerateViewModel<int>(messenger, source) { }

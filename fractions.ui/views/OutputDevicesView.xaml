@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="fractions.ui.views.OutputDevicesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:fractions.ui.views"
+             xmlns:vm="clr-namespace:fractions.ui.viewmodels"
+             mc:Ignorable="d" 
+             d:DesignHeight="28" d:DesignWidth="120"
+             d:DataContext="{d:DesignInstance Type=vm:OutputDevicesViewModel}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Label Content="Out" ToolTip="Output Devices" Padding="0,0,0,0"/>
+        <ComboBox x:Name="ChannelComboBox" Grid.Column="1"
+              ItemsSource="{x:Static vm:OutputDevicesViewModel.AllOutputDevices}"
+              SelectedItem="{Binding SelectedOutputDevice, Mode=TwoWay}"
+              DisplayMemberPath="DisplayName"/>
+    </Grid>
+</UserControl>

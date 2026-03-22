@@ -9,21 +9,16 @@ using fractions.ui.messages;
 
 namespace fractions.ui.viewmodels;
 
-public partial class BaseViewModel : BaseObservableObject
+public partial class BaseViewModel : MessengerViewModel
 {
-    public BaseViewModel(IMessenger messenger, Settings settings)
+    public BaseViewModel(IMessenger messenger, Settings settings) : base(messenger)
     {
         ArgumentNullException.ThrowIfNull(messenger);
-
-        Messenger = messenger;
-        statusMessage = string.Empty;
+        Settings = settings;
     }
 
     [ObservableProperty]
     private bool hasUserCancelled;
-
-    [ObservableProperty]
-    private IMessenger messenger;
 
     [ObservableProperty]
     protected bool isLoaded;
@@ -34,15 +29,8 @@ public partial class BaseViewModel : BaseObservableObject
     [ObservableProperty]
     protected string cancelCommandText = "Cancel";
 
-    public string ErrorMessage => LastException?.Message ?? string.Empty;
-
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(ErrorMessage))]
-    [NotifyPropertyChangedFor(nameof(StatusMessage))]
-    protected Exception? lastException;
-
-    [ObservableProperty]
-    private string statusMessage;
+    private Settings settings;
 
     protected bool firstLoad = true;
 
@@ -55,8 +43,11 @@ public partial class BaseViewModel : BaseObservableObject
         return DoNothing;
     }
 
-    [ObservableProperty]
-    private Settings settings;
+    [RelayCommand]
+    public Task Cancel()
+    {
+        return Task.CompletedTask;
+    }
 
     protected void ReportChanges(int inserted, string nounPlural = "updates")
     {
@@ -107,6 +98,7 @@ public partial class BaseViewModel : BaseObservableObject
     partial void OnIsVisibleChanged(bool value)
     {
         Task.Run(() => OnIsVisibleChangedInternal(value));
+        firstLoad = false;
     }
 
     #endregion Events

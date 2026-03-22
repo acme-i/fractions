@@ -6,7 +6,7 @@ using fractions.ui.configuration;
 
 namespace fractions.ui.viewmodels;
 
-abstract public class EnumerateViewModel<T>(Enumerate<T> source) : BaseObservableObject(), IEnumerateViewModelOfT<T>
+abstract public class EnumerateViewModel<T>(IMessenger messenger, Enumerate<T> source) : MessengerViewModel(messenger), IEnumerateViewModelOfT<T>
 {
     public Enumerate<T> Source { get; } = source;
 
@@ -53,7 +53,5 @@ abstract public class EnumerateViewModel<T>(Enumerate<T> source) : BaseObservabl
     public T GetNext() => Source.GetNext();
 
     public T PeekAt(int steps) => Source.PeekAt(steps);
-
-    public override Task<int> Reload(string? filter = null) => Task.FromResult(0);
 
 }

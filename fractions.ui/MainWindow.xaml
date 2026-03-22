@@ -4,9 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:fractions.ui"
-        xmlns:rgn="http://prismlibrary.com/"
-        rgn:ViewModelLocator.AutoWireViewModel="True"
+        xmlns:views="clr-namespace:fractions.ui.views"
+        xmlns:vm="clr-namespace:fractions.ui.viewmodels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <ContentControl rgn:RegionManager.RegionName="MainRegion"/>
+        FontSize="8"
+        HorizontalAlignment="Stretch" VerticalAlignment="Top"
+        Title="MainWindow" Height="450" Width="800"
+        d:DataContext="{d:DesignInstance Type=vm:MainViewModel}">
+    <Grid>
+        <views:MainView></views:MainView>
+    </Grid>
 </Window>
