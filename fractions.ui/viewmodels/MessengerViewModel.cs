@@ -24,4 +24,5 @@ public partial class MessengerViewModel : BaseObservableObject
     private string statusMessage = string.Empty;
 
     public string ErrorMessage => LastException?.Message ?? string.Empty;
+
 }

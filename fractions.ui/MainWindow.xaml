@@ -12,6 +12,22 @@
         Title="MainWindow" Height="450" Width="800"
         d:DataContext="{d:DesignInstance Type=vm:MainViewModel}">
     <Grid>
-        <views:MainView></views:MainView>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="4"></ColumnDefinition>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+            <StackPanel Orientation="Vertical">
+                <views:OutputDevicesView DataContext="{Binding OutputDevicesViewModel}"/>
+                <views:ClockView DataContext="{Binding ClockViewModel}"/>
+            </StackPanel>
+        </Grid>
+        <GridSplitter HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="4" Background="Black" Grid.Column="1"></GridSplitter>
+        <Grid  Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+            <StackPanel Orientation="Vertical">
+                <views:NoteOnOffListView DataContext="{Binding NoteOnOffListViewModel}" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

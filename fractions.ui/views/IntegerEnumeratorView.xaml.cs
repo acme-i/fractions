@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CommunityToolkit.Mvvm.Messaging;
+using fractions.ui.viewmodels;
 
 namespace fractions.ui;
 
@@ -21,11 +22,8 @@ namespace fractions.ui;
 /// </summary>
 public partial class IntegerEnumeratorView : UserControl
 {
-    private readonly IMessenger _messenger;
-
-    public IntegerEnumeratorView(IMessenger messenger)
+    public IntegerEnumeratorView()
     {
         InitializeComponent();
-        _messenger = messenger;
     }
 }

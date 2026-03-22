@@ -1,6 +1,7 @@
-﻿using System;
+﻿using fractions.ui.viewmodels;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,25 +16,13 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace fractions.ui.views;
-
 /// <summary>
-/// Interaction logic for MainView.xaml
+/// Interaction logic for ClockView.xaml
 /// </summary>
-public partial class MainView : UserControl
+public partial class ClockView : UserControl
 {
-
-    public MainView()
+    public ClockView()
     {
         InitializeComponent();
-    }
-
-    private void NoteOnOffView_Loaded(object sender, RoutedEventArgs e)
-    {
-
-    }
-
-    private void UserControl_Loaded(object sender, RoutedEventArgs e)
-    {
-
     }
 }

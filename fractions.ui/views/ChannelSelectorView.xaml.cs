@@ -1,4 +1,5 @@
-﻿using System;
+﻿using fractions.ui.viewmodels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

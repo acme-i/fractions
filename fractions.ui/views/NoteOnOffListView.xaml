@@ -5,9 +5,81 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:views="clr-namespace:fractions.ui.views"
              xmlns:vm="clr-namespace:fractions.ui.viewmodels"
-             mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance Type=vm:NoteOnOffListViewModel}" Height="419" Width="289">
-    <Grid>
+             mc:Ignorable="d" d:DesignHeight="100" d:DesignWidth="460"
+             d:DataContext="{d:DesignInstance Type=vm:NoteOnOffListViewModel}">
+    <StackPanel Orientation="Vertical">
+        <Button Content="Read" Command="{Binding ReadFileCommand}" />
+        <DataGrid ItemsSource="{Binding AllNotes}"
+          AutoGenerateColumns="False"
+          CanUserAddRows="False"
+          CanUserDeleteRows="False"
+          IsReadOnly="False"
+          SelectionMode="Single"
+          HeadersVisibility="Column"
+          GridLinesVisibility="Horizontal"
+          BorderThickness="0"
+          VirtualizingPanel.IsVirtualizing="True"
+          VirtualizingPanel.VirtualizationMode="Recycling"
+          VirtualizingPanel.IsContainerVirtualizable="True"
+          EnableRowVirtualization="True"
+          EnableColumnVirtualization="True"
+          ScrollViewer.IsDeferredScrollingEnabled="True">
 
-    </Grid>
+            <DataGrid.Columns>
+
+                <!-- Channel: numeric (0-15), maps to Channel enum -->
+                <DataGridTextColumn Header="Ch"
+                            Binding="{Binding Channel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Width="30"/>
+
+                <!-- Pitch: numeric (0-127), maps to Pitch enum -->
+                <DataGridTextColumn Header="Pitch"
+                            Binding="{Binding Pitch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Width="40"/>
+
+                <!-- Velocity -->
+                <DataGridTextColumn Header="Vel"
+                            Binding="{Binding Velocity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
+                            Width="36"/>
+
+                <!-- Pan -->
+                <DataGridTextColumn Header="Pan"
+                            Binding="{Binding Pan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
+                            Width="36"/>
+
+                <!-- Reverb: nullable double -->
+                <DataGridTextColumn Header="Rev"
+                            Binding="{Binding Reverb, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0, TargetNullValue='-'}"
+                            Width="36"/>
+
+                <!-- Duration -->
+                <DataGridTextColumn Header="Dur"
+                            Binding="{Binding Duration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
+                            Width="38"/>
+
+                <!-- Min / Max Octave -->
+                <DataGridTextColumn Header="Oct↓"
+                            Binding="{Binding MinOctave, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Width="34"/>
+                <DataGridTextColumn Header="Oct↑"
+                            Binding="{Binding MaxOctave, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Width="34"/>
+
+                <!-- SendNow button -->
+                <DataGridTemplateColumn Header="▶" Width="28">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="▶"
+                            Command="{Binding SendNowCommand}"
+                            Padding="0"
+                            BorderThickness="0"
+                            Background="Transparent"
+                            ToolTip="Send now"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
 </UserControl>

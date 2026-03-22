@@ -200,7 +200,6 @@ namespace fractions
         private static void AssertCollection(IEnumerable<T> collection)
         {
             if (collection is null) throw new ArgumentNullException(nameof(collection));
-            collection.ThrowIfCountIsLessThan(1, nameof(collection));
         }
     }
 }

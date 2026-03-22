@@ -13,52 +13,47 @@ namespace fractions.ui.viewmodels;
 
 public partial class OutputDevicesViewModel : BaseObservableObject
 {
-    public OutputDevicesViewModel(IOutputDevice outputDevice)
+    public OutputDevicesViewModel()
     {
-        _outputDevice = outputDevice;
     }
 
-    private IOutputDevice _outputDevice;
+    private OutputDevicesViewModel(string item)
+    {
+        _selectedOutputDevice = item;
+    }
+
+    private string _selectedOutputDevice;
 
     /// <summary>
     /// The selected channel value.
     /// </summary>
-    public IOutputDevice SelectedOutputDevice
+    public string? SelectedOutputDevice
     {
-        get => _outputDevice;
+        get => _selectedOutputDevice;
         set
         {
-            if (_outputDevice != value)
+            if (_selectedOutputDevice != value)
             {
-                NotifyPropertyChangingOnUiThread(nameof(OutputDevice));
-                NotifyPropertyChangingOnUiThread(nameof(DisplayName));
-                _outputDevice = value;
-                NotifyPropertyChangedOnUiThread(nameof(OutputDevice));
-                NotifyPropertyChangedOnUiThread(nameof(DisplayName));
+                NotifyPropertyChangingOnUiThread(nameof(SelectedOutputDevice));
+                _selectedOutputDevice = value ?? "[N/A]";
+                if(fractions.OutputDevice.InstalledDevices.FirstOrDefault(ioc => ioc.Name == value) is IOutputDevice device)
+                {
+                    App.OutputDevice = device;
+                }
+                NotifyPropertyChangedOnUiThread(nameof(SelectedOutputDevice));
             }
-        }
-    }
-
-    /// <summary>
-    /// Display-friendly name for the channel (e.g., "Channel1").
-    /// </summary>
-    public string DisplayName
-    {
-        get
-        {
-            return _outputDevice.Name;
         }
     }
 
     /// <summary>
     /// Gets all available channels as ChannelViewModel instances for binding to a ComboBox.
     /// </summary>
-    public static IEnumerable<OutputDevicesViewModel> AllOutputDevices
+    public static IEnumerable<string> AllOutputDevices
     {
         get
         {
             return fractions.OutputDevice.InstalledDevices
-                .Select(ioc => new OutputDevicesViewModel(ioc));
+                .Select(ioc => ioc.Name);
         }
     }
 }

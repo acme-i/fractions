@@ -32,33 +32,10 @@ public partial class BaseViewModel : MessengerViewModel
     [ObservableProperty]
     private Settings settings;
 
-    protected bool firstLoad = true;
-
-    protected bool isListDirty = true;
-    public static readonly Task<int> DoNothing = Task.FromResult(0);
-
-    [RelayCommand]
-    public Task<int> Reload(string? filter = null)
-    {
-        return DoNothing;
-    }
-
     [RelayCommand]
     public Task Cancel()
     {
         return Task.CompletedTask;
-    }
-
-    protected void ReportChanges(int inserted, string nounPlural = "updates")
-    {
-        if (inserted > 0)
-        {
-            StatusMessage = $"{inserted} {nounPlural}...";
-        }
-        else
-        {
-            StatusMessage = $"No changes...";
-        }
     }
 
     #region Settings
@@ -87,18 +64,19 @@ public partial class BaseViewModel : MessengerViewModel
 
     #region CommunityToolkit Events
 
+    protected bool firstLoad = true;
+
     protected virtual async Task OnIsVisibleChangedInternal(bool value)
     {
         if (firstLoad || value)
         {
-            await Reload(null).ConfigureAwait(false);
+            firstLoad = false;
         }
     }
 
     partial void OnIsVisibleChanged(bool value)
     {
         Task.Run(() => OnIsVisibleChangedInternal(value));
-        firstLoad = false;
     }
 
     #endregion Events
