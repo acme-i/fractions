@@ -46,6 +46,8 @@ public partial class App : System.Windows.Application
                 // ── Core singletons ───────────────────────────────────────
                 services.AddSingleton<ClockViewModel>();
                 services.AddSingleton<OutputDevicesViewModel>();
+                services.AddSingleton<MidiFileSourceViewModel>();
+                services.AddSingleton<PipelineViewModel>();
 
                 // NoteOnOffListViewModel primary ctor needs Enumerate<NoteOnOffMessage>.
                 // The VM loads its own notes via ReadFile(), so an empty source is fine.
@@ -55,6 +57,10 @@ public partial class App : System.Windows.Application
 
                 // MainViewModel is the root DataContext — must be Singleton so every
                 // view that inherits it sees the same instance.
+                services.AddTransient<MidiFileSourceView>();
+                services.AddTransient<EchoGeneratorView>();
+                services.AddTransient<PipelineCanvasView>();
+                services.AddTransient<NoteListPreviewView>();
                 services.AddSingleton<MainViewModel>();
 
                 // ── Views ─────────────────────────────────────────────────

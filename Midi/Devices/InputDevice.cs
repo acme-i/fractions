@@ -229,7 +229,7 @@ namespace fractions
         /// <remarks>
         /// <para>
         /// This method waits for all in-progress input event handlers to finish, and then joins
-        /// (shuts down) the background thread that was created in <see cref="StartReceiving" />.
+        /// (shuts down) the background thread that was created in <see cref="StartReceiving(Clock)" />.
         /// Thus, when this function returns you can be sure that no more event handlers will be invoked.
         /// </para>
         /// <para>

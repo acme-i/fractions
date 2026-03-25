@@ -27,6 +27,8 @@
         <Grid  Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Top">
             <StackPanel Orientation="Vertical">
                 <views:NoteOnOffListView DataContext="{Binding NoteOnOffListViewModel}" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" />
+
+                <!--<views:PipelineCanvasView DataContext="{Binding PipelineViewModel}"/>-->
             </StackPanel>
         </Grid>
     </Grid>
