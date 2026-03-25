@@ -35,7 +35,7 @@ namespace fractions.examples
         private readonly Dictionary<Channel, Enumerate<float>> EchoReverbMap = new Dictionary<Channel, Enumerate<float>>();
         private readonly Dictionary<Channel, Enumerate<float>> EchoReverbMap2 = new Dictionary<Channel, Enumerate<float>>();
 
-        private IOutputDevice OutputDevice = fractions.OutputDevice.InstalledDevices.FirstOrDefault();
+        private IOutputDevice OutputDevice;
         private Clock Clock = new Clock(64);
 
         private readonly Enumerate<Channel> channels = new[] {
@@ -91,6 +91,7 @@ namespace fractions.examples
 
         public override void Run()
         {
+            OutputDevice = ExampleUtil.ChooseOutputDeviceFromConsole();
             if (OutputDevice == null)
             {
                 Console.WriteLine("No output devices, so can't run this example.");

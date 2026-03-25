@@ -20,7 +20,7 @@ namespace fractions.examples
         {
             try
             {
-                OutputDevice = fractions.OutputDevice.InstalledDevices.FirstOrDefault();
+                OutputDevice = ExampleUtil.ChooseOutputDeviceFromConsole();
                 if (OutputDevice == null)
                 {
                     Console.WriteLine("No output devices, so can't run this example.");
@@ -181,7 +181,7 @@ namespace fractions.examples
                 instruments.GetNext();
             }
 
-            update(16, 30, 2);
+            Update(16, 30, 2);
 
             Clock = new Clock(BPM);
 
@@ -196,7 +196,7 @@ namespace fractions.examples
             Clock.Stop();
         }
 
-        static void update(float panSteps, float volSteps, int stepsAhead)
+        static void Update(float panSteps, float volSteps, int stepsAhead)
         {
             //MaxLeft = 20 + rand.GetNext(30);
             //MaxRight = MaxLeft + rand.GetNext(57);
@@ -229,7 +229,7 @@ namespace fractions.examples
                     v.GetNext();
         }
 
-        static (Enumerate<Pitch>, Enumerate<Pitch>) GetMelody(float time)
+        static (Enumerate<Pitch>, Enumerate<Pitch>) GetMelody()
         {
             Enumerate<Pitch> mel = melodies.GetNext();
             Enumerate<Pitch> bas = melodies2.GetNext();
@@ -273,7 +273,7 @@ namespace fractions.examples
                     var s = j % 2 == 0 ? scaler1.GetNext() : scaler2.GetNext();
                     var k = j % 2 == 0 ? skips1.GetNext() : skips2.GetNext();
 
-                    update(panSteps.GetNext(), volSteps.GetNext(), stepsAhead.GetNext());
+                    Update(panSteps.GetNext(), volSteps.GetNext(), stepsAhead.GetNext());
                     AdvanceMelody();
                     if (sum % 2 == 0)
                         PlayMelody1(sum, f, s, k);
@@ -299,7 +299,7 @@ namespace fractions.examples
                 results = list;
             }
 
-            var mels = GetMelody(i);
+            var mels = GetMelody();
             var melodi1 = mels.Item1.Clone();
             var bass1 = mels.Item2.Clone();
             var c = melodiChans.GetNext();
@@ -322,7 +322,7 @@ namespace fractions.examples
 
                 if ((i + count) % mod1.GetNext() == 0)
                 {
-                    n.BeforeSendingNoteOnOff += (NoteOnOffMessage ne) =>
+                    n.BeforeSendingNoteOnOff += ne =>
                     {
                         AdvanceMelody();
 
@@ -365,7 +365,7 @@ namespace fractions.examples
 
                 if ((i + count) % mod2.GetNext() == 0)
                 {
-                    n2.BeforeSendingNoteOnOff += (NoteOnOffMessage n2e) =>
+                    n2.BeforeSendingNoteOnOff += n2e =>
                     {
                         n2e.Channel = melodiChans.GetNext();
                         n2e.Velocity = VolMapE[n2e.Channel].GetNext();
@@ -413,7 +413,7 @@ namespace fractions.examples
                 results = list;
             }
 
-            var mels = GetMelody(i);
+            var mels = GetMelody();
             var melodi2 = mels.Item1.Clone().OctaveBelow();
             var bass2 = mels.Item2.Clone().OctaveBelow();
             var c = melodi2Chans.GetNext();
@@ -437,7 +437,7 @@ namespace fractions.examples
 
                 if ((i + count) % mod1.GetNext() == 0)
                 {
-                    n.BeforeSendingNoteOnOff += (NoteOnOffMessage ne) =>
+                    n.BeforeSendingNoteOnOff += ne =>
                     {
                         ne.Channel = bassChans.GetNext();
                         ne.Velocity = VolMap[ne.Channel].GetNext();
@@ -477,7 +477,7 @@ namespace fractions.examples
 
                 if ((i + count) % mod2.GetNext() == 0)
                 {
-                    n2.BeforeSendingNoteOnOff += (NoteOnOffMessage n2e) =>
+                    n2.BeforeSendingNoteOnOff += n2e =>
                     {
                         AdvanceMelody();
 

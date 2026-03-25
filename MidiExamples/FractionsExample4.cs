@@ -26,7 +26,7 @@ namespace fractions.examples
         private readonly Dictionary<Channel, Enumerate<float>> EchoPanMap = new Dictionary<Channel, Enumerate<float>>();
         private readonly Dictionary<Channel, Enumerate<float>> EchoPanMap2 = new Dictionary<Channel, Enumerate<float>>();
 
-        private IOutputDevice OutputDevice = fractions.OutputDevice.InstalledDevices.FirstOrDefault();
+        private IOutputDevice OutputDevice;
         private Clock Clock = new Clock(32);
 
         private readonly Enumerate<Channel> chans = new[] {
@@ -78,6 +78,7 @@ namespace fractions.examples
 
         public override void Run()
         {
+            OutputDevice = ExampleUtil.ChooseOutputDeviceFromConsole();
             if (OutputDevice == null)
             {
                 Console.WriteLine("No output devices, so can't run this example.");

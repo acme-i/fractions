@@ -20,6 +20,7 @@ namespace fractions.examples
         {
             try
             {
+                OutputDevice = ExampleUtil.ChooseOutputDeviceFromConsole();
                 if (OutputDevice == null)
                 {
                     Console.WriteLine("No output devices, so can't run this example.");
@@ -43,7 +44,7 @@ namespace fractions.examples
             }
         }
 
-        static IOutputDevice OutputDevice = fractions.OutputDevice.InstalledDevices.FirstOrDefault();
+        static IOutputDevice OutputDevice;
         static int BPM = 220;
         static Clock Clock = new Clock(BPM);
         static Random rand = new Random(DateTime.Now.Millisecond);

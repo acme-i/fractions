@@ -20,7 +20,7 @@ namespace fractions.examples
         {
             try
             {
-                outputDevice = OutputDevice.InstalledDevices.FirstOrDefault();
+                outputDevice = ExampleUtil.ChooseOutputDeviceFromConsole();
                 if (outputDevice == null)
                 {
                     Console.WriteLine("No output devices, so can't run this example.");

@@ -15,11 +15,13 @@ namespace fractions.examples
     internal class R7c3_b_2 : ExampleBase
     {
         public R7c3_b_2() : base(nameof(R7c3_b_2)) { }
-
+        static IOutputDevice OutputDevice;
+        
         public override void Run()
         {
             try
             {
+                OutputDevice = ExampleUtil.ChooseOutputDeviceFromConsole();
                 Init();
                 Console.WriteLine();
                 ExampleUtil.PressAnyKeyToContinue();
@@ -34,7 +36,6 @@ namespace fractions.examples
             }
         }
 
-        static IOutputDevice OutputDevice = fractions.OutputDevice.InstalledDevices.FirstOrDefault();
         static int BPM = 250;
         static Clock Clock = new Clock(BPM);
 

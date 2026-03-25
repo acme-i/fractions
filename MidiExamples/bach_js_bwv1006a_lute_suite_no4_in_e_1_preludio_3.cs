@@ -44,7 +44,7 @@ namespace fractions.examples
         private readonly Dictionary<Channel, Enumerate<float>> PanMap = new Dictionary<Channel, Enumerate<float>>();
         private readonly Dictionary<Channel, Enumerate<float>> EchoPanMap = new Dictionary<Channel, Enumerate<float>>();
 
-        private IOutputDevice OutputDevice = fractions.OutputDevice.InstalledDevices.FirstOrDefault();
+        private IOutputDevice OutputDevice = ExampleUtil.ChooseOutputDeviceFromConsole();
         private Clock Clock = new Clock(80);
 
         private readonly Enumerate<Channel> chans = new Enumerate<Channel>(

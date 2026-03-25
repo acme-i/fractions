@@ -17,7 +17,7 @@ namespace fractions.examples
 
         public override void Run()
         {
-            OutputDevice = fractions.OutputDevice.InstalledDevices.FirstOrDefault();
+            OutputDevice = ExampleUtil.ChooseOutputDeviceFromConsole();
             if (OutputDevice == null)
             {
                 Console.WriteLine("No output devices, so can't run this example.");
