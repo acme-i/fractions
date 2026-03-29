@@ -582,7 +582,7 @@ namespace fractions
 
         public void ApplyMelody(IEnumerable<Channel> channels, Enumerate<Pitch> melody, int maxRepeats = 1)
         {
-            if (melody.Length > 0)
+            if (melody.Count > 0)
                 foreach (var coll in messages)
                 {
                     var notes = coll
@@ -718,7 +718,7 @@ namespace fractions
         /// </summary>
         public void MapNoteMessages(IEnumerable<Channel> sourceChannels, Enumerate<Channel> targetChannels, PitchRange range)
         {
-            if (!sourceChannels.Any() || !targetChannels.ToList().Any() || (targetChannels.Length == 1 && targetChannels.First() == Channel.Channel10))
+            if (!sourceChannels.Any() || !targetChannels.ToList().Any() || (targetChannels.Count == 1 && targetChannels.First() == Channel.Channel10))
             {
                 return;
             }

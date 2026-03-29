@@ -15,14 +15,12 @@ public partial class MainViewModel : BaseViewModel
     public MainViewModel(IMessenger messenger, Settings settings, 
         OutputDevicesViewModel outputDevicesViewModel, 
         ClockViewModel clockViewModel, 
-        NoteOnOffListViewModel noteOnOffListViewModel,
-        PipelineViewModel pipelineViewModel)
+        NoteOnOffListViewModel noteOnOffListViewModel)
         : base(messenger, settings)
     {
         _outputDevicesViewModel = outputDevicesViewModel;
         _clockViewModel = clockViewModel;
         _noteOnOffListViewModel = noteOnOffListViewModel;
-        _pipelineViewModel = pipelineViewModel;
     }
 
     [ObservableProperty]
@@ -33,7 +31,4 @@ public partial class MainViewModel : BaseViewModel
 
     [ObservableProperty]
     private NoteOnOffListViewModel _noteOnOffListViewModel;
-
-    [ObservableProperty]
-    private PipelineViewModel _pipelineViewModel;
 }

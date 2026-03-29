@@ -6,8 +6,7 @@ namespace fractions.ui.viewmodels
     public interface IEnumerateViewModelOfT<T>
     {
         string Name { get; set;  }
-        Incrementor Incrementor { get; }
-        int Length { get; }
+        int Count { get; }
         void AddRange(IEnumerable<T> others);
         void Set(IEnumerable<T> others);
         T Current { get; }
@@ -16,5 +15,7 @@ namespace fractions.ui.viewmodels
         T GetNext();
         T Peek { get; }
         T PeekAt(int steps);
+        int Index { get; }
+        int PreviousIndex { get; }
     }
 }

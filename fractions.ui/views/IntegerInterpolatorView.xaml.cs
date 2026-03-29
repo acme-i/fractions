@@ -12,17 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using CommunityToolkit.Mvvm.Messaging;
-using fractions.ui.viewmodels;
 
 namespace fractions.ui.views;
-
 /// <summary>
-/// Interaction logic for EnumerateUserControl.xaml
+/// Interaction logic for IntegerInterpolatorView.xaml
 /// </summary>
-public partial class IntegerEnumeratorView : UserControl
+public partial class IntegerInterpolatorView : UserControl
 {
-    public IntegerEnumeratorView()
+    public IntegerInterpolatorView()
     {
         InitializeComponent();
     }

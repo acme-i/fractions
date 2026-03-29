@@ -329,10 +329,10 @@ namespace fractions
                 // Parameter, LSB
                 CheckReturnCode(Win32API.midiOutShortMsg(handle, ShortMsg.EncodeControlChange(channel, Control.NonRegisteredParameterLSB, parameter14.LSB)));
 
-                // Value, MSB
+                // Index, MSB
                 CheckReturnCode(Win32API.midiOutShortMsg(handle, ShortMsg.EncodeControlChange(channel, Control.DataEntryMSB, value14.MSB)));
 
-                // Value, LSB
+                // Index, LSB
                 CheckReturnCode(Win32API.midiOutShortMsg(handle, ShortMsg.EncodeControlChange(channel, Control.DataEntryLSB, value14.LSB)));
             }
         }

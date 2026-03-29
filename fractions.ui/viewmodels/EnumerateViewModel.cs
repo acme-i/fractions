@@ -1,16 +1,18 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using fractions;
-using System.Linq;
-using System.Collections.Generic;
 using fractions.ui.configuration;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Controls;
 
 namespace fractions.ui.viewmodels;
 
-abstract public class EnumerateViewModel<T>(IMessenger messenger, Enumerate<T> source) : MessengerViewModel(messenger), IEnumerateViewModelOfT<T>
+abstract public partial class EnumerateViewModel<T>(IMessenger messenger) : MessengerViewModel(messenger)
 {
-    public Enumerate<T> Source { get; } = source;
-
-    public Incrementor Incrementor => this.Source.Incrementor;
+    [ObservableProperty]
+    public Enumerate<T> source = new Enumerate<T>();
 
     public string Name
     {
@@ -23,35 +25,84 @@ abstract public class EnumerateViewModel<T>(IMessenger messenger, Enumerate<T> s
         }
     }
 
-    public int Length
+    public IncrementMethod Method
     {
-        get => Source.Length;
+        get => Source.Method;
+        set
+        {
+            NotifyPropertyChangingOnUiThread(nameof(Method));
+            Source.Method = value;
+            NotifyPropertyChangedOnUiThread(nameof(Method));
+        }
+    }
+
+    public double Index
+    {
+        get => Source.Index;
+    }
+
+    public double StepSize
+    {
+        get => Source.StepSize;
     }
 
     public T Current => Source.Current;
 
-    public T Max => Source.Max;
-
-    public T Min => Source.Min;
-
     public T Peek => Source.Peek;
 
-    public void AddRange(IEnumerable<T> others)
+    [RelayCommand(CanExecute = nameof(IsReady))]
+    public void PeekAt(int repeat)
     {
+        PeekAtResult = Source.PeekAt(repeat);
+    }
+
+    [ObservableProperty]
+    private T? peekAtResult;
+
+    public bool IsReady()
+    {
+        return Source != null;
+    }
+
+    [RelayCommand(CanExecute = nameof(IsReady))]
+    public void AddRange(IEnumerable<T> collection)
+    {
+        if (collection is null || collection.Any() == false)
+        {
+            return;
+        }
+
         NotifyPropertyChangingOnUiThread(nameof(Source));
-        Source.AddRange(others);
+        Source.AddRange(collection);
         NotifyPropertyChangedOnUiThread(nameof(Source));
     }
 
+
+    [RelayCommand(CanExecute = nameof(IsReady))]
     public void Set(IEnumerable<T> others)
     {
         NotifyPropertyChangingOnUiThread(nameof(Source));
-        Source.Set(others);
+        Source = new Enumerate<T>(others, Method, StepSize, Index, Guid.NewGuid().ToString());
+        NotifyPropertyChangedOnUiThread(nameof(IsReady));
         NotifyPropertyChangedOnUiThread(nameof(Source));
     }
 
-    public T GetNext() => Source.GetNext();
+    [RelayCommand(CanExecute = nameof(IsReady))]
+    public void GoToNext()
+    {
+        NotifyPropertyChangingOnUiThread(nameof(Current));
+        Source.GetNext();
+        NotifyPropertyChangedOnUiThread(nameof(Current));
+    }
 
-    public T PeekAt(int steps) => Source.PeekAt(steps);
+    public T GetNext()
+    {
+        return Source.GetNext();
+    }
 
+    [RelayCommand(CanExecute=nameof(IsReady))]
+    public void Clear()
+    {
+        Source.Clear();
+    }
 }

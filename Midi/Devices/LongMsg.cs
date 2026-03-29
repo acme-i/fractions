@@ -49,8 +49,8 @@ namespace fractions
             data = new byte[header.dwBytesRecorded];
             for (var i = 0; i < header.dwBytesRecorded; i++)
             {
-                //Array.Resize<byte>(ref data, data.Length + 1);
-                //data[data.Length - 1] = System.Runtime.InteropServices.Marshal.ReadByte(header.lpData, i);
+                //Array.Resize<byte>(ref data, data.Count + 1);
+                //data[data.Count - 1] = System.Runtime.InteropServices.Marshal.ReadByte(header.lpData, i);
                 data[i] = Marshal.ReadByte(header.lpData, i);
             }
             timestamp = (uint)dwParam2;

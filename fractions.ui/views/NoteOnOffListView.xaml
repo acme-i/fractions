@@ -8,13 +8,32 @@
              mc:Ignorable="d" d:DesignHeight="100" d:DesignWidth="460"
              d:DataContext="{d:DesignInstance Type=vm:NoteOnOffListViewModel}">
     <StackPanel Orientation="Vertical">
+        <ToolBarPanel>
+            <Menu>
+                <MenuItem Header="Note" IsEnabled="{Binding IsSingleItemSelected}">
+                    <MenuItem Header="Edit" Command="{Binding EditNote}" CommandParameter="{Binding SelectedNote}"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="Range" IsEnabled="{Binding IsManyItemSelected}">
+                    <MenuItem Header="Select All" Command="{Binding SelectAllCommand}" />
+                    <MenuItem Header="Interpolate">
+
+                        <MenuItem Header="Velocity" Command="{Binding InterpolateVelocityCommand}" CommandParameter="{Binding SelectedNotes}"></MenuItem>
+                        <MenuItem Header="Pan" Command="{Binding InterpolatePanCommand}" CommandParameter="{Binding SelectedNotes}"></MenuItem>
+                        <MenuItem Header="Reverb" Command="{Binding InterpolateReverbCommand}" CommandParameter="{Binding SelectedNotes}"></MenuItem>
+                        <MenuItem Header="Duration" Command="{Binding InterpolateReverbCommand}" CommandParameter="{Binding SelectedNotes}"></MenuItem>
+                    </MenuItem>
+                    
+                </MenuItem>
+            </Menu>
+        </ToolBarPanel>
         <Button Content="Read" Command="{Binding ReadFileCommand}" />
-        <DataGrid ItemsSource="{Binding AllNotes}"
+        <DataGrid 
+          Name="dataGrid"
           AutoGenerateColumns="False"
           CanUserAddRows="False"
           CanUserDeleteRows="False"
           IsReadOnly="False"
-          SelectionMode="Single"
+          SelectionMode="Extended"
           HeadersVisibility="Column"
           GridLinesVisibility="Horizontal"
           BorderThickness="0"
@@ -23,7 +42,12 @@
           VirtualizingPanel.IsContainerVirtualizable="True"
           EnableRowVirtualization="True"
           EnableColumnVirtualization="True"
-          ScrollViewer.IsDeferredScrollingEnabled="True">
+          ScrollViewer.IsDeferredScrollingEnabled="True"
+          IsSynchronizedWithCurrentItem="True"
+          ItemsSource="{Binding AllNotes}"
+          SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+          SelectionUnit="FullRow"
+          ClipboardCopyMode="ExcludeHeader">
 
             <DataGrid.Columns>
 
@@ -31,6 +55,10 @@
                 <DataGridTextColumn Header="Ch"
                             Binding="{Binding Channel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Width="30"/>
+
+                <DataGridTextColumn Header="T"
+                            Binding="{Binding Time, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Width="40"/>
 
                 <!-- Pitch: numeric (0-127), maps to Pitch enum -->
                 <DataGridTextColumn Header="Pitch"
@@ -58,15 +86,15 @@
                             Width="38"/>
 
                 <!-- Min / Max Octave -->
-                <DataGridTextColumn Header="Oct↓"
+                <!--<DataGridTextColumn Header="Oct↓"
                             Binding="{Binding MinOctave, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Width="34"/>
                 <DataGridTextColumn Header="Oct↑"
                             Binding="{Binding MaxOctave, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            Width="34"/>
+                            Width="34"/>-->
 
                 <!-- SendNow button -->
-                <DataGridTemplateColumn Header="▶" Width="28">
+                <!--<DataGridTemplateColumn Header="▶" Width="28">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Content="▶"
@@ -77,7 +105,7 @@
                             ToolTip="Send now"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>-->
 
             </DataGrid.Columns>
         </DataGrid>

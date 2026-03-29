@@ -2,4 +2,9 @@
 
 namespace fractions.ui.viewmodels;
 
-public class IntegerEnumeratorViewModel(IMessenger messenger, Enumerate<int> source) : EnumerateViewModel<int>(messenger, source) { }
+public class IntegerEnumeratorViewModel : EnumerateViewModel<int>
+{
+    public IntegerEnumeratorViewModel(IMessenger messenger) : base(messenger)
+    {
+    }
+}

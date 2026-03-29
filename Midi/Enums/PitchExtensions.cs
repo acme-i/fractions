@@ -193,7 +193,7 @@ namespace fractions
         public static Enumerate<Pitch> PitchAbove(this Enumerate<Pitch> pitches, int semiTones, bool wrapAround = false)
         {
             if (pitches != null && semiTones > 0)
-                for (int i = 0; i < pitches.Length; i++)
+                for (int i = 0; i < pitches.Count; i++)
                     pitches.collection[i] = pitches.collection[i].PitchAbove(semiTones, wrapAround);
             return pitches;
         }
@@ -217,7 +217,7 @@ namespace fractions
         public static Enumerate<Pitch> OctaveAbove(this Enumerate<Pitch> pitches, bool wrapAround = false)
         {
             if (pitches != null)
-                for (int i = 0; i < pitches.Length; i++)
+                for (int i = 0; i < pitches.Count; i++)
                     pitches.collection[i] = pitches.collection[i].OctaveAbove(wrapAround);
             return pitches;
         }
@@ -225,7 +225,7 @@ namespace fractions
         public static Enumerate<Pitch> OctaveAbove(this Enumerate<Pitch> pitches, int octaves, double prop, Random rand, bool wrapAround = false)
         {
             if (pitches != null)
-                for (int i = 0; i < pitches.Length; i++)
+                for (int i = 0; i < pitches.Count; i++)
                     pitches.collection[i] = pitches.collection[i].OctaveAbove(octaves, rand, prop, wrapAround);
             return pitches;
         }
@@ -261,7 +261,7 @@ namespace fractions
         public static Enumerate<Pitch> OctaveBelow(this Enumerate<Pitch> pitches, bool wrapAround = false)
         {
             if (pitches != null)
-                for (int i = 0; i < pitches.Length; i++)
+                for (int i = 0; i < pitches.Count; i++)
                     pitches.collection[i] = pitches.collection[i].OctaveBelow(wrapAround);
             return pitches;
         }
@@ -269,7 +269,7 @@ namespace fractions
         public static Enumerate<Pitch> OctaveBelow(this Enumerate<Pitch> pitches, int octaves, double prop, Random rand, bool wrapAround = false)
         {
             if (pitches != null)
-                for (int i = 0; i < pitches.Length; i++)
+                for (int i = 0; i < pitches.Count; i++)
                     pitches.collection[i] = pitches.collection[i].OctaveBelow(octaves, rand, prop, wrapAround);
             return pitches;
         }

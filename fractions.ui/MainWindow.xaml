@@ -21,14 +21,13 @@
             <StackPanel Orientation="Vertical">
                 <views:OutputDevicesView DataContext="{Binding OutputDevicesViewModel}"/>
                 <views:ClockView DataContext="{Binding ClockViewModel}"/>
+                
             </StackPanel>
         </Grid>
         <GridSplitter HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="4" Background="Black" Grid.Column="1"></GridSplitter>
         <Grid  Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Top">
             <StackPanel Orientation="Vertical">
                 <views:NoteOnOffListView DataContext="{Binding NoteOnOffListViewModel}" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" />
-
-                <!--<views:PipelineCanvasView DataContext="{Binding PipelineViewModel}"/>-->
             </StackPanel>
         </Grid>
     </Grid>

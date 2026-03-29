@@ -329,7 +329,7 @@ namespace fractions
         }
 
         /// <summary>
-        ///     Value equality.
+        ///     Index equality.
         /// </summary>
         public override bool Equals(object obj)
         {

@@ -158,7 +158,7 @@ namespace fractions
         /// </summary>
         /// <param name="channel">The channel</param>
         /// <param name="parameter">Parameter number, 0..16383</param>
-        /// <param name="value">Value, 0..16383</param>
+        /// <param name="value">Index, 0..16383</param>
         void SendNrpn(Channel channel, int parameter, int value);
     }
 }

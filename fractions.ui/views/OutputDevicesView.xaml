@@ -14,8 +14,9 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Label Content="Out" ToolTip="Output Devices" Padding="0,0,0,0"/>
-        <ComboBox x:Name="ChannelComboBox" Grid.Column="1" IsReadOnly="True"
-              ItemsSource="{x:Static vm:OutputDevicesViewModel.AllOutputDevices}"
-              SelectedItem="{Binding SelectedOutputDevice, Mode=TwoWay}" />
+        <ComboBox Grid.Column="1"
+                  ItemsSource="{Binding AllOutputDevices}"
+                  SelectedItem="{Binding SelectedOutputDevice, Mode=TwoWay}"
+                  IsReadOnly="True"/>
     </Grid>
 </UserControl>

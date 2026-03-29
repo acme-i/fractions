@@ -324,16 +324,16 @@ namespace fractions
         }
 
         /// <summary>
-        /// interpolate between start and end in n number of steps using the method m
+        /// interpolate between start and end in numberOfSteps number of steps using the method method
         /// </summary>
         /// <param name="start"></param>
         /// <param name="end"></param>
-        /// <param name="n">number of steps</param>
-        /// <param name="m">method. 0 = cosine, 1 = linear, 2 = square, etc</param>
-        /// <returns>the progression of start towards end in n number of steps</returns>
-        public static List<float> Interpolate(float start, float end, int n, int m = 1)
+        /// <param name="numberOfSteps">number of steps</param>
+        /// <param name="method">method. 0 = cosine, 1 = linear, 2 = square, etc</param>
+        /// <returns>the progression of start towards end in numberOfSteps number of steps</returns>
+        public static List<float> Interpolate(float start, float end, int numberOfSteps, int method = 1)
         {
-            if (Math.Sign(n) <= 0) throw new ArgumentOutOfRangeException(nameof(n));
+            if (Math.Sign(numberOfSteps) <= 0) throw new ArgumentOutOfRangeException(nameof(numberOfSteps));
 
             var isReversed = start > end;
             if (isReversed)
@@ -341,10 +341,10 @@ namespace fractions
                 (end, start) = (start, end);
             }
 
-            var values = new List<float>(n);
-            var step = (end - start) / n;
-            for (double i = 1; i <= n; i++)
-                values.Add((float)Interpolate(step * i, start, end, start, end, m));
+            var values = new List<float>(numberOfSteps);
+            var step = (end - start) / numberOfSteps;
+            for (double i = 1; i <= numberOfSteps; i++)
+                values.Add((float)Interpolate(step * i, start, end, start, end, method));
 
             if (isReversed) values.Reverse();
 
@@ -352,16 +352,16 @@ namespace fractions
         }
 
         /// <summary>
-        /// interpolate between start and end in n number of steps using the method m
+        /// interpolate between start and end in numberOfSteps number of steps using the method method
         /// </summary>
         /// <param name="start"></param>
         /// <param name="end"></param>
-        /// <param name="n">number of steps</param>
-        /// <param name="m">method. 0 = cosine, 1 = linear, 2 = square, etc</param>
-        /// <returns>the progression of start towards end in n number of steps</returns>
-        public static List<double> Interpolate(double start, double end, int n, int m = 1)
+        /// <param name="numberOfSteps">number of steps</param>
+        /// <param name="method">method. 0 = cosine, 1 = linear, 2 = square, etc</param>
+        /// <returns>the progression of start towards end in numberOfSteps number of steps</returns>
+        public static List<double> Interpolate(double start, double end, int numberOfSteps, int method = 1)
         {
-            if (Math.Sign(n) <= 0) throw new ArgumentOutOfRangeException(nameof(n));
+            if (Math.Sign(numberOfSteps) <= 0) throw new ArgumentOutOfRangeException(nameof(numberOfSteps));
 
             var isReversed = start > end;
             if (isReversed)
@@ -369,10 +369,10 @@ namespace fractions
                 (end, start) = (start, end);
             }
 
-            var values = new List<double>(n);
-            var step = (end - start) / n;
-            for (double i = 1; i <= n; i++)
-                values.Add(Interpolate(step * i, start, end, start, end, m));
+            var values = new List<double>(numberOfSteps);
+            var step = (end - start) / numberOfSteps;
+            for (double i = 1; i <= numberOfSteps; i++)
+                values.Add(Interpolate(step * i, start, end, start, end, method));
 
             if (isReversed) values.Reverse();
 

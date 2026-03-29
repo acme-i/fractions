@@ -19,6 +19,17 @@ public partial class NoteOnOffViewModel : MessengerViewModel
 
     private NoteOnOffMessage _note;
 
+    public float Time
+    {
+        get => _note.Time;
+        set
+        {
+            NotifyPropertyChangingOnUiThread(nameof(Time));
+            _note.Time = value;
+            NotifyPropertyChangedOnUiThread(nameof(Time));
+        }
+    }
+
     public int Channel
     {
         get => (int)_note.Channel;

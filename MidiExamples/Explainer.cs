@@ -51,10 +51,6 @@ namespace fractions.examples
         private static readonly int MaxVol = 120;
         private static readonly int MaxLeft = 30;
         private static readonly int MaxRight = 97;
-        private static readonly Dictionary<Channel, Incrementor> VolMap = new Dictionary<Channel, Incrementor>();
-        private static readonly Dictionary<Channel, Incrementor> PanMap = new Dictionary<Channel, Incrementor>();
-        private static readonly Dictionary<Channel, Incrementor> RevMap = new Dictionary<Channel, Incrementor>();
-
         private static IOutputDevice OutputDevice;
         private static Clock Clock;
         private static int BPM;
@@ -78,10 +74,6 @@ namespace fractions.examples
             Channels.InstrumentChannels.ForEach(c =>
             {
                 OutputDevice.SendProgramChange(c, Instrument.ElectricGuitarMuted);
-
-                VolMap.Add(c, new Incrementor((double)c * volStep, MinVol, MaxVol, volStep, IncrementMethod.MaxMin));
-                PanMap.Add(c, new Incrementor((double)c * panStep, MaxLeft, MaxRight, panStep, IncrementMethod.Cyclic));
-                RevMap.Add(c, new Incrementor((double)c * revStep, MinRev, MaxRev, revStep, IncrementMethod.Cyclic));
 
                 OutputDevice.SendControlChange(c, Control.Volume, 100);
                 OutputDevice.SendControlChange(c, Control.CelesteLevel, 0);

@@ -26,18 +26,41 @@ namespace fractions.tests
             Assert.AreEqual(Pitch.A1, octaveAbove[1]);
         }
 
+        [Test]
+        public void AsCycleTest()
+        {
+            var list = new[] { Pitch.A1, Pitch.A2 }.AsCycle();
+            Assert.AreEqual(Pitch.A1, list.GetNext());
+            Assert.AreEqual(Pitch.A2, list.GetNext());
+            Assert.AreEqual(Pitch.A1, list.GetNext());
+        }
+
+        [Test]
+        public void AsMaxMinEnumerationTest()
+        {
+            var list = new[] { Pitch.A1, Pitch.A2 }.AsMaxMinEnumeration();
+            Assert.AreEqual(Pitch.A2, list.GetNext());
+            Assert.AreEqual(Pitch.A1, list.GetNext());
+            Assert.AreEqual(Pitch.A2, list.GetNext());
+        }
+
         #endregion Methods
 
         [Test]
         public void StartsAtZero()
         {
-
             var maxLeft = 10;
             var maxRight = 117;
             var pSteps = Interpolator.Interpolate(maxLeft, maxRight, 4 * 12, 0);
             var pSteps2 = Interpolator.Interpolate(maxLeft, maxRight, 4 * 6, 0);
             var pSteppers = new[] { pSteps, pSteps2 }.AsEnumeration();
-            Assert.AreEqual(0, pSteppers.Incrementor.Value);
+            Assert.AreEqual(0, pSteppers.Index);
+            Assert.AreEqual(1, pSteppers.Max);
+            Assert.AreEqual(2, pSteppers.Count);
+            Assert.AreEqual(IncrementMethod.MinMax, pSteppers.Method);
+
+            Assert.AreEqual(pSteps, pSteppers.GetNext());
+            Assert.AreEqual(pSteps2, pSteppers.GetNext());
         }
     }
 }

@@ -2,17 +2,32 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using fractions.ui.configuration;
+using fractions.ui.views;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 
 namespace fractions.ui.viewmodels;
 
-public partial class NoteOnOffListViewModel(IMessenger messenger, Enumerate<NoteOnOffMessage> source)
-    : EnumerateViewModel<NoteOnOffMessage>(messenger, source)
+public partial class NoteOnOffListViewModel : EnumerateViewModel<NoteOnOffViewModel>
 {
+    private ObservableCollection<NoteOnOffViewModel> _allNotes;
+    private InternalCollectionView _noteList;
 
-    List<NoteOnOffMessage> _notes = new List<NoteOnOffMessage>(1000);
+    public NoteOnOffListViewModel(IMessenger messenger) : base(messenger)
+    {
+        _allNotes = new ObservableCollection<NoteOnOffViewModel>(Source);
+        _noteList = new InternalCollectionView(this, _allNotes);
+        _noteList.CurrentChanged += (_, _) =>
+        {
+            SelectedItem = _noteList.CurrentItem as NoteOnOffViewModel;
+        };
+    }
 
-    private ObservableCollection<NoteOnOffViewModel> _allNotes = new ObservableCollection<NoteOnOffViewModel>(); 
     public ObservableCollection<NoteOnOffViewModel> AllNotes => _allNotes;
     
     private readonly int minVol = 47;
@@ -53,15 +68,22 @@ public partial class NoteOnOffListViewModel(IMessenger messenger, Enumerate<Note
             Channel.Channel16
         }.AsEnumeration();
 
-    static Instrument[] instruments_ = new[] {
-            Instrument.Vibraphone,
-            Instrument.Xylophone,
-        };
+    static Instrument[] lInstr = new[] {
+            Instrument.SlapBass1, Instrument.ElectricPiano1, Instrument.Vibraphone, Instrument.ElectricPiano1,
+            Instrument.SlapBass1, Instrument.ElectricPiano1, Instrument.ElectricPiano1, Instrument.Vibraphone,
+            Instrument.SlapBass1, Instrument.Vibraphone, Instrument.ElectricPiano1, Instrument.ElectricPiano1,
+    };
 
-    private readonly Enumerate<Instrument> mainInstr = instruments_.AsCycle();
-    private readonly Enumerate<Instrument> secondInstr = instruments_.AsCycle().AsReversed();
-    private readonly Enumerate<Instrument> echoMainInstr = instruments_.AsCycle();
-    private readonly Enumerate<Instrument> echoSecondInstr = instruments_.AsCycle().AsReversed();
+    static Instrument[] rInstr = new[] {
+                Instrument.ElectricBassPick, Instrument.ElectricPiano1, Instrument.ElectricBassPick,
+                Instrument.ElectricBassPick, Instrument.ElectricBassPick, Instrument.ElectricPiano1,
+                Instrument.ElectricPiano1, Instrument.ElectricBassPick, Instrument.ElectricBassPick,
+            };
+
+    private readonly Enumerate<Instrument> mainInstr = lInstr.AsCycle();
+    private readonly Enumerate<Instrument> secondInstr = rInstr.AsCycle().AsReversed();
+    private readonly Enumerate<Instrument> echoMainInstr = rInstr.AsCycle();
+    private readonly Enumerate<Instrument> echoSecondInstr = lInstr.AsCycle().AsReversed();
 
     static string path = @".\midifiles\bach_js_bwv0999_prelude_in_cm_for_lute.mid";
     static MidiFile file = new MidiFile(path);
@@ -70,7 +92,6 @@ public partial class NoteOnOffListViewModel(IMessenger messenger, Enumerate<Note
     static (IEnumerable<MidiEvent> OnEvents, IEnumerable<MidiEvent> OffEvents, IEnumerable<float> Durations) result = file.GetEventsAndDurations();
     static readonly Enumerate<MidiEvent> nots = result.OnEvents.AsEnumeration();
     static readonly Enumerate<float> durs = result.Durations.AsEnumeration();
-
 
     [RelayCommand]
     public void ReadFile()
@@ -157,7 +178,7 @@ public partial class NoteOnOffListViewModel(IMessenger messenger, Enumerate<Note
 
         var echoes = resultTimes.AsCycle();
         
-        _notes.Clear();
+        Source.Clear();
         for (var i = 0; i < result.Durations.Count(); i++)
         {
             PlayAt(i);
@@ -168,13 +189,13 @@ public partial class NoteOnOffListViewModel(IMessenger messenger, Enumerate<Note
             }
         }
 
+        //Source.ForEach(n => n.Reverb = (n.Velocity + n.Pan)/2.0);
+
         NotifyPropertyChangingOnUiThread(nameof(AllNotes));
         _allNotes = new ObservableCollection<NoteOnOffViewModel>(
-            _notes
-                .Where(n=>Double.IsNaN(n.Duration)==false)
-                .OrderBy(n=>n.Channel)
-                .ThenBy(n => n.Duration)
-                .Select(n => new NoteOnOffViewModel(this.Messenger, n))
+            Source
+                .Where(n => Double.IsNaN(n.Duration) == false)
+                .OrderBy(n => n.Time)
         );
         NotifyPropertyChangedOnUiThread(nameof(AllNotes));
     }
@@ -196,7 +217,7 @@ public partial class NoteOnOffListViewModel(IMessenger messenger, Enumerate<Note
         };
         App.DefaultClock.Schedule(nt);
 
-        _notes.Add(nt);
+        Source.Add(new NoteOnOffViewModel(Messenger, nt));
     }
 
     readonly Enumerate<int> ps1 = new[] {
@@ -250,9 +271,69 @@ public partial class NoteOnOffListViewModel(IMessenger messenger, Enumerate<Note
             note = notsClone.GetNext();
             dur = durClone.GetNext();
 
-            _notes.Add(nt);
+            Source.Add(new NoteOnOffViewModel(Messenger, nt));
         }
 
         ps.GetNext();
     }
+
+    [RelayCommand]
+    public void SelectAll()
+    {
+        View.SelectAll();
+    }
+
+    public IList<NoteOnOffViewModel> GetSelectedItems()
+    {
+        return View.GetSelectedItems();
+    }
+
+    public IListView<NoteOnOffViewModel> View { get; set; }
+
+    public int SelectedIndex { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+    public int SelectedItemsCount => throw new NotImplementedException();
+
+    [ObservableProperty]
+    private bool isAscendingOrder;
+
+    [ObservableProperty]
+    private NoteOnOffViewModel? selectedItem;
+
+    public IList<NoteOnOffViewModel> SelectedItems
+    {
+        get
+        {
+            return View.GetSelectedItems();
+        }
+    }
+
+    #region InternalCollectionView
+    public class InternalCollectionView : ListCollectionView, ICollectionView
+    {
+        public InternalCollectionView(NoteOnOffListViewModel owner, IList list) : base(list)
+        {
+            Owner = owner;
+        }
+
+        public NoteOnOffListViewModel Owner { get; }
+
+        protected override void OnPropertyChanged(PropertyChangedEventArgs args)
+        {
+            base.OnPropertyChanged(args);
+            Owner.OnPropertyChanged(new PropertyChangedEventArgs($"Notes.{args.PropertyName}"));
+        }
+
+        public void RaiseItemsChanged()
+        {
+            OnPropertyChanged(new PropertyChangedEventArgs(nameof(SourceCollection)));
+        }
+
+        public void RaiseFilterChanged()
+        {
+            OnPropertyChanged(new PropertyChangedEventArgs(nameof(Filter)));
+        }
+    }
+    #endregion
+
 }

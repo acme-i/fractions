@@ -186,7 +186,7 @@ namespace fractions
         }
 
         /// <summary>
-        /// Value equality.
+        /// Index equality.
         /// </summary>
         public override bool Equals(object obj)
         {
@@ -214,7 +214,7 @@ namespace fractions
         /// the 0-indexed scale position (or -1) for each position in the octave.
         /// </param>
         /// <param name="noteSequence">
-        /// Must have pattern.Ascent.Length elements, and is filled with
+        /// Must have pattern.Ascent.Count elements, and is filled with
         /// the notes for each scale degree.
         /// </param>
         /// <param name="numAccidentals">

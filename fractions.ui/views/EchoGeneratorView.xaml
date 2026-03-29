@@ -3,33 +3,38 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:views="clr-namespace:fractions.ui.views"
              xmlns:vm="clr-namespace:fractions.ui.viewmodels"
              mc:Ignorable="d"
-             d:DesignHeight="60"
-             d:DesignWidth="460"
+             d:DesignHeight="200"
+             d:DesignWidth="380"
              d:DataContext="{d:DesignInstance Type=vm:EchoGeneratorViewModel}">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="60"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="60"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="60"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="60"/>
-        </Grid.ColumnDefinitions>
-
-        <TextBlock Text="Echoes" VerticalAlignment="Center" Margin="0,0,4,0"/>
-        <TextBox Grid.Column="1" Text="{Binding EchoCount}" VerticalAlignment="Center"/>
-
-        <TextBlock Grid.Column="2" Text="Time" VerticalAlignment="Center" Margin="8,0,4,0"/>
-        <TextBox Grid.Column="3" Text="{Binding TimeOffset}" VerticalAlignment="Center"/>
-
-        <TextBlock Grid.Column="4" Text="Pitch" VerticalAlignment="Center" Margin="8,0,4,0"/>
-        <TextBox Grid.Column="5" Text="{Binding PitchOffset}" VerticalAlignment="Center"/>
-
-        <TextBlock Grid.Column="6" Text="Vel" VerticalAlignment="Center" Margin="8,0,4,0"/>
-        <TextBox Grid.Column="7" Text="{Binding VelocityScale}" VerticalAlignment="Center"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <StackPanel Orientation="Horizontal">
+                <CheckBox Content="Next" IsChecked="{Binding IncrementEchoesPerEcho}"/>
+                <CheckBox Content="Next" IsChecked="{Binding IncrementOffsetsPerEcho}"/>
+                <CheckBox Content="Next" IsChecked="{Binding IncrementPitchesPerEcho}"/>
+                <CheckBox Content="Next" IsChecked="{Binding IncrementVelocityOffsetsPerEcho}"/>
+            </StackPanel>
+        </Grid>
+        <TabControl Grid.Row="1">
+            <TabItem Header="Echoes">
+                <views:IntegerEnumeratorView DataContext="{Binding EchoesViewModel}"/>
+            </TabItem>
+            <TabItem Header="Offsets">
+                <views:FloatEnumeratorView DataContext="{Binding OffsetsViewModel}"/>
+            </TabItem>
+            <TabItem Header="Pitches">
+                <views:IntegerEnumeratorView DataContext="{Binding PitchesViewModel}"/>
+            </TabItem>
+            <TabItem Header="Velocity Offsets">
+                <views:FloatEnumeratorView DataContext="{Binding VelocityOffsetsViewModel}"/>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>

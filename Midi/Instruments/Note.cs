@@ -297,7 +297,7 @@ namespace fractions
         }
 
         /// <summary>
-        ///     Value equality for Note.
+        ///     Index equality for Note.
         /// </summary>
         public override bool Equals(object obj)
         {

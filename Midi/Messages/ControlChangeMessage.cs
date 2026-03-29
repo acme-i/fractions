@@ -13,7 +13,7 @@ namespace fractions
         /// <param name="device"> The device associated with this message</param>
         /// <param name="channel"> Channel, 0..15, 10 reserved for percussion</param>
         /// <param name="control"> Control, 0..119 </param>
-        /// <param name="value"> Value, 0..127</param>
+        /// <param name="value"> Index, 0..127</param>
         /// <param name="time"> The timestamp for this message</param>
         /// <param name="tag"> User-defined object</param>
         public ControlChangeMessage(IDeviceBase device, Channel channel, Control control, int value, float time, object tag = null)
@@ -34,7 +34,7 @@ namespace fractions
         public Control Control { get; }
 
         /// <summary>
-        ///     Value, 0..127.
+        ///     Index, 0..127.
         /// </summary>
         public int Value { get; }
 
@@ -61,7 +61,7 @@ namespace fractions
 
         public override string ToString()
         {
-            return $"Control: {Control}, Value: {Value}";
+            return $"Control: {Control}, Index: {Value}";
         }
 
         #endregion Methods

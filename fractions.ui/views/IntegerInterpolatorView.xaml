@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="fractions.ui.views.IntegerInterpolatorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:fractions.ui.viewmodels"
+             mc:Ignorable="d"
+             d:DesignHeight="200" d:DesignWidth="410"
+             d:DataContext="{d:DesignInstance Type=vm:IntegerInterpolatorViewModel}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Start"/>
+            <TextBox Width="60" Text="{Binding Start}"/>
+            <TextBlock Text="End"/>
+            <TextBox Width="60" Text="{Binding End}"/>
+            <TextBlock Text="Steps"/>
+            <TextBox Width="60" Text="{Binding NumberOfSteps}"/>
+            <TextBlock Text="Method"/>
+            <TextBox Width="30" Text="{Binding Method}"/>
+            <Button Content="Generate" Command="{Binding GenerateCommand}"/>
+        </StackPanel>
+
+        <ListBox Grid.Row="1" ItemsSource="{Binding Values}" />
+    </Grid>
+</UserControl>

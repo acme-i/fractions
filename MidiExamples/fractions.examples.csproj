@@ -87,12 +87,7 @@
     <Compile Include="bach_js_bwv0578_fugue_in_gm_little_fugue.cs" />
     <Compile Include="bach_js_bwv0996_lute_suite_in_em_3_courante.cs" />
     <Compile Include="NoClue.cs" />
-    <Compile Include="R7c3_b_2.cs" />
     <Compile Include="y2023m12d17.cs" />
-    <Compile Include="R7c3_c.cs" />
-    <Compile Include="R7c3_b.cs" />
-    <Compile Include="R7c4.cs" />
-    <Compile Include="R7c3.cs" />
     <Compile Include="SingleThreadedOutputExample.cs" />
     <Compile Include="SimpleDrumMachineExample.cs" />
     <Compile Include="PrintNotesAndChordsExample.cs" />

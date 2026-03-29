@@ -17,12 +17,7 @@ public partial class OutputDevicesViewModel : BaseObservableObject
     {
     }
 
-    private OutputDevicesViewModel(string item)
-    {
-        _selectedOutputDevice = item;
-    }
-
-    private string _selectedOutputDevice;
+    private string? _selectedOutputDevice;
 
     /// <summary>
     /// The selected channel value.
@@ -52,8 +47,7 @@ public partial class OutputDevicesViewModel : BaseObservableObject
     {
         get
         {
-            return fractions.OutputDevice.InstalledDevices
-                .Select(ioc => ioc.Name);
+            return fractions.OutputDevice.InstalledDevices.Select(ioc => ioc.Name);
         }
     }
 }
