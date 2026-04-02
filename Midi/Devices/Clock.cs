@@ -431,6 +431,14 @@ namespace fractions
             }
         }
 
+        public int CountNoteOnOffMessages
+        {
+            get
+            {
+                return threadMessageQueue.CountNoteOnOffMessages;
+            }
+        }
+
         /// <summary>
         /// Returns the number of milliseconds from now until the specified beat time.
         ///</summary>

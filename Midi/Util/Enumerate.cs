@@ -15,30 +15,66 @@ namespace fractions
             AssertMethod(method);
 
             this.collection = collection.ToList();
-            Method = method;
-            StepSize = step;
-            Index = startIndex;
-            Name = name ?? Guid.NewGuid().ToString();
+            this.Incrementor = new Incrementor(Math.Max(0, startIndex), 0, this.collection.Count - 1, Math.Min(Math.Max(1, step), this.collection.Count - 1), method);
+            this.Name = name ?? Guid.NewGuid().ToString();
+        }
+
+        public Enumerate(IEnumerable<T> collection, Incrementor incrementor, string name = null)
+        {
+            AssertCollection(collection);
+            
+            this.collection = collection.ToList();
+            this.Incrementor = incrementor;
+            this.Name = name ?? Guid.NewGuid().ToString();
         }
 
         public Enumerate()
         {
         }
 
+        public Incrementor Incrementor { get; set; }
+
         /// <summary>
         /// Optional name for this instance
         /// </summary>
         public string Name { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Min Index
-        /// </summary>
-        public double Min { get { return 0; } }
 
         /// <summary>
-        /// Max value
+        /// The current value between min and max
         /// </summary>
-        public double Max { get { return collection.Count - 1; } }
+        public double Index => Incrementor.Index;
+
+        /// <summary>
+        /// Returns the current, but does not advance the incrementor
+        /// </summary>
+        /// <returns></returns>
+        public T Current
+        {
+            get => collection[(int)Incrementor.Index];
+        }
+
+        /// <summary>
+        /// Returns the current, then advances the incrementor
+        /// </summary>
+        /// <returns></returns>
+        public T GetNext()
+        {
+            var current = collection[(int)Incrementor.Index];
+            Incrementor.GetNext();
+            Counter++;
+            return current;
+        }
+
+
+        /// <summary>
+        /// Returns the current, then advances the incrementor
+        /// </summary>
+        /// <returns></returns>
+        public void Reset()
+        {
+            Incrementor.Reset();
+        }
 
         /// <summary>
         /// Gets the length of the collection
@@ -58,189 +94,45 @@ namespace fractions
         public Guid Id { get; private set; } = Guid.NewGuid();
 
         /// <summary>
-        /// Returns the current, but does not advance the incrementor
-        /// </summary>
-        /// <returns></returns>
-        public T Current
-        {
-            get => collection[(int)Index];
-        }
-
-        /// <summary>
-        /// Updates the stepSize size. 
-        /// </summary>
-        /// <param name="newStepSize">The new stepSize size</param>
-        /// <param name="wrapAround">Whether to take modulus of the stepSize size if the value is greater than Max.</param>
-        /// <exception cref="ArgumentOutOfRangeException">newStepSize is zero or negative</exception>
-        /// <exception cref="ArgumentOutOfRangeException">newStepSize is greater than Max and wrapAround is false</exception>
-        public void SetStepSize(int newStepSize, bool wrapAround = true)
-        {
-            if (Math.Sign(newStepSize) <= 0)
-                throw new ArgumentOutOfRangeException(nameof(newStepSize));
-
-            if (newStepSize > Max)
-            {
-                if (wrapAround)
-                    StepSize = newStepSize % Max;
-                else
-                    throw new ArgumentOutOfRangeException(nameof(newStepSize));
-            }
-            else
-            {
-                StepSize = newStepSize;
-            }
-        }
-
-        /// <summary>
-        /// The current value between min and max
-        /// </summary>
-        public double Index { get; set; }
-
-        /// <summary>
         /// The previous value
         /// </summary>
-        public double? PreviousIndex { get; set; } = null;
+        public double? PreviousIndex => Incrementor.PreviousIndex;
 
         /// <summary>
         /// StepSize value to move towards min or max when calling GetNext()
         /// </summary>
-        public double StepSize { get; internal set; } = 1;
+        public double StepSize => Incrementor.StepSize;
 
-        public bool Increasing { get; internal set; } = true;
+        public bool Increasing => Incrementor.Increasing;
 
-        public IncrementMethod Method { get; set; }
+        public IncrementMethod Method => Incrementor.Method;
 
         /// <summary>
-        /// GetNext value towards min or max
+        /// Returns the next, then advances back one step
         /// </summary>
-        /// <returns>The new value</returns>
-        public T GetNext()
-        {
-            if(PreviousIndex == null)
-            {
-                PreviousIndex = 0;
-                return collection[0];
-            }
-
-            PreviousIndex = Index;
-
-            switch (Method)
-            {
-                case IncrementMethod.Bit:
-                    Index = (Index == Min) ? Max : Min;
-                    break;
-
-                case IncrementMethod.Cyclic:
-                    if (Increasing)
-                    {
-                        if (Index + StepSize > Max)
-                        {
-                            Index = Max - ((Index + StepSize) % Max);
-                            Increasing = !Increasing;
-                        }
-                        else
-                        {
-                            Index += StepSize;
-                            if (Index == Max)
-                                Increasing = !Increasing;
-                        }
-                    }
-                    else
-                    {
-                        Index -= StepSize;
-                        if (Index == Min)
-                            Increasing = !Increasing;
-                        else if (Index < Min)
-                        {
-                            Index = Min + Math.Abs(Index);
-                            Increasing = !Increasing;
-                        }
-                    }
-
-                    break;
-
-                case IncrementMethod.MinMax:
-                    if (Index + StepSize <= Max)
-                    {
-                        Index += StepSize;
-                    }
-                    else
-                    {
-                        var diff = Max - Min - Index;
-                        Index = Min;
-                        if (diff > 0)
-                        {
-                            var remain = Math.Abs(StepSize - diff);
-                            if (Min == 0)
-                            {
-                                remain -= 1;
-                            }
-                            Index += remain;
-                        }
-                    }
-                    break;
-
-                case IncrementMethod.MaxMin:
-                    if (Index - StepSize >= Min)
-                    {
-                        Index -= StepSize;
-                    }
-                    else
-                    {
-                        var remain = Index - Min;
-                        Index = Max;
-                        if (remain > 0)
-                        {
-                            Index -= remain;
-                        }
-                    }
-                    break;
-
-            }
-
-            return collection[(int)Index];
-        }
-
-        /// <returns>Returns the next value GetNext() would return - without actually changing the Index</returns>
+        /// <returns></returns>
         public T Peek
         {
-            get
-            {
-                var oldIncreasing = Increasing;
-                var oldPreviousValue = PreviousIndex;
-                var oldValue = Index;
-                var peek = GetNext();
-                Index = oldValue;
-                PreviousIndex = oldPreviousValue;
-                Increasing = oldIncreasing;
-                return peek;
-            }
+            get => collection[(int)Incrementor.Peek];
         }
 
-
-        /// <returns>Returns the next value GetNext() would return - without actually changing the Index</returns>
-        public T PeekAt(int repeat)
+        /// <summary>
+        /// Returns the next value steps ahead, then advances back to current
+        /// </summary>
+        /// <returns></returns>
+        public T PeekAt(int steps)
         {
-            if (Math.Sign(repeat) <= 0)
-                throw new ArgumentException("must be positive", nameof(repeat));
-
-            var oldIncreasing = Increasing;
-            var oldPreviousValue = PreviousIndex;
-            var oldValue = Index;
-            var peek = GetNext();
-            for (var i = 0; i < repeat - 1; i++)
-            {
-                peek = GetNext();
-            }
-            Index = oldValue;
-            PreviousIndex = oldPreviousValue;
-            Increasing = oldIncreasing;
-            return peek;
+            return collection[(int)Incrementor.PeekAt(steps)];
         }
 
         public void Set(IEnumerable<T> others)
         {
             AssertCollection(others);
+
+            Counter = 0;
+
+            if (Incrementor.Index >= collection.Count)
+                Incrementor.Index %= collection.Count;
 
             collection.Clear();
             AddRange(others);
@@ -301,7 +193,19 @@ namespace fractions
         /// <returns></returns>
         public Enumerate<T> Clone()
         {
-            return new Enumerate<T>(collection, Method, StepSize, Index, Guid.NewGuid().ToString());
+            return new Enumerate<T>(collection, Incrementor.Clone(), Guid.NewGuid().ToString());
+        }
+
+        /// <summary>
+        /// Returns a clone of this instance.
+        /// The clone will have the same collection, incrementor state and name, but a different Id.
+        /// </summary>
+        /// <returns></returns>
+        public Enumerate<T> CloneWithPreviousIndex()
+        {
+            var incr = Incrementor.Clone();
+            incr.PreviousIndex = Incrementor.PreviousIndex;
+            return new Enumerate<T>(collection, incr, Guid.NewGuid().ToString());
         }
 
         public IEnumerator<T> GetEnumerator()

@@ -25,17 +25,8 @@ abstract public partial class EnumerateViewModel<T>(IMessenger messenger) : Mess
         }
     }
 
-    public IncrementMethod Method
-    {
-        get => Source.Method;
-        set
-        {
-            NotifyPropertyChangingOnUiThread(nameof(Method));
-            Source.Method = value;
-            NotifyPropertyChangedOnUiThread(nameof(Method));
-        }
-    }
-
+    public IncrementMethod Method => Source.Method;
+      
     public double Index
     {
         get => Source.Index;
@@ -83,8 +74,8 @@ abstract public partial class EnumerateViewModel<T>(IMessenger messenger) : Mess
     {
         NotifyPropertyChangingOnUiThread(nameof(Source));
         Source = new Enumerate<T>(others, Method, StepSize, Index, Guid.NewGuid().ToString());
-        NotifyPropertyChangedOnUiThread(nameof(IsReady));
         NotifyPropertyChangedOnUiThread(nameof(Source));
+        NotifyPropertyChangedOnUiThread(nameof(IsReady));
     }
 
     [RelayCommand(CanExecute = nameof(IsReady))]
@@ -104,5 +95,15 @@ abstract public partial class EnumerateViewModel<T>(IMessenger messenger) : Mess
     public void Clear()
     {
         Source.Clear();
+    }
+
+    [RelayCommand]
+    public void Reset()
+    {
+        NotifyPropertyChangingOnUiThread(nameof(Index));
+        NotifyPropertyChangingOnUiThread(nameof(Current));
+        Source.Reset();
+        NotifyPropertyChangedOnUiThread(nameof(Index));
+        NotifyPropertyChangedOnUiThread(nameof(Current));
     }
 }

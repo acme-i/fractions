@@ -47,10 +47,10 @@ namespace fractions.examples
         private static readonly int MelodiLength = 4;
         private static readonly int MinRev = 16;
         private static readonly int MaxRev = 70;
-        private static readonly int MinVol = 7;
-        private static readonly int MaxVol = 120;
-        private static readonly int MaxLeft = 30;
-        private static readonly int MaxRight = 97;
+        private static readonly int MinVol = 40;
+        private static readonly int MaxVol = 100;
+        private static readonly int MaxLeft = 20;
+        private static readonly int MaxRight = 127;
         private static IOutputDevice OutputDevice;
         private static Clock Clock;
         private static int BPM;
@@ -67,17 +67,17 @@ namespace fractions.examples
 
             Melodi1 = file.GetEventsAndDurations().OnEvents.Select(o => (Pitch)o.Note).AsEnumeration();
 
-            var panStep = Math.Abs(MaxRight - MaxLeft) / 16.0;
-            var volStep = Math.Abs(MaxVol - MinVol) / 16.0;
-            var revStep = Math.Abs(MaxRev - MinRev) / 16.0;
+            var panStep = Math.Abs(MaxRight - MaxLeft) / 32.0;
+            var volStep = Math.Abs(MaxVol - MinVol) / 32.0;
+            var revStep = Math.Abs(MaxRev - MinRev) / 4.0;
 
             Channels.InstrumentChannels.ForEach(c =>
             {
-                OutputDevice.SendProgramChange(c, Instrument.ElectricGuitarMuted);
+                OutputDevice.SendProgramChange(c, Instrument.AcousticGrandPiano);
 
                 OutputDevice.SendControlChange(c, Control.Volume, 100);
-                OutputDevice.SendControlChange(c, Control.CelesteLevel, 0);
-                OutputDevice.SendControlChange(c, Control.ReverbLevel, 100);
+                OutputDevice.SendControlChange(c, Control.CelesteLevel, 60);
+                OutputDevice.SendControlChange(c, Control.ReverbLevel, 60);
             });
 
             Clock = new Clock(BPM);
@@ -88,13 +88,18 @@ namespace fractions.examples
         private static void Play()
         {
             for (int time = 0; time < MelodiLength; time++)
-                Clock.Schedule(new NoteOnOffMessage(OutputDevice, Channel.Channel1, Melodi1.GetNext(), 80, time, Clock, 1));
+            {
+                var node = new NoteOnOffMessage(OutputDevice, Channel.Channel1, Melodi1.GetNext(), 80, time, Clock, 1);
+                node.Pan = (int)node.Pitch;
+                Clock.Schedule(node);
+            }
 
             var start = new NoteOnOffMessage(OutputDevice, Channel.Channel1, Melodi1.GetNext(), 80, 5, Clock, 1, 0);
             var notes = LinearInterpolator<NoteOnOffMessage>.Interpolate(start, 80, 127, 4, 1, 1, 1, 1);
             notes.ForEach(n =>
             {
                 n.Pitch = Melodi1.GetNext();
+                n.Pan = (int)n.Pitch;
                 Clock.Schedule(n);
             });
 
@@ -105,6 +110,7 @@ namespace fractions.examples
                 n.BeforeSendingNoteOnOff += noom =>
                 {
                     noom.Pitch = Melodi1.GetNext();
+                    noom.Pan = (int)noom.Pitch;
                 };
             });
 
@@ -116,19 +122,31 @@ namespace fractions.examples
                 n.BeforeSendingNoteOnOff += noom =>
                 {
                     noom.Pitch = Melodi1.GetNext();
+                    noom.Pan = (int)noom.Pitch;
                 };
                 Clock.Schedule(n);
             });
 
-            var volumes = new Enumerate<int>(Enumerable.Range(50, 80), IncrementMethod.Cyclic, 11);
-            var pans = new Enumerate<int>(Enumerable.Range(0, 127), IncrementMethod.Cyclic, 7);
+            var volumes = new Enumerate<int>(Enumerable.Range(MinVol, MaxVol), IncrementMethod.Cyclic, 5);
+            var pans = new Enumerate<int>(Enumerable.Range(MaxLeft, MaxRight), IncrementMethod.Cyclic, 5);
             var steps = new Enumerate<int>(Enumerable.Range(2, 12), IncrementMethod.Cyclic);
             var volMets = new Enumerate<int>(Enumerable.Range(0, 3), IncrementMethod.Cyclic);
             var durMets = new Enumerate<int>(Enumerable.Range(0, 3), IncrementMethod.Cyclic);
             var panMets = new Enumerate<int>(Enumerable.Range(0, 3), IncrementMethod.Cyclic);
             for (var i = 0; i < 1000; i++)
             {
-                var nt = new NoteOnOffMessage(OutputDevice, Channel.Channel1, Melodi1.GetNext(), volumes.GetNext(), 12 + i, Clock, 1, 127 - pans.GetNext());
+                var m = Melodi1.GetNext();
+                var nt = new NoteOnOffMessage(
+                    OutputDevice, 
+                    Channel.Channel1,
+                    m, 
+                    volumes.GetNext(), 
+                    12 + i, 
+                    Clock, 
+                    1, 
+                    (int)m
+                );
+                
                 var st = steps.GetNext();
                 var nts = LinearInterpolator<NoteOnOffMessage>.Interpolate(nt, volumes.GetNext(), pans.GetNext(), st, 1F / st, volMets.GetNext(), durMets.GetNext(), panMets.GetNext());
                 nts.ForEach(n =>
@@ -137,6 +155,7 @@ namespace fractions.examples
                     n.BeforeSendingNoteOnOff += noom =>
                     {
                         noom.Pitch = Melodi1.GetNext();
+                        noom.Pan = (int)noom.Pitch;
                     };
                     Clock.Schedule(n);
                 });

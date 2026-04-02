@@ -7,14 +7,41 @@ namespace fractions
 {
     public static class EnumerateExtension
     {
+        public static Enumerate<T> AsEnumeration<T>(this Enumerate<T> iEnumerable, int step = 1, int startIndex = 0, string name = null)
+        {
+            return new Enumerate<T>(iEnumerable, IncrementMethod.MinMax, step, startIndex, name);
+        }
+
         public static Enumerate<T> AsEnumeration<T>(this IEnumerable<T> iEnumerable, IncrementMethod method = IncrementMethod.MinMax, int step = 1, int startIndex = 0, string name = null)
         {
             return new Enumerate<T>(iEnumerable, method, step, startIndex, name);
         }
 
-        public static Enumerate<T> AsReversed<T>(this IEnumerable<T> iEnumerable, IncrementMethod method = IncrementMethod.MinMax, int step = 1, int startIndex = 0, string name = null)
+        public static Enumerate<T> AsReversed<T>(this Enumerate<T> iEnumerable, int step = 1, int startIndex = 0, string name = null)
         {
-            return new Enumerate<T>(iEnumerable.Reverse(), method, step, startIndex, name);
+            switch (iEnumerable.Method)
+            {
+                case IncrementMethod.MinMax:
+                    return new Enumerate<T>(iEnumerable, IncrementMethod.MaxMin, step, startIndex, name + "Reversed");
+
+                case IncrementMethod.MaxMin:
+                    return new Enumerate<T>(iEnumerable, IncrementMethod.MinMax, step, startIndex, name + "Reversed");
+
+                case IncrementMethod.Cyclic:
+                    return new Enumerate<T>(iEnumerable.Reverse<T>(), IncrementMethod.Cyclic, step, startIndex, name + "Reversed");
+
+                case IncrementMethod.Bit:
+                    return new Enumerate<T>(iEnumerable.Reverse<T>(), IncrementMethod.Bit, step, startIndex, name + "Reversed");
+
+                default:
+                    return new Enumerate<T>(iEnumerable, iEnumerable.Method, step, startIndex, name + "Reversed");
+            }
+            
+        }
+
+        public static Enumerate<T> AsMaxMinEnumeration<T>(this Enumerate<T> iEnumerable, int step = 1, int startIndex = 0, string name = null)
+        {
+            return new Enumerate<T>(iEnumerable, IncrementMethod.MaxMin, step, startIndex, name);
         }
 
         public static Enumerate<T> AsMaxMinEnumeration<T>(this IEnumerable<T> iEnumerable, int step = 1, int startIndex = 0, string name = null)
@@ -22,9 +49,14 @@ namespace fractions
             return new Enumerate<T>(iEnumerable, IncrementMethod.MaxMin, step, startIndex, name);
         }
 
+        public static Enumerate<T> AsCycle<T>(this Enumerate<T> iEnumerable, int step = 1, int startIndex = 0, string name = null)
+        {
+            return new Enumerate<T>(iEnumerable, IncrementMethod.Cyclic, step, startIndex, name);
+        }
+
         public static Enumerate<T> AsCycle<T>(this IEnumerable<T> iEnumerable, int step = 1, int startIndex = 0, string name = null)
         {
-            return new Enumerate<T>(iEnumerable, IncrementMethod.Cyclic, step, startIndex);
+            return new Enumerate<T>(iEnumerable, IncrementMethod.Cyclic, step, startIndex, name);
         }
 
         /// <returns>Scales by amount</returns>

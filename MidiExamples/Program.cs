@@ -50,6 +50,10 @@ namespace fractions.examples
             {
                 try
                 {
+                    if (type.IsAbstract) continue;
+                    if (type.FullName == "<PrivateImplementationDetails>" || type.FullName == "fractions.examples.Drummer") continue;
+                    if (type.FullName == "fractions.examples.Summarizer" || type.FullName == "fractions.examples.Drummer") continue;
+
                     if (Activator.CreateInstance(type) is ExampleBase instance)
                     {
                         //Console.WriteLine(type.FullName);

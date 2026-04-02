@@ -97,7 +97,7 @@ namespace fractions.examples
 
         private Enumerate<Instrument> echoMainInstr = new Enumerate<Instrument>(
             new[] {
-                Instrument.Vibraphone,
+                Instrument.Xylophone,
                 Instrument.Vibraphone,
             },
             IncrementMethod.Cyclic);

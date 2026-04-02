@@ -172,9 +172,20 @@ namespace fractions
             }
         }
 
+        public int CountNoteOnOffMessages
+        {
+            get
+            {
+                return messages
+                    .SelectMany(x => x)
+                    .Count(m => m.GetType() == typeof(NoteOnOffMessage));
+            }
+        }
+
         public void Align(IEnumerable<Channel> channels, PitchRange range)
         {
-            var relevant = messages.SelectMany(x => x)
+            var relevant = messages
+                .SelectMany(x => x)
                 .Where(m => m.GetType() == typeof(NoteOnOffMessage))
                 .Cast<NoteOnOffMessage>()
                 .Where(m => channels.Contains(m.Channel) && range.IsInside(m.Pitch))

@@ -126,6 +126,28 @@ namespace fractions
             return messages;
         }
 
+        public static List<T> Interpolate(T start, double endVelocity, double endPan, double endReverb, int steps, float duration = 1f, int velocityMethod = 0b1, int timeMethod = 0b1, int panMethod = 0b1, int reverbMethod = 0b1)
+        {
+            var messages = new List<T>(steps);
+            var startVel = start.Velocity;
+            var startTime = start.Time;
+            var startPan = start.Pan;
+            var startRev = start.Reverb ?? 0.0;
+            var maxTime = start.Time + (steps * duration);
+            for (int i = 1; i <= steps; i++)
+            {
+                var clone = (T)start.Clone();
+                clone.Velocity = Interpolator.Interpolate(i + 0.002, 1.001, steps, startVel, endVelocity, velocityMethod);
+                clone.Time = (float)Interpolator.Interpolate(i + 0.002, 1.001, steps, startTime, maxTime, timeMethod);
+                clone.Pan = Interpolator.Interpolate(i + 0.002, 1.001, steps, startPan, endPan, panMethod);
+                clone.Reverb = Interpolator.Interpolate(i + 0.002, 1.001, steps, startRev, endReverb, reverbMethod);
+
+                messages.Add(clone);
+            }
+
+            return messages;
+        }
+
         public static List<T> Interpolate(Pitch[] pitches, int pitchStart, T start, double endVelocity, int steps, float duration = 1F, int velocityMethod = 1, int timeMethod = 1)
         {
             var messages = new List<T>(steps);

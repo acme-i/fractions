@@ -160,6 +160,7 @@
     <Compile Include="Devices\ShortMsg.cs" />
     <Compile Include="Messages\SysExMessage.cs" />
     <Compile Include="Util\IncrementMethod.cs" />
+    <Compile Include="Util\Incrementor.cs" />
     <Compile Include="Win32\HMIDIIN.cs" />
     <Compile Include="Win32\HMIDIOUT.cs" />
     <Compile Include="Win32\MidiDeviceType.cs" />

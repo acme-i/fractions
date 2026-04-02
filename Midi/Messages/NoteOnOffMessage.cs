@@ -78,7 +78,7 @@ namespace fractions
         #region Properties
 
         /// <summary>The clock used to schedule the follow-up message</summary>
-        public Clock Clock { get; }
+        public Clock Clock { get; internal set; }
 
         /// <summary>Time delay between the Note On and the Note Off</summary>
         public float Duration { get; set; }
