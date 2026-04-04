@@ -25,11 +25,21 @@ public partial class OutputDevicesViewModel() : BaseViewModel()
         {
             if (_selectedOutputDevice != value)
             {
+                if (_selectedOutputDevice != null)
+                {
+                    var d = fractions.OutputDevice.InstalledDevices.FirstOrDefault(d => d.Name == _selectedOutputDevice);
+                    if(d?.IsOpen == true)
+                    {
+                        d.Close();
+                    }
+                }
+
                 NotifyPropertyChangingOnUiThread(nameof(SelectedOutputDevice));
                 _selectedOutputDevice = value ?? "[N/A]";
                 if(fractions.OutputDevice.InstalledDevices.FirstOrDefault(ioc => ioc.Name == value) is IOutputDevice device)
                 {
                     App.OutputDevice = device;
+                    device.Open();
                 }
                 NotifyPropertyChangedOnUiThread(nameof(SelectedOutputDevice));
             }

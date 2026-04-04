@@ -103,8 +103,8 @@ namespace fractions.examples
                 Clock.Schedule(n);
             });
 
-            var start1 = new NoteOnOffMessage(OutputDevice, Channel.Channel1, Melodi1.GetNext(), 80, 10, Clock, 1, 0);
-            var notes1 = LinearInterpolator<NoteOnOffMessage>.Interpolate(start1, 64, 127, 64, 1 / 64F, 1, 1, 1);
+            var start1 = new NoteOnOffMessage(OutputDevice, Channel.Channel1, Melodi1.GetNext(), 72, 10, Clock, 1, 0);
+            var notes1 = LinearInterpolator<NoteOnOffMessage>.Interpolate(start1, 64, 127, 64, 1 / 32F, 1, 1, 1);
             notes1.ForEach(n =>
             {
                 n.BeforeSendingNoteOnOff += noom =>

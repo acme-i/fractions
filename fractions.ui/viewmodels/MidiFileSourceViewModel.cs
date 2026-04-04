@@ -12,8 +12,16 @@ public partial class MidiFileSourceViewModel(IOutputDevice device, Clock clock) 
 
     public IEnumerable<NoteOnOffMessage> Load()
     {
-        if (_device == null)
-            throw new InvalidOperationException("No output device available.");
+        if(_device==null)
+        {
+            LastException = new InvalidOperationException("No output device available.");
+            return new List<NoteOnOffMessage>();
+        }
+
+        if (_device.IsOpen == false)
+        {
+            _device.Open();
+        }
 
         var file = new MidiFile(FilePath);
         return file.GetNotes(_device, _clock);

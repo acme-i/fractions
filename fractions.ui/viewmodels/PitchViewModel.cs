@@ -62,7 +62,7 @@ public partial class PitchViewModel : BaseViewModel
     /// <summary>
     /// Gets common pitches (88-key piano range: A♯0 to C8) for a smaller ComboBox list.
     /// </summary>
-    public IEnumerable<PitchViewModel> CommonPitches
+    public IEnumerable<PitchViewModel> Pitches88Keyboard
     {
         get
         {

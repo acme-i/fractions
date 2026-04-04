@@ -1,13 +1,21 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 
 namespace fractions
 {
-    public class Enumerate<T> : IEnumerable<T>
+    public class Enumerate<T> : IEnumerable<T>, INotifyCollectionChanged
     {
         internal IList<T> collection = new List<T>();
+
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+        private void OnCollectionChanged(NotifyCollectionChangedEventArgs args)
+        {
+            CollectionChanged?.Invoke(this, args);
+        }
 
         public Enumerate(IEnumerable<T> collection, IncrementMethod method = IncrementMethod.MinMax, double step = 1, double startIndex = 0, string name = null)
         {
@@ -22,7 +30,7 @@ namespace fractions
         public Enumerate(IEnumerable<T> collection, Incrementor incrementor, string name = null)
         {
             AssertCollection(collection);
-            
+
             this.collection = collection.ToList();
             this.Incrementor = incrementor;
             this.Name = name ?? Guid.NewGuid().ToString();
@@ -38,7 +46,6 @@ namespace fractions
         /// Optional name for this instance
         /// </summary>
         public string Name { get; set; } = string.Empty;
-
 
         /// <summary>
         /// The current value between min and max
@@ -65,7 +72,6 @@ namespace fractions
             Counter++;
             return current;
         }
-
 
         /// <summary>
         /// Returns the current, then advances the incrementor
@@ -136,6 +142,7 @@ namespace fractions
 
             collection.Clear();
             AddRange(others);
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         public void Add(T item)
@@ -146,6 +153,8 @@ namespace fractions
             }
             else
                 collection.Add(item);
+
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
         }
 
         /// <summary>
@@ -161,6 +170,8 @@ namespace fractions
             else
                 foreach (var other in others)
                     collection.Add(other);
+
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         /// <summary>
@@ -184,6 +195,7 @@ namespace fractions
         public void Reverse()
         {
             collection = collection.Reverse().ToList();
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         /// <summary>
@@ -226,6 +238,7 @@ namespace fractions
         public void Clear()
         {
             collection.Clear();
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         private static void AssertMethod(IncrementMethod method)

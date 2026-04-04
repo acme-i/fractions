@@ -51,7 +51,10 @@ public partial class ClockViewModel(Clock clock) : BaseViewModel()
     {
         try
         {
-            App.OutputDevice.Open();
+            if(!App.OutputDevice.IsOpen)
+            {
+                App.OutputDevice.Open();
+            }
             _clock.Start();
             NotifyStateChanged();
         }
@@ -67,7 +70,10 @@ public partial class ClockViewModel(Clock clock) : BaseViewModel()
         try
         {
             _clock.Stop();
-            App.OutputDevice.Close();
+            if (App.OutputDevice.IsOpen)
+            {
+                App.OutputDevice.Close();
+            }
             NotifyStateChanged();
         }
         catch (Exception ex)
