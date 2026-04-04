@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
+using fractions.ui.configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,9 @@ namespace fractions.ui.viewmodels;
 /// <summary>
 /// ViewModel for displaying and selecting MIDI channel values.
 /// </summary>
-public partial class ChannelViewModel : BaseObservableObject
+public partial class ChannelViewModel : BaseViewModel
 {
-    public ChannelViewModel(Channel channel)
+    public ChannelViewModel(Channel channel) : base()
     {
         ArgumentOutOfRangeException.ThrowIfLessThan((int)channel, 0);
         ArgumentOutOfRangeException.ThrowIfGreaterThan((int)channel, 16);

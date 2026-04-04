@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace fractions.ui.views;
+﻿namespace fractions.ui.views;
 
 public interface IListView<T>
     where T : class

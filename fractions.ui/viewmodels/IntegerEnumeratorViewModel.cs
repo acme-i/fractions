@@ -1,10 +1,3 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
+﻿namespace fractions.ui.viewmodels;
 
-namespace fractions.ui.viewmodels;
-
-public class IntegerEnumeratorViewModel : EnumerateViewModel<int>
-{
-    public IntegerEnumeratorViewModel(IMessenger messenger) : base(messenger)
-    {
-    }
-}
+public class IntegerEnumeratorViewModel() : EnumerateViewModel<int>() { }

@@ -1,18 +1,16 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using fractions.ui.configuration;
 
 namespace fractions.ui.viewmodels;
 
 /// <summary>
 /// ViewModel for displaying and selecting MIDI pitch values.
 /// </summary>
-public partial class PitchViewModel : BaseObservableObject
+public partial class PitchViewModel : BaseViewModel
 {
     public PitchViewModel() : this(Pitch.C4) { }
 
-    public PitchViewModel(Pitch pitch)
+    internal PitchViewModel(Pitch pitch) : base()
     {
         _pitch = pitch;
     }
@@ -52,7 +50,7 @@ public partial class PitchViewModel : BaseObservableObject
     /// <summary>
     /// Gets all available pitches as PitchViewModel instances for binding to a ComboBox.
     /// </summary>
-    public static IEnumerable<PitchViewModel> AllPitches
+    public IEnumerable<PitchViewModel> AllPitches
     {
         get
         {
@@ -64,7 +62,7 @@ public partial class PitchViewModel : BaseObservableObject
     /// <summary>
     /// Gets common pitches (88-key piano range: A♯0 to C8) for a smaller ComboBox list.
     /// </summary>
-    public static IEnumerable<PitchViewModel> CommonPitches
+    public IEnumerable<PitchViewModel> CommonPitches
     {
         get
         {

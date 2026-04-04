@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace fractions.ui.viewmodels;
 
-public partial class NoteOnOffViewModel : MessengerViewModel
+public partial class NoteOnOffViewModel : BaseViewModel
 {
-    public NoteOnOffViewModel(IMessenger messenger, NoteOnOffMessage note) : base(messenger)
+    public NoteOnOffViewModel(NoteOnOffMessage note) : base()
     {
         _note = note;
     }

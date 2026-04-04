@@ -5,8 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vm="clr-namespace:fractions.ui.viewmodels"
              mc:Ignorable="d"
-             d:DesignHeight="28"
-             d:DesignWidth="460"
+             d:DesignHeight="28" d:DesignWidth="200"
              d:DataContext="{d:DesignInstance Type=vm:MidiFileSourceViewModel}">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -14,12 +13,9 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="MIDI"
-                   VerticalAlignment="Center"
-                   Margin="0,0,6,0"/>
+        <TextBlock Text="MIDI" VerticalAlignment="Center"/>
 
-        <TextBox Grid.Column="1"
-                 Text="{Binding FilePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 VerticalAlignment="Center"/>
+        <TextBox Grid.Column="1" VerticalAlignment="Center" 
+                 Text="{Binding FilePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
     </Grid>
 </UserControl>

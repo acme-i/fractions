@@ -15,6 +15,8 @@ public partial class App : System.Windows.Application
     private static readonly SettingsManager Manager = new("./settings.json");
     public static Settings Settings => Manager.Settings;
 
+    public static IMessenger Messenger = WeakReferenceMessenger.Default;
+
     public static IHost? AppHost { get; private set; }
     public static IOutputDevice OutputDevice { get; internal set; }
     public static Clock DefaultClock { get; } = new(120f);
@@ -24,14 +26,6 @@ public partial class App : System.Windows.Application
         AppHost = Host.CreateDefaultBuilder()
             .ConfigureServices((_, services) =>
             {
-                // ── Infrastructure ────────────────────────────────────────
-                services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
-
-                // Settings: register the concrete type so BaseViewModel can receive it,
-                // and ISettings for anything that depends on the interface.
-                services.AddSingleton<Settings>(_ => Settings);
-                services.AddSingleton<ISettings>(sp => sp.GetRequiredService<Settings>());
-
                 // Clock: expose the shared static instance
                 services.AddSingleton<Clock>(_ => DefaultClock);
 

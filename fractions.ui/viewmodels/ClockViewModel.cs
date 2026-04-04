@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using fractions.ui.configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,21 +10,16 @@ using System.Xml.Linq;
 
 namespace fractions.ui.viewmodels;
 
-public partial class ClockViewModel : MessengerViewModel
+public partial class ClockViewModel(Clock clock) : BaseViewModel()
 {
-    public ClockViewModel(IMessenger messenger, Clock clock) : base(messenger)
-    {
-        _clock = clock;
-    }
-
-    private Clock _clock;
+    private Clock _clock = clock;
 
     public float BeatsPerMinute
     {
         get => _clock.BeatsPerMinute;
         set
         {
-            if(_clock.IsRunning==false)
+            if (_clock.IsRunning == false)
             {
                 NotifyPropertyChangingOnUiThread(nameof(BeatsPerMinute));
                 _clock.BeatsPerMinute = value;
@@ -39,24 +35,45 @@ public partial class ClockViewModel : MessengerViewModel
     [RelayCommand(CanExecute = nameof(IsNotRunning))]
     public void Reset()
     {
-        _clock.Reset();
-        NotifyStateChanged();
+        try
+        {
+            _clock.Reset();
+            NotifyStateChanged();
+        }
+        catch (Exception ex)
+        {
+            LastException = ex;
+        }
     }
 
     [RelayCommand(CanExecute = nameof(IsNotRunning))]
     public void Start()
     {
-        App.OutputDevice.Open();
-        _clock.Start();
-        NotifyStateChanged();
+        try
+        {
+            App.OutputDevice.Open();
+            _clock.Start();
+            NotifyStateChanged();
+        }
+        catch (Exception ex)
+        {
+            LastException = ex;
+        }
     }
 
     [RelayCommand(CanExecute = nameof(IsRunning))]
     public void Stop()
     {
-        _clock.Stop();
-        App.OutputDevice.Close();
-        NotifyStateChanged();
+        try
+        {
+            _clock.Stop();
+            App.OutputDevice.Close();
+            NotifyStateChanged();
+        }
+        catch (Exception ex)
+        {
+            LastException = ex;
+        }
     }
 
 

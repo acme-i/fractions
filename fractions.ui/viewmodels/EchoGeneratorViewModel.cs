@@ -1,5 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using fractions.ui.configuration;
 using fractions.ui.pipeline;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,18 +9,14 @@ using System.Windows;
 
 namespace fractions.ui.viewmodels;
 
-public partial class EchoGeneratorViewModel : ObservableObject, INoteProcessor
+public partial class EchoGeneratorViewModel : BaseViewModel, INoteProcessor
 {
-    public EchoGeneratorViewModel()
-    {
-    }
-
     public EchoGeneratorViewModel(
         IntegerEnumeratorViewModel echoes,
         FloatEnumeratorViewModel offsets,
         IntegerEnumeratorViewModel pitches,
         FloatEnumeratorViewModel velocityOffsets
-    )
+    ) : base()
     {
         EchoesViewModel = echoes;
         OffsetsViewModel = offsets;
@@ -63,8 +61,10 @@ public partial class EchoGeneratorViewModel : ObservableObject, INoteProcessor
 
             for (var i = 1; i <= EchoesViewModel.Current; i++)
             {
-                var echo = new NoteOnOffMessage(note, PitchesViewModel.Current + i, OffsetsViewModel.Current * i);
-                echo.Velocity = note.Velocity * Math.Pow(VelocityOffsetsViewModel.Current, i);
+                var echo = new NoteOnOffMessage(note, PitchesViewModel.Current + i, OffsetsViewModel.Current * i)
+                {
+                    Velocity = note.Velocity * Math.Pow(VelocityOffsetsViewModel.Current, i)
+                };
                 output.Add(echo);
 
                 if (IncrementEchoesPerEcho) EchoesViewModel.GoToNextCommand.Execute(null);

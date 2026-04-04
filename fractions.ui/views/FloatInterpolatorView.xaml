@@ -24,7 +24,6 @@
             <TextBox Width="30" Text="{Binding Method}"/>
             <Button Content="Generate" Command="{Binding GenerateCommand}"/>
         </StackPanel>
-
-        <ListBox Grid.Row="1" ItemsSource="{Binding Values}" />
+            <ListBox ItemsSource="{Binding Values}" ScrollViewer.CanContentScroll="True" />
     </Grid>
 </UserControl>

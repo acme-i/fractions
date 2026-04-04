@@ -1,15 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
 using fractions;
-using fractions.ui.configuration;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Controls;
 
 namespace fractions.ui.viewmodels;
 
-abstract public partial class EnumerateViewModel<T>(IMessenger messenger) : MessengerViewModel(messenger)
+abstract public partial class EnumerateViewModel<T>() : BaseViewModel()
 {
     [ObservableProperty]
     public Enumerate<T> source = new Enumerate<T>();
@@ -19,9 +14,12 @@ abstract public partial class EnumerateViewModel<T>(IMessenger messenger) : Mess
         get => Source.Name;
         set
         {
-            NotifyPropertyChangingOnUiThread(nameof(Name));
-            Source.Name = value;
-            NotifyPropertyChangedOnUiThread(nameof(Name));
+            if(value != Source.Name)
+            {
+                NotifyPropertyChangingOnUiThread(nameof(Name));
+                Source.Name = value;
+                NotifyPropertyChangedOnUiThread(nameof(Name));
+            }
         }
     }
 
@@ -84,11 +82,6 @@ abstract public partial class EnumerateViewModel<T>(IMessenger messenger) : Mess
         NotifyPropertyChangingOnUiThread(nameof(Current));
         Source.GetNext();
         NotifyPropertyChangedOnUiThread(nameof(Current));
-    }
-
-    public T GetNext()
-    {
-        return Source.GetNext();
     }
 
     [RelayCommand(CanExecute=nameof(IsReady))]

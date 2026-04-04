@@ -13,7 +13,7 @@
         </Grid.ColumnDefinitions>
         <TextBlock Text="P" ToolTip="Pitch" />
         <ComboBox x:Name="PitchComboBox" Grid.Column="1"
-                  ItemsSource="{x:Static vm:PitchViewModel.AllPitches}"
+                  ItemsSource="{Binding AllPitches}"
                   SelectedItem="{Binding Pitch, Mode=TwoWay}"
                   DisplayMemberPath="DisplayName" />
     </Grid>

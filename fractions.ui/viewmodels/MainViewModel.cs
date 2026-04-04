@@ -1,26 +1,21 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Messaging;
-using fractions.ui.configuration;
-using fractions.ui.views;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace fractions.ui.viewmodels;
 
 public partial class MainViewModel : BaseViewModel
 {
-    public MainViewModel(IMessenger messenger, Settings settings, 
+    public MainViewModel(
         OutputDevicesViewModel outputDevicesViewModel, 
         ClockViewModel clockViewModel, 
-        NoteOnOffListViewModel noteOnOffListViewModel)
-        : base(messenger, settings)
+        NoteOnOffListViewModel noteOnOffListViewModel,
+        FloatInterpolatorViewModel floatInterpolatorViewModel
+        )
+        : base()
     {
         _outputDevicesViewModel = outputDevicesViewModel;
         _clockViewModel = clockViewModel;
         _noteOnOffListViewModel = noteOnOffListViewModel;
+        _floatInterpolatorViewModel = floatInterpolatorViewModel;
     }
 
     [ObservableProperty]
@@ -31,4 +26,7 @@ public partial class MainViewModel : BaseViewModel
 
     [ObservableProperty]
     private NoteOnOffListViewModel _noteOnOffListViewModel;
+
+    [ObservableProperty]
+    private FloatInterpolatorViewModel _floatInterpolatorViewModel;
 }

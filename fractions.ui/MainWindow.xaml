@@ -26,8 +26,15 @@
         </Grid>
         <GridSplitter HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="4" Background="Black" Grid.Column="1"></GridSplitter>
         <Grid  Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Top">
-            <StackPanel Orientation="Vertical">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Vertical" Grid.Column="0">
                 <views:NoteOnOffListView DataContext="{Binding NoteOnOffListViewModel}" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" />
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Grid.Column="1">
+                <views:FloatInterpolatorView DataContext="{Binding FloatInterpolatorViewModel}" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" />
             </StackPanel>
         </Grid>
     </Grid>

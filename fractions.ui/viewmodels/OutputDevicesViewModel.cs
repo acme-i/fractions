@@ -11,12 +11,8 @@ using System.Threading.Tasks;
 
 namespace fractions.ui.viewmodels;
 
-public partial class OutputDevicesViewModel : BaseObservableObject
+public partial class OutputDevicesViewModel() : BaseViewModel()
 {
-    public OutputDevicesViewModel()
-    {
-    }
-
     private string? _selectedOutputDevice;
 
     /// <summary>

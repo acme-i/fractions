@@ -1,35 +1,26 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
-using fractions.ui.configuration;
 using fractions.ui.views;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 
 namespace fractions.ui.viewmodels;
 
 public partial class NoteOnOffListViewModel : EnumerateViewModel<NoteOnOffViewModel>
 {
-    private ObservableCollection<NoteOnOffViewModel> _allNotes;
     private InternalCollectionView _noteList;
 
-    public NoteOnOffListViewModel(IMessenger messenger) : base(messenger)
+    public NoteOnOffListViewModel() : base()
     {
-        _allNotes = new ObservableCollection<NoteOnOffViewModel>(Source);
-        _noteList = new InternalCollectionView(this, _allNotes);
+        _noteList = new InternalCollectionView(this, Source.ToList());
         _noteList.CurrentChanged += (_, _) =>
         {
             SelectedItem = _noteList.CurrentItem as NoteOnOffViewModel;
         };
     }
 
-    public ObservableCollection<NoteOnOffViewModel> AllNotes => _allNotes;
-    
     private readonly int minVol = 47;
     private readonly int maxVol = 107;
     private readonly int maxLeft = 4;
@@ -142,33 +133,33 @@ public partial class NoteOnOffListViewModel : EnumerateViewModel<NoteOnOffViewMo
         }
 
         var times = new[] {
-                0, 0, 0, 2,
-                0, 0, 4, 0,
-                0, 2, 0, 0,
-                4, 0, 0, 0,
+            0, 0, 0, 2,
+            0, 0, 4, 0,
+            0, 2, 0, 0,
+            4, 0, 0, 0,
 
-                0, 2, 0, 0,
-                0, 0, 4, 0,
-                0, 0, 0, 2,
-                0, 0, 4, 0,
+            0, 2, 0, 0,
+            0, 0, 4, 0,
+            0, 0, 0, 2,
+            0, 0, 4, 0,
 
-                0, 2, 0, 0,
-                4, 0, 0, 0,
-                0, 2, 0, 0,
-                0, 0, 4, 0,
+            0, 2, 0, 0,
+            4, 0, 0, 0,
+            0, 2, 0, 0,
+            0, 0, 4, 0,
 
-                4, 0, 0, 0,
-                0, 8, 0, 0,
-                0, 0, 4, 0,
-                0, 0, 0, 2,
+            4, 0, 0, 0,
+            0, 8, 0, 0,
+            0, 0, 4, 0,
+            0, 0, 0, 2,
 
-                0, 0, 4, 0,
-                0, 8, 0, 0,
-                4, 0, 0, 0,
-                0, 2, 0, 0,
+            0, 0, 4, 0,
+            0, 8, 0, 0,
+            4, 0, 0, 0,
+            0, 2, 0, 0,
 
-                0, 0, 4, 0,
-            };
+            0, 0, 4, 0,
+        };
 
         var resultTimes = new List<int>(times);
         resultTimes.AddRange(times.Select(t => 2));
@@ -177,7 +168,7 @@ public partial class NoteOnOffListViewModel : EnumerateViewModel<NoteOnOffViewMo
         resultTimes.AddRange(times.Select(t => 4));
 
         var echoes = resultTimes.AsCycle();
-        
+
         Source.Clear();
         for (var i = 0; i < result.Durations.Count(); i++)
         {
@@ -191,13 +182,17 @@ public partial class NoteOnOffListViewModel : EnumerateViewModel<NoteOnOffViewMo
 
         //Source.ForEach(n => n.Reverb = (n.Velocity + n.Pan)/2.0);
 
-        NotifyPropertyChangingOnUiThread(nameof(AllNotes));
-        _allNotes = new ObservableCollection<NoteOnOffViewModel>(
-            Source
+        NotifyPropertyChangingOnUiThread(nameof(Source));
+        Source = Source
                 .Where(n => Double.IsNaN(n.Duration) == false)
                 .OrderBy(n => n.Time)
-        );
-        NotifyPropertyChangedOnUiThread(nameof(AllNotes));
+                .AsEnumeration();
+        NotifyPropertyChangedOnUiThread(nameof(Source));
+        NotifyPropertyChangedOnUiThread(nameof(SelectedIndex));
+        NotifyPropertyChangedOnUiThread(nameof(SelectedItem));
+        NotifyPropertyChangedOnUiThread(nameof(SelectedItems));
+        NotifyPropertyChangedOnUiThread(nameof(SelectedItemsCount));
+        NotifyPropertyChangedOnUiThread(nameof(IsRangeSelected));
     }
 
     private void PlayAt(int i)
@@ -217,19 +212,21 @@ public partial class NoteOnOffListViewModel : EnumerateViewModel<NoteOnOffViewMo
         };
         App.DefaultClock.Schedule(nt);
 
-        Source.Add(new NoteOnOffViewModel(Messenger, nt));
+        Source.Add(new NoteOnOffViewModel(nt));
     }
 
     readonly Enumerate<int> ps1 = new[] {
-            12, 24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0,
-            24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12,
-            0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12, 24
-        }.AsEnumeration();
+        12, 24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0,
+        24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12,
+        0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12, 24
+    }.AsEnumeration();
+
     readonly Enumerate<int> ps2 = new[] {
-            24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12,
-            0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12,24,
-            12, 24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0,
-        }.AsEnumeration();
+        24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12,
+        0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12,24,
+        12, 24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0,
+    }.AsEnumeration();
+
     private void PlayEchos(int i, int max)
     {
         var notsClone = nots.Clone();
@@ -271,7 +268,7 @@ public partial class NoteOnOffListViewModel : EnumerateViewModel<NoteOnOffViewMo
             note = notsClone.GetNext();
             dur = durClone.GetNext();
 
-            Source.Add(new NoteOnOffViewModel(Messenger, nt));
+            Source.Add(new NoteOnOffViewModel(nt));
         }
 
         ps.GetNext();
@@ -280,19 +277,23 @@ public partial class NoteOnOffListViewModel : EnumerateViewModel<NoteOnOffViewMo
     [RelayCommand]
     public void SelectAll()
     {
-        View.SelectAll();
+        ListView.SelectAll();
+        NotifyPropertyChangedOnUiThread(nameof(SelectedIndex));
+        NotifyPropertyChangedOnUiThread(nameof(SelectedItem));
+        NotifyPropertyChangedOnUiThread(nameof(SelectedItems));
+        NotifyPropertyChangedOnUiThread(nameof(SelectedItemsCount));
+        NotifyPropertyChangedOnUiThread(nameof(IsRangeSelected));
     }
 
-    public IList<NoteOnOffViewModel> GetSelectedItems()
-    {
-        return View.GetSelectedItems();
-    }
+    public IList<NoteOnOffViewModel> GetSelectedItems() => ListView.GetSelectedItems() ;
 
-    public IListView<NoteOnOffViewModel> View { get; set; }
+    public IListView<NoteOnOffViewModel> ListView { get; set; }
 
-    public int SelectedIndex { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    public int SelectedIndex { get => ListView?.SelectedIndex ?? -1; set => ListView.SelectedIndex = value; }
 
-    public int SelectedItemsCount => throw new NotImplementedException();
+    public int SelectedItemsCount => ListView?.SelectedItemsCount ?? 0;
+    public bool IsSingleItemSelected => SelectedItemsCount == 1;
+    public bool IsRangeSelected => SelectedItemsCount > 0;
 
     [ObservableProperty]
     private bool isAscendingOrder;
@@ -300,13 +301,115 @@ public partial class NoteOnOffListViewModel : EnumerateViewModel<NoteOnOffViewMo
     [ObservableProperty]
     private NoteOnOffViewModel? selectedItem;
 
-    public IList<NoteOnOffViewModel> SelectedItems
+    public IList<NoteOnOffViewModel> SelectedItems => ListView?.GetSelectedItems();
+
+    #region Methods
+
+    [RelayCommand]
+    public void InterpolateVelocity()
     {
-        get
+        try
         {
-            return View.GetSelectedItems();
+            var notes = GetSelectedItems();
+            var start = notes.First().Velocity;
+            var end = notes.Last().Velocity;
+            var count = notes.Count;
+
+            if (count < 3 || start == end) return;
+
+            var values = Interpolator.Interpolate(start, end, count, 0).AsEnumeration();
+            foreach (var n in notes)
+            {
+                n.Velocity = values.GetNext();
+            }
+
+            NotifyPropertyChangedOnUiThread(nameof(Source));
+        }
+        catch (Exception ex)
+        {
+            LastException = ex;
         }
     }
+
+    [RelayCommand]
+    public void InterpolateDuration()
+    {
+        try
+        {
+            var notes = GetSelectedItems();
+            var start = notes.First().Duration;
+            var end = notes.Last().Duration;
+            var count = notes.Count;
+
+            if (count < 3 || start == end) return;
+
+            var values = Interpolator.Interpolate(start, end, count, 0).AsEnumeration();
+            foreach (var n in notes)
+            {
+                n.Duration = values.GetNext();
+            }
+
+            NotifyPropertyChangedOnUiThread(nameof(Source));
+        }
+        catch (Exception ex)
+        {
+            LastException = ex;
+        }
+    }
+
+    [RelayCommand]
+    public void InterpolateReverb()
+    {
+        try
+        {
+            var notes = GetSelectedItems();
+            var start = (float)notes.First().Reverb;
+            var end = (float)notes.Last().Reverb;
+            var count = notes.Count;
+
+            if (count < 3 || start == end) return;
+
+            var values = Interpolator.Interpolate(start, end, count, 0).AsEnumeration();
+            foreach (var n in notes)
+            {
+                n.Reverb = values.GetNext();
+            }
+
+            NotifyPropertyChangedOnUiThread(nameof(Source));
+        }
+        catch (Exception ex)
+        {
+            LastException = ex;
+        }
+    }
+
+    [RelayCommand]
+    public void InterpolatePan()
+    {
+        try
+        {
+            var notes = GetSelectedItems();
+            var start = (float)notes.First().Pan;
+            var end = (float)notes.Last().Pan;
+            var count = notes.Count;
+
+            if (count < 3 || start == end) return;
+
+            var values = Interpolator.Interpolate(start, end, count, 0).AsEnumeration();
+            foreach (var n in notes)
+            {
+                n.Pan = values.GetNext();
+            }
+
+            NotifyPropertyChangedOnUiThread(nameof(Source));
+        }
+        catch (Exception ex)
+        {
+            LastException = ex;
+        }
+    }
+
+    #endregion
 
     #region InternalCollectionView
     public class InternalCollectionView : ListCollectionView, ICollectionView
@@ -335,5 +438,4 @@ public partial class NoteOnOffListViewModel : EnumerateViewModel<NoteOnOffViewMo
         }
     }
     #endregion
-
 }

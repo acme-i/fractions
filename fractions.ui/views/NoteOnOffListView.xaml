@@ -10,19 +10,17 @@
     <StackPanel Orientation="Vertical">
         <ToolBarPanel>
             <Menu>
+                <MenuItem Header="Select All" Command="{Binding SelectAllCommand}" />
                 <MenuItem Header="Note" IsEnabled="{Binding IsSingleItemSelected}">
-                    <MenuItem Header="Edit" Command="{Binding EditNote}" CommandParameter="{Binding SelectedNote}"></MenuItem>
+                    <MenuItem Header="Edit" Command="{Binding EditNote}" CommandParameter="{Binding SelectedItem}"></MenuItem>
                 </MenuItem>
-                <MenuItem Header="Range" IsEnabled="{Binding IsManyItemSelected}">
-                    <MenuItem Header="Select All" Command="{Binding SelectAllCommand}" />
+                <MenuItem Header="Range" IsEnabled="{Binding IsRangeSelected}">
                     <MenuItem Header="Interpolate">
-
-                        <MenuItem Header="Velocity" Command="{Binding InterpolateVelocityCommand}" CommandParameter="{Binding SelectedNotes}"></MenuItem>
-                        <MenuItem Header="Pan" Command="{Binding InterpolatePanCommand}" CommandParameter="{Binding SelectedNotes}"></MenuItem>
-                        <MenuItem Header="Reverb" Command="{Binding InterpolateReverbCommand}" CommandParameter="{Binding SelectedNotes}"></MenuItem>
-                        <MenuItem Header="Duration" Command="{Binding InterpolateReverbCommand}" CommandParameter="{Binding SelectedNotes}"></MenuItem>
+                        <MenuItem Header="Velocity" Command="{Binding InterpolateVelocityCommand}" CommandParameter="{Binding SelectedItems}"></MenuItem>
+                        <MenuItem Header="Pan" Command="{Binding InterpolatePanCommand}" CommandParameter="{Binding SelectedItems}"></MenuItem>
+                        <MenuItem Header="Reverb" Command="{Binding InterpolateReverbCommand}" CommandParameter="{Binding SelectedItems}"></MenuItem>
+                        <MenuItem Header="Duration" Command="{Binding InterpolateDurationCommand}" CommandParameter="{Binding SelectedItems}"></MenuItem>
                     </MenuItem>
-                    
                 </MenuItem>
             </Menu>
         </ToolBarPanel>
@@ -44,7 +42,7 @@
           EnableColumnVirtualization="True"
           ScrollViewer.IsDeferredScrollingEnabled="True"
           IsSynchronizedWithCurrentItem="True"
-          ItemsSource="{Binding AllNotes}"
+          ItemsSource="{Binding Source}"
           SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
           SelectionUnit="FullRow"
           ClipboardCopyMode="ExcludeHeader">

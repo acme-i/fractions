@@ -1,19 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Messaging;
-using fractions.ui.configuration;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Threading;
 
 namespace fractions.ui.viewmodels;
 
-public class BaseObservableObject : ObservableObject
+public partial class BaseObservableObject : ObservableObject
 {
-    internal Dispatcher? Dispatcher;
+    internal FrameworkElement? View;
 
     public BaseObservableObject()
     {
@@ -23,9 +17,9 @@ public class BaseObservableObject : ObservableObject
 
     protected void NotifyPropertyChangingOnUiThread(string propertyName)
     {
-        if (Dispatcher is not null && Dispatcher.CheckAccess() == false)
+        if (View?.Dispatcher is not null && View?.Dispatcher.CheckAccess() == false)
         {
-            Dispatcher.Invoke(DispatcherPriority.Normal, new Action<string>(NotifyPropertyChangingOnUiThread), propertyName);
+            View?.Dispatcher.Invoke(DispatcherPriority.Normal, new Action<string>(NotifyPropertyChangingOnUiThread), propertyName);
             return;
         }
         OnPropertyChanging(new PropertyChangingEventArgs(propertyName));
@@ -33,12 +27,22 @@ public class BaseObservableObject : ObservableObject
 
     protected void NotifyPropertyChangedOnUiThread(string propertyName)
     {
-        if (Dispatcher is not null && Dispatcher.CheckAccess() == false)
+        if (View?.Dispatcher is not null && View?.Dispatcher.CheckAccess() == false)
         {
-            Dispatcher.Invoke(DispatcherPriority.Normal, new Action<string>(NotifyPropertyChangedOnUiThread), propertyName);
+            View?.Dispatcher.Invoke(DispatcherPriority.Normal, new Action<string>(NotifyPropertyChangedOnUiThread), propertyName);
             return;
         }
         OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
     }
+
     #endregion Notify Property Changed
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ErrorMessage))]
+    protected Exception? lastException;
+
+    [ObservableProperty]
+    private string statusMessage = string.Empty;
+
+    public string ErrorMessage => LastException?.Message ?? string.Empty;
 }
