@@ -7,8 +7,14 @@
              xmlns:vm="clr-namespace:fractions.ui.viewmodels"
              mc:Ignorable="d" d:DesignHeight="100" d:DesignWidth="460"
              d:DataContext="{d:DesignInstance Type=vm:NoteOnOffListViewModel}">
-    <StackPanel Orientation="Vertical">
-        <ToolBarPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ToolBarPanel Grid.Row="0">
             <Menu>
                 <MenuItem Header="Select All" Command="{Binding SelectAllCommand}" />
                 <MenuItem Header="Note" IsEnabled="{Binding IsSingleItemSelected}">
@@ -24,8 +30,11 @@
                 </MenuItem>
             </Menu>
         </ToolBarPanel>
-        <Button Content="Read" Command="{Binding ReadFileCommand}" />
+
+        <Button Grid.Row="1" Content="Read" Command="{Binding ReadFileCommand}" />
+
         <DataGrid 
+          Grid.Row="2"
           Name="dataGrid"
           AutoGenerateColumns="False"
           CanUserAddRows="False"
@@ -41,6 +50,7 @@
           EnableRowVirtualization="True"
           EnableColumnVirtualization="True"
           ScrollViewer.IsDeferredScrollingEnabled="True"
+          ScrollViewer.VerticalScrollBarVisibility="Auto"
           IsSynchronizedWithCurrentItem="True"
           ItemsSource="{Binding Source}"
           SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
@@ -48,8 +58,6 @@
           ClipboardCopyMode="ExcludeHeader">
 
             <DataGrid.Columns>
-
-                <!-- Channel: numeric (0-15), maps to Channel enum -->
                 <DataGridTextColumn Header="Ch"
                             Binding="{Binding Channel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Width="30"/>
@@ -58,41 +66,27 @@
                             Binding="{Binding Time, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Width="40"/>
 
-                <!-- Pitch: numeric (0-127), maps to Pitch enum -->
                 <DataGridTextColumn Header="Pitch"
                             Binding="{Binding Pitch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Width="40"/>
 
-                <!-- Velocity -->
                 <DataGridTextColumn Header="Vel"
                             Binding="{Binding Velocity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                             Width="36"/>
 
-                <!-- Pan -->
                 <DataGridTextColumn Header="Pan"
                             Binding="{Binding Pan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                             Width="36"/>
 
-                <!-- Reverb: nullable double -->
                 <DataGridTextColumn Header="Rev"
                             Binding="{Binding Reverb, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0, TargetNullValue='-'}"
                             Width="36"/>
 
-                <!-- Duration -->
                 <DataGridTextColumn Header="Dur"
                             Binding="{Binding Duration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
                             Width="38"/>
 
-                <!-- Min / Max Octave -->
-                <!--<DataGridTextColumn Header="Oct↓"
-                            Binding="{Binding MinOctave, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            Width="34"/>
-                <DataGridTextColumn Header="Oct↑"
-                            Binding="{Binding MaxOctave, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            Width="34"/>-->
-
-                <!-- SendNow button -->
-                <!--<DataGridTemplateColumn Header="▶" Width="28">
+                <DataGridTemplateColumn Header="▶" Width="28">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Content="▶"
@@ -103,9 +97,8 @@
                             ToolTip="Send now"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>-->
-
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-    </StackPanel>
+    </Grid>
 </UserControl>

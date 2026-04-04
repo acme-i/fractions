@@ -8,7 +8,7 @@
         xmlns:vm="clr-namespace:fractions.ui.viewmodels"
         mc:Ignorable="d"
         FontSize="8"
-        HorizontalAlignment="Stretch" VerticalAlignment="Top"
+        HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
         Title="MainWindow" Height="450" Width="800"
         d:DataContext="{d:DesignInstance Type=vm:MainViewModel}">
     <Grid>
@@ -17,25 +17,33 @@
             <ColumnDefinition Width="4"></ColumnDefinition>
             <ColumnDefinition Width="3*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Top">
-            <StackPanel Orientation="Vertical">
-                <views:OutputDevicesView DataContext="{Binding OutputDevicesViewModel}"/>
-                <views:ClockView DataContext="{Binding ClockViewModel}"/>
-                
-            </StackPanel>
+
+        <Grid Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <views:OutputDevicesView Grid.Row="0" DataContext="{Binding OutputDevicesViewModel}"/>
+            <views:ClockView Grid.Row="1" DataContext="{Binding ClockViewModel}"/>
         </Grid>
+
         <GridSplitter HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="4" Background="Black" Grid.Column="1"></GridSplitter>
-        <Grid  Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+
+        <Grid Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Vertical" Grid.Column="0">
-                <views:NoteOnOffListView DataContext="{Binding NoteOnOffListViewModel}" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" />
-            </StackPanel>
-            <StackPanel Orientation="Vertical" Grid.Column="1">
-                <views:FloatInterpolatorView DataContext="{Binding FloatInterpolatorViewModel}" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" />
-            </StackPanel>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <views:NoteOnOffListView Grid.Column="0" Grid.Row="0" DataContext="{Binding NoteOnOffListViewModel}"
+                                     VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+
+            <views:FloatInterpolatorView Grid.Column="1" Grid.Row="0" DataContext="{Binding FloatInterpolatorViewModel}"
+                                          VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
         </Grid>
     </Grid>
 </Window>

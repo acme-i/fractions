@@ -1,5 +1,7 @@
 ﻿using fractions.ui.viewmodels;
+using System.Collections.Specialized;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace fractions.ui.views;
 /// <summary>
@@ -20,13 +22,27 @@ public partial class NoteOnOffListView : UserControl, IListView<NoteOnOffViewMod
         {
             VM.IsLoaded = false;
         };
-        IsVisibleChanged += (o, e) =>
+        IsVisibleChanged += (_, e) =>
         {
             VM.IsVisible = (bool)e.NewValue;
         };
     }
 
-    private NoteOnOffListViewModel VM => (NoteOnOffListViewModel)DataContext;
+    private NoteOnOffListViewModel VM
+    {
+        get
+        {
+            if (DataContext is NoteOnOffListViewModel noteOnOffListViewModel)
+            {
+                return noteOnOffListViewModel;
+            }
+            else if (DataContext is MainViewModel mainViewModel)
+            {
+                return mainViewModel.NoteOnOffListViewModel;
+            }
+            return null;
+        }
+    }
 
     public void SelectAll()
     {
