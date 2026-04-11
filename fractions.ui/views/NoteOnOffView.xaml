@@ -8,12 +8,16 @@
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance Type=vm:NoteOnOffViewModel}">
-    <Grid VerticalAlignment="Top">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <views:ChannelSelectorView Grid.Column="0"/>
-        <views:PitchSelectorView Grid.Column="1"/>
+        <Grid Grid.Column="0">
+            <views:ChannelSelectorView DataContext="{Binding ChannelViewModel}" />
+        </Grid>
+        <Grid Grid.Column="1">
+            <views:PitchSelectorView DataContext="{Binding PitchViewModel}" />
+        </Grid>
     </Grid>
 </UserControl>

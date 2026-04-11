@@ -1,8 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
-using fractions.ui.configuration;
-using System.Collections.ObjectModel;
 
 namespace fractions.ui.viewmodels;
 

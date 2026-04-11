@@ -9,10 +9,13 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <TextBlock Text="C" ToolTip="Channel"/>
-        <ComboBox x:Name="ChannelComboBox" Grid.Column="1"
+        <ComboBox ItemsSource="{Binding ChannelTypes}"
+                  SelectedItem="{Binding TypeOfChannel, Mode=TwoWay}" />
+        <TextBlock Text="C" ToolTip="Channel" Grid.Column="1" Margin="4" />
+        <ComboBox x:Name="ChannelComboBox" Grid.Column="2"
                   ItemsSource="{Binding Channels}"
                   SelectedItem="{Binding Channel, Mode=TwoWay}"
                   DisplayMemberPath="DisplayName" />

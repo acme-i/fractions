@@ -359,7 +359,7 @@ namespace fractions
         /// <param name="numberOfSteps">number of steps</param>
         /// <param name="method">method. 0 = cosine, 1 = linear, 2 = square, etc</param>
         /// <returns>the progression of start towards end in numberOfSteps number of steps</returns>
-        public static List<double> Interpolate(double start, double end, int numberOfSteps, int method = 1)
+        public static List<double> InterpolateD(double start, double end, int numberOfSteps, int method = 1)
         {
             if (Math.Sign(numberOfSteps) <= 0) throw new ArgumentOutOfRangeException(nameof(numberOfSteps));
 
@@ -375,6 +375,34 @@ namespace fractions
                 values.Add(Interpolate(step * i, start, end, start, end, method));
 
             if (isReversed) values.Reverse();
+
+            return values;
+        }
+
+        /// <summary>
+        /// interpolate between start and end in numberOfSteps number of steps using the method method
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="numberOfSteps">number of steps</param>
+        /// <param name="method">method. 0 = cosine, 1 = linear, 2 = square, etc</param>
+        /// <returns>the progression of start towards end in numberOfSteps number of steps</returns>
+        public static List<double> Interpolate(double start, double end, int numberOfSteps, int method = 1)
+        {
+            if (Math.Sign(numberOfSteps) <= 0) throw new ArgumentOutOfRangeException(nameof(numberOfSteps));
+
+            var isReversed = start > end;
+            if (isReversed)
+            {
+                (end, start) = (start, end);
+            }
+
+            var values = new List<double>(numberOfSteps);
+            var step = (end - start) / numberOfSteps;
+            for (double i = 1; i <= numberOfSteps; i++)
+                values.Add(Interpolate(step * i, start, end, start, end, method));
+
+            if (isReversed) values = values.Reverse<double>().ToList();
 
             return values;
         }

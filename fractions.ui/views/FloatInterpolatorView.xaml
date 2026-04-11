@@ -12,7 +12,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
         <StackPanel Orientation="Horizontal">
             <TextBlock Text="Start"/>
             <TextBox Width="60" Text="{Binding Start}"/>
@@ -24,6 +23,6 @@
             <TextBox Width="30" Text="{Binding Method}"/>
             <Button Content="Generate" Command="{Binding GenerateCommand}"/>
         </StackPanel>
-            <ListBox ItemsSource="{Binding Values}" ScrollViewer.CanContentScroll="True" />
+        <ListBox ItemsSource="{Binding Values}" Grid.Row="1"/>
     </Grid>
 </UserControl>

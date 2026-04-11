@@ -11,7 +11,7 @@ public class SettingsManager
     private Settings settings = new();
     public Settings Settings { get => settings; set => settings = value; }
     public string FileName;
-    private static object locker = new();
+    private static readonly object locker = new();
     public SettingsManager(string fileName)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(fileName);

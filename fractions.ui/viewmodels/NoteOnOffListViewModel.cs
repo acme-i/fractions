@@ -10,7 +10,7 @@ namespace fractions.ui.viewmodels;
 
 public partial class NoteOnOffListViewModel : EnumerateViewModel<NoteOnOffViewModel>
 {
-    private InternalCollectionView _noteList;
+    private readonly InternalCollectionView _noteList;
 
     public NoteOnOffListViewModel() : base()
     {
@@ -25,12 +25,12 @@ public partial class NoteOnOffListViewModel : EnumerateViewModel<NoteOnOffViewMo
     private readonly int maxVol = 107;
     private readonly int maxLeft = 4;
     private readonly int maxRight = 127;
-    private readonly Dictionary<Channel, Enumerate<float>> VolMap = new Dictionary<Channel, Enumerate<float>>();
-    private readonly Dictionary<Channel, Enumerate<float>> EchoVolMap = new Dictionary<Channel, Enumerate<float>>();
-    private readonly Dictionary<Channel, Enumerate<float>> EchoVolMap2 = new Dictionary<Channel, Enumerate<float>>();
-    private readonly Dictionary<Channel, Enumerate<float>> PanMap = new Dictionary<Channel, Enumerate<float>>();
-    private readonly Dictionary<Channel, Enumerate<float>> EchoPanMap = new Dictionary<Channel, Enumerate<float>>();
-    private readonly Dictionary<Channel, Enumerate<float>> EchoPanMap2 = new Dictionary<Channel, Enumerate<float>>();
+    private readonly Dictionary<Channel, Enumerate<float>> VolMap = [];
+    private readonly Dictionary<Channel, Enumerate<float>> EchoVolMap = [];
+    private readonly Dictionary<Channel, Enumerate<float>> EchoVolMap2 = [];
+    private readonly Dictionary<Channel, Enumerate<float>> PanMap = [];
+    private readonly Dictionary<Channel, Enumerate<float>> EchoPanMap = [];
+    private readonly Dictionary<Channel, Enumerate<float>> EchoPanMap2 = [];
 
     private readonly Enumerate<Channel> chans = new[] {
             Channel.Channel1,
@@ -59,30 +59,30 @@ public partial class NoteOnOffListViewModel : EnumerateViewModel<NoteOnOffViewMo
             Channel.Channel16
         }.AsEnumeration();
 
-    static Instrument[] lInstr = new[] {
+    private static readonly Instrument[] lInstr = [
             Instrument.SlapBass1, Instrument.ElectricPiano1, Instrument.Vibraphone, Instrument.ElectricPiano1,
             Instrument.SlapBass1, Instrument.ElectricPiano1, Instrument.ElectricPiano1, Instrument.Vibraphone,
             Instrument.SlapBass1, Instrument.Vibraphone, Instrument.ElectricPiano1, Instrument.ElectricPiano1,
-    };
+    ];
 
-    static Instrument[] rInstr = new[] {
+    private static readonly Instrument[] rInstr = [
                 Instrument.ElectricBassPick, Instrument.ElectricPiano1, Instrument.ElectricBassPick,
                 Instrument.ElectricBassPick, Instrument.ElectricBassPick, Instrument.ElectricPiano1,
                 Instrument.ElectricPiano1, Instrument.ElectricBassPick, Instrument.ElectricBassPick,
-            };
+            ];
 
     private readonly Enumerate<Instrument> mainInstr = lInstr.AsCycle();
     private readonly Enumerate<Instrument> secondInstr = rInstr.AsCycle().AsReversed();
     private readonly Enumerate<Instrument> echoMainInstr = rInstr.AsCycle();
     private readonly Enumerate<Instrument> echoSecondInstr = lInstr.AsCycle().AsReversed();
 
-    static string path = @".\midifiles\bach_js_bwv0999_prelude_in_cm_for_lute.mid";
-    static MidiFile file = new MidiFile(path);
-    static float div = file.TicksPerQuarterNote + 0f;
+    private static readonly string path = @".\midifiles\bach_js_bwv0999_prelude_in_cm_for_lute.mid";
+    private static readonly MidiFile file = new(path);
+    private static readonly float div = file.TicksPerQuarterNote + 0f;
 
-    static (IEnumerable<MidiEvent> OnEvents, IEnumerable<MidiEvent> OffEvents, IEnumerable<float> Durations) result = file.GetEventsAndDurations();
-    static readonly Enumerate<MidiEvent> nots = result.OnEvents.AsEnumeration();
-    static readonly Enumerate<float> durs = result.Durations.AsEnumeration();
+    private static (IEnumerable<MidiEvent> OnEvents, IEnumerable<MidiEvent> OffEvents, IEnumerable<float> Durations) result = file.GetEventsAndDurations();
+    private static readonly Enumerate<MidiEvent> nots = result.OnEvents.AsEnumeration();
+    private static readonly Enumerate<float> durs = result.Durations.AsEnumeration();
 
     [RelayCommand]
     public void ReadFile()
@@ -184,7 +184,7 @@ public partial class NoteOnOffListViewModel : EnumerateViewModel<NoteOnOffViewMo
 
         NotifyPropertyChangingOnUiThread(nameof(Source));
         Source = Source
-                .Where(n => Double.IsNaN(n.Duration) == false)
+                .Where(n => double.IsNaN(n.Duration) == false)
                 .OrderBy(n => n.Time)
                 .AsEnumeration();
         NotifyPropertyChangedOnUiThread(nameof(Source));
@@ -215,13 +215,13 @@ public partial class NoteOnOffListViewModel : EnumerateViewModel<NoteOnOffViewMo
         Source.Add(new NoteOnOffViewModel(nt));
     }
 
-    readonly Enumerate<int> ps1 = new[] {
+    private readonly Enumerate<int> ps1 = new[] {
         12, 24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0,
         24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12,
         0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12, 24
     }.AsEnumeration();
 
-    readonly Enumerate<int> ps2 = new[] {
+    private readonly Enumerate<int> ps2 = new[] {
         24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12,
         0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12,24,
         12, 24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0,
@@ -317,6 +317,8 @@ public partial class NoteOnOffListViewModel : EnumerateViewModel<NoteOnOffViewMo
 
             if (count < 3 || start == end) return;
 
+            NotifyPropertyChangedOnUiThread(nameof(Source));
+
             var values = Interpolator.Interpolate(start, end, count, 0).AsEnumeration();
             foreach (var n in notes)
             {
@@ -342,6 +344,8 @@ public partial class NoteOnOffListViewModel : EnumerateViewModel<NoteOnOffViewMo
             var count = notes.Count;
 
             if (count < 3 || start == end) return;
+
+            NotifyPropertyChangingOnUiThread(nameof(Source));
 
             var values = Interpolator.Interpolate(start, end, count, 0).AsEnumeration();
             foreach (var n in notes)
@@ -369,6 +373,8 @@ public partial class NoteOnOffListViewModel : EnumerateViewModel<NoteOnOffViewMo
 
             if (count < 3 || start == end) return;
 
+            NotifyPropertyChangingOnUiThread(nameof(Source));
+
             var values = Interpolator.Interpolate(start, end, count, 0).AsEnumeration();
             foreach (var n in notes)
             {
@@ -395,6 +401,8 @@ public partial class NoteOnOffListViewModel : EnumerateViewModel<NoteOnOffViewMo
 
             if (count < 3 || start == end) return;
 
+            NotifyPropertyChangingOnUiThread(nameof(Source));
+
             var values = Interpolator.Interpolate(start, end, count, 0).AsEnumeration();
             foreach (var n in notes)
             {
@@ -412,14 +420,9 @@ public partial class NoteOnOffListViewModel : EnumerateViewModel<NoteOnOffViewMo
     #endregion
 
     #region InternalCollectionView
-    public class InternalCollectionView : ListCollectionView, ICollectionView
+    public class InternalCollectionView(NoteOnOffListViewModel owner, IList list) : ListCollectionView(list), ICollectionView
     {
-        public InternalCollectionView(NoteOnOffListViewModel owner, IList list) : base(list)
-        {
-            Owner = owner;
-        }
-
-        public NoteOnOffListViewModel Owner { get; }
+        public NoteOnOffListViewModel Owner { get; } = owner;
 
         protected override void OnPropertyChanged(PropertyChangedEventArgs args)
         {

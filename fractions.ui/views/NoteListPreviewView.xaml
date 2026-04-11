@@ -3,10 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:views="clr-namespace:fractions.ui.views"
+             xmlns:vm="clr-namespace:fractions.ui.viewmodels"
              mc:Ignorable="d"
              d:DesignHeight="160"
-             d:DesignWidth="520">
-    <DataGrid ItemsSource="{Binding OutputNotes}"
+             d:DesignWidth="520"
+             d:DataContext="{d:DesignInstance Type=vm:NoteOnOffListViewModel}">
+    <DataGrid ItemsSource="{Binding Source}"
               AutoGenerateColumns="False"
               CanUserAddRows="False"
               CanUserDeleteRows="False"

@@ -36,7 +36,7 @@ namespace fractions.examples
         private readonly Dictionary<Channel, Enumerate<float>> EchoReverbMap2 = new Dictionary<Channel, Enumerate<float>>();
 
         private IOutputDevice OutputDevice;
-        private Clock Clock = new Clock(64);
+        private readonly Clock Clock = new Clock(64);
 
         private readonly Enumerate<Channel> channels = new[] {
             Channel.Channel1, Channel.Channel2, Channel.Channel3, Channel.Channel4,

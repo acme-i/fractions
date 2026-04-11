@@ -83,8 +83,7 @@ namespace fractions
                 if (noteOfs
                     .Where(n => n.Channel == non.Channel)
                     .Where(n => n.Time > non.Time)
-                    .Where(n => n.Note == non.Note)
-                    .FirstOrDefault() is MidiEvent nof)
+                    .FirstOrDefault(n => n.Note == non.Note) is MidiEvent nof)
                 {
                     durs.Add(nof.Time - non.Time);
                 }
@@ -115,24 +114,12 @@ namespace fractions
                 if (noteOfs
                     .Where(n => n.Channel == non.Channel)
                     .Where(n => n.Time > non.Time)
-                    .Where(n => n.Note == non.Note)
-                    .FirstOrDefault() is MidiEvent nof)
+                    .FirstOrDefault(n => n.Note == non.Note) is MidiEvent nof)
                 {
                     durs.Add(nof.Time - non.Time);
                 }
             }
             return (noteOns, noteOfs, durs);
-        }
-
-        /// <summary>
-        /// GetNotes
-        /// </summary>
-        /// <param name="device"></param>
-        /// <param name="clock"></param>
-        /// <returns></returns>
-        public List<NoteOnOffMessage> GetNotes(IOutputDevice device, Clock clock)
-        {
-            return GetNotes(device, clock, Tracks);
         }
 
         /// <summary>
@@ -158,8 +145,7 @@ namespace fractions
                 if (noteOfs
                     .Where(n => n.Channel == non.Channel)
                     .Where(n => n.Time > non.Time)
-                    .Where(n => n.Note == non.Note)
-                    .FirstOrDefault() is MidiEvent nof)
+                    .FirstOrDefault(n => n.Note == non.Note) is MidiEvent nof)
                 {
                     durs.Add(nof.Time - non.Time);
                 }
@@ -177,6 +163,47 @@ namespace fractions
             }
 
             return list;
+        }
+
+        /// <summary>
+        /// GetNotes
+        /// </summary>
+        /// <param name="device"></param>
+        /// <param name="clock"></param>
+        /// <param name="tracks"></param>
+        /// <returns></returns>
+        public List<Enumerate<NoteOnOffMessage>> GetTracks(IOutputDevice device, Clock clock, IEnumerable<MidiTrack> tracks)
+        {
+            var output = new List<Enumerate<NoteOnOffMessage>>();
+            foreach (var track in tracks)
+            {
+                var notes = GetNotes(device, clock, new[] { track });
+                if (notes?.Count > 0)
+                {
+                    var en = notes.AsEnumeration();
+                    if (track.TextEvents?.Any() == true)
+                    {
+                        var names = track.TextEvents
+                            .Where(t => t.TextEventType == TextEventType.TrackName)
+                            .Where(t => !string.IsNullOrEmpty(t.Value));
+                        if (names.Any())
+                            en.Name = string.Join(", ", names.Select(t => t.Value));
+                    }
+                    output.Add(en);
+                }
+            }
+            return output;
+        }
+
+        /// <summary>
+        /// GetNotes
+        /// </summary>
+        /// <param name="device"></param>
+        /// <param name="clock"></param>
+        /// <returns></returns>
+        public List<NoteOnOffMessage> GetNotes(IOutputDevice device, Clock clock)
+        {
+            return GetNotes(device, clock, Tracks);
         }
 
         private static bool ParseMetaEvent(

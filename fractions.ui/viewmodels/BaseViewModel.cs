@@ -18,7 +18,9 @@ public partial class BaseViewModel : BaseObservableObject
     protected string cancelCommandText = "Cancel";
 
     [RelayCommand]
+#pragma warning disable CA1822 // Mark members as static
     public Task Cancel()
+#pragma warning restore CA1822 // Mark members as static
     {
         return Task.CompletedTask;
     }

@@ -61,7 +61,7 @@ namespace fractions.examples
                 Channel.Channel16
             }, IncrementMethod.MinMax);
 
-        static Instrument[] instruments_ = new[] {
+        static readonly Instrument[] instruments_ = new[] {
             Instrument.Vibraphone,
             Instrument.Xylophone,
             Instrument.Vibraphone,
@@ -70,19 +70,19 @@ namespace fractions.examples
             Instrument.ElectricGrandPiano,
         };
 
-        private Enumerate<Instrument> mainInstr = new Enumerate<Instrument>(
+        private readonly Enumerate<Instrument> mainInstr = new Enumerate<Instrument>(
             instruments_,
             IncrementMethod.Cyclic);
 
-        private Enumerate<Instrument> secondInstr = new Enumerate<Instrument>(
+        private readonly Enumerate<Instrument> secondInstr = new Enumerate<Instrument>(
             instruments_.Reverse<Instrument>(),
             IncrementMethod.Cyclic);
 
-        private Enumerate<Instrument> echoMainInstr = new Enumerate<Instrument>(
+        private readonly Enumerate<Instrument> echoMainInstr = new Enumerate<Instrument>(
             instruments_,
             IncrementMethod.Cyclic);
 
-        private Enumerate<Instrument> echoSecondInstr = new Enumerate<Instrument>(
+        private readonly Enumerate<Instrument> echoSecondInstr = new Enumerate<Instrument>(
             instruments_.Reverse<Instrument>(),
             IncrementMethod.Cyclic);
 

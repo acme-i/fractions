@@ -62,7 +62,7 @@ namespace fractions.examples
         private static Enumerate<Pitch> Melodi3;
         private static Enumerate<Pitch> Melodi4;
         private static Enumerate<Pitch> Melodi5;
-        private static Enumerate<int> PAN = new Enumerate<int>(
+        private static readonly Enumerate<int> PAN = new Enumerate<int>(
             Enumerable.Range(0, 20),
             IncrementMethod.Cyclic, 7);
 

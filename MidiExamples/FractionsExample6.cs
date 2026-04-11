@@ -36,7 +36,7 @@ namespace fractions.examples
         private readonly Dictionary<Channel, Enumerate<float>> EchoReverbMap2 = new Dictionary<Channel, Enumerate<float>>();
 
         private IOutputDevice OutputDevice;
-        private Clock Clock = new Clock(12);
+        private readonly Clock Clock = new Clock(12);
 
         private readonly Enumerate<Channel> chans = new Enumerate<Channel>(
             new[] {
@@ -71,7 +71,7 @@ namespace fractions.examples
                 Channel.Channel16
             }, IncrementMethod.MinMax);
 
-        static Instrument[] instruments_ = new[] {
+        static readonly Instrument[] instruments_ = new[] {
                 Instrument.Vibraphone,
                 Instrument.ElectricPiano1,
                 Instrument.SlapBass1,
@@ -88,29 +88,29 @@ namespace fractions.examples
                 Instrument.ElectricGuitarMuted,
             };
 
-        private Enumerate<Instrument> mainInstr = new Enumerate<Instrument>(
+        private readonly Enumerate<Instrument> mainInstr = new Enumerate<Instrument>(
             instruments_.Reverse<Instrument>(),
             IncrementMethod.Cyclic);
 
-        private Enumerate<Instrument> secondInstr = new Enumerate<Instrument>(
+        private readonly Enumerate<Instrument> secondInstr = new Enumerate<Instrument>(
             instruments_,
             IncrementMethod.Cyclic);
 
-        private Enumerate<Instrument> echoMainInstr = new Enumerate<Instrument>(
+        private readonly Enumerate<Instrument> echoMainInstr = new Enumerate<Instrument>(
             instruments_.Reverse<Instrument>(),
             IncrementMethod.Cyclic);
 
-        private Enumerate<Instrument> echoSecondInstr = new Enumerate<Instrument>(
+        private readonly Enumerate<Instrument> echoSecondInstr = new Enumerate<Instrument>(
             instruments_,
             IncrementMethod.Cyclic);
 
-        static string path = @".\midifiles\bach_js_bwv0999_prelude_in_cm_for_lute.mid";
-        static MidiFile file = new MidiFile(path);
-        static float div = file.TicksPerQuarterNote + 0f;
+        static readonly string path = @".\midifiles\bach_js_bwv0999_prelude_in_cm_for_lute.mid";
+        static readonly MidiFile file = new MidiFile(path);
+        static readonly float div = file.TicksPerQuarterNote + 0f;
 
         static (IEnumerable<MidiEvent> OnEvents, IEnumerable<MidiEvent> OffEvents, IEnumerable<float> Durations) result = file.GetEventsAndDurations();
-        static Enumerate<MidiEvent> nots = result.OnEvents.AsEnumeration();
-        static Enumerate<float> durs = result.Durations.AsEnumeration();
+        static readonly Enumerate<MidiEvent> nots = result.OnEvents.AsEnumeration();
+        static readonly Enumerate<float> durs = result.Durations.AsEnumeration();
 
         public FractionsExample6() : base("FractionsExample6 - BWV0999: Prelude in Cm for Lute") { }
 
@@ -284,13 +284,13 @@ namespace fractions.examples
             Clock.Schedule(nt);
         }
 
-        Enumerate<int> ps1 = new Enumerate<int>(
+        readonly Enumerate<int> ps1 = new Enumerate<int>(
             new[] {
                 12, 24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0,
                 24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12,
                 0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12, 24
             });
-        Enumerate<int> ps2 = new Enumerate<int>(
+        readonly Enumerate<int> ps2 = new Enumerate<int>(
             new[] {
                 -24, 0,-12, -24, 0,-12, -24, 0,-12, -24, 0,-12,
                 0,-12, -24, 0,-12, -24, 0,-12, -24, 0,-12,-24,

@@ -48,7 +48,7 @@ namespace fractions.examples
         private readonly Dictionary<Channel, Enumerate<float>> EchoPanMap2 = new Dictionary<Channel, Enumerate<float>>();
 
         private IOutputDevice OutputDevice;
-        private Clock Clock = new Clock(62);
+        private readonly Clock Clock = new Clock(62);
 
         private readonly Enumerate<Channel> chans = new Enumerate<Channel>(
             new[] {
@@ -83,13 +83,13 @@ namespace fractions.examples
                 Channel.Channel16
             }, IncrementMethod.MinMax);
 
-        static Instrument[] instruments_ = new[] {
+        static readonly Instrument[] instruments_ = new[] {
                 Instrument.ElectricGuitarJazz,
                 Instrument.ElectricPiano1,
                 Instrument.ElectricGuitarJazz,
             };
 
-        static Instrument[] echoInstruments_ = new[] {
+        static readonly Instrument[] echoInstruments_ = new[] {
                 Instrument.ElectricGuitarMuted,
                 Instrument.ElectricGuitarJazz,
                 Instrument.ElectricPiano1,

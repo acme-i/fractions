@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using fractions.ui.configuration;
 using System;
@@ -12,14 +13,14 @@ namespace fractions.ui.viewmodels;
 
 public partial class ClockViewModel(Clock clock) : BaseViewModel()
 {
-    private Clock _clock = clock;
+    private readonly Clock _clock = clock;
 
     public float BeatsPerMinute
     {
         get => _clock.BeatsPerMinute;
         set
         {
-            if (_clock.IsRunning == false)
+            if (_clock.IsRunning == false && _clock.BeatsPerMinute != value)
             {
                 NotifyPropertyChangingOnUiThread(nameof(BeatsPerMinute));
                 _clock.BeatsPerMinute = value;
@@ -33,10 +34,27 @@ public partial class ClockViewModel(Clock clock) : BaseViewModel()
     public bool IsNotRunning => !_clock.IsRunning;
 
     [RelayCommand(CanExecute = nameof(IsNotRunning))]
+    public void SetBeatsPerMinute(float value)
+    {
+        try
+        {
+            this.BeatsPerMinute = value;
+        }
+        catch (Exception ex)
+        {
+            LastException = ex;
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(IsNotRunning))]
     public void Reset()
     {
         try
         {
+            if (_clock.IsRunning)
+            {
+                _clock.Stop();
+            }
             _clock.Reset();
             NotifyStateChanged();
         }
@@ -51,7 +69,7 @@ public partial class ClockViewModel(Clock clock) : BaseViewModel()
     {
         try
         {
-            if(!App.OutputDevice.IsOpen)
+            if (!App.OutputDevice.IsOpen)
             {
                 App.OutputDevice.Open();
             }
@@ -69,7 +87,10 @@ public partial class ClockViewModel(Clock clock) : BaseViewModel()
     {
         try
         {
-            _clock.Stop();
+            if (_clock.IsRunning)
+            {
+                _clock.Stop();
+            }
             if (App.OutputDevice.IsOpen)
             {
                 App.OutputDevice.Close();
@@ -82,7 +103,6 @@ public partial class ClockViewModel(Clock clock) : BaseViewModel()
         }
     }
 
-
     private void NotifyStateChanged()
     {
         NotifyPropertyChangedOnUiThread(nameof(IsRunning));
@@ -90,9 +110,10 @@ public partial class ClockViewModel(Clock clock) : BaseViewModel()
         NotifyPropertyChangedOnUiThread(nameof(BeatsPerMinute));
         NotifyPropertyChangedOnUiThread(nameof(Time));
 
-        // Tell WPF to re-evaluate CanExecute on all three commands
+        // Tell WPF to re-evaluate CanExecute on all four commands
         ResetCommand.NotifyCanExecuteChanged();
         StartCommand.NotifyCanExecuteChanged();
         StopCommand.NotifyCanExecuteChanged();
+        SetBeatsPerMinuteCommand.NotifyCanExecuteChanged();
     }
 }

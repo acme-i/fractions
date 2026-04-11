@@ -29,7 +29,7 @@ namespace fractions.examples
 
 
         private IOutputDevice OutputDevice;
-        private Clock Clock = new Clock(32);
+        private readonly Clock Clock = new Clock(32);
 
         private readonly Enumerate<Channel> chans =
             new[] {
@@ -64,23 +64,23 @@ namespace fractions.examples
                 Channel.Channel16
             }.AsEnumeration();
 
-        static Instrument[] instruments_ = new[] {
+        static readonly Instrument[] instruments_ = new[] {
                 Instrument.Vibraphone,
                 Instrument.Xylophone,
             };
 
-        private Enumerate<Instrument> mainInstr = instruments_.AsCycle();
-        private Enumerate<Instrument> secondInstr = instruments_.AsCycle().AsReversed();
-        private Enumerate<Instrument> echoMainInstr = instruments_.AsCycle();
-        private Enumerate<Instrument> echoSecondInstr = instruments_.AsCycle().AsReversed();
+        private readonly Enumerate<Instrument> mainInstr = instruments_.AsCycle();
+        private readonly Enumerate<Instrument> secondInstr = instruments_.AsCycle().AsReversed();
+        private readonly Enumerate<Instrument> echoMainInstr = instruments_.AsCycle();
+        private readonly Enumerate<Instrument> echoSecondInstr = instruments_.AsCycle().AsReversed();
 
-        static string path = @".\midifiles\bach_js_bwv0999_prelude_in_cm_for_lute.mid";
-        static MidiFile file = new MidiFile(path);
-        static float div = file.TicksPerQuarterNote + 0f;
+        static readonly string path = @".\midifiles\bach_js_bwv0999_prelude_in_cm_for_lute.mid";
+        static readonly MidiFile file = new MidiFile(path);
+        static readonly float div = file.TicksPerQuarterNote + 0f;
 
         static (IEnumerable<MidiEvent> OnEvents, IEnumerable<MidiEvent> OffEvents, IEnumerable<float> Durations) result = file.GetEventsAndDurations();
-        static Enumerate<MidiEvent> nots = result.OnEvents.AsEnumeration();
-        static Enumerate<float> durs = result.Durations.AsEnumeration();
+        static readonly Enumerate<MidiEvent> nots = result.OnEvents.AsEnumeration();
+        static readonly Enumerate<float> durs = result.Durations.AsEnumeration();
 
         public FractionsExample5() : base("FractionsExample5 - BWV0999: Prelude in Cm for Lute") { }
 
@@ -206,12 +206,12 @@ namespace fractions.examples
             Clock.Schedule(nt);
         }
 
-        Enumerate<int> ps1 = new[] {
+        readonly Enumerate<int> ps1 = new[] {
             12, 24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0,
             24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12,
             0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12, 24
         }.AsEnumeration();
-        Enumerate<int> ps2 = new[] {
+        readonly Enumerate<int> ps2 = new[] {
             24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12,
             0, 12, 24, 0, 12, 24, 0, 12, 24, 0, 12,24,
             12, 24, 0, 12, 24, 0, 12, 24, 0, 12, 24, 0,

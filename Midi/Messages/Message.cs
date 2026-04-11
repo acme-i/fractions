@@ -47,7 +47,7 @@ namespace fractions
 
         public bool Equals(Message other)
         {
-            if (ReferenceEquals(null, other)) return false;
+            if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
             if (id == other.id) return true;
             return false;

@@ -48,10 +48,7 @@ public partial class ChannelViewModel : BaseViewModel
     /// </summary>
     public string DisplayName
     {
-        get
-        {
-            return _channel.ToString();
-        }
+        get => _channel.ToString();
     }
 
     public ChannelType _typeOfChannel;
@@ -68,6 +65,8 @@ public partial class ChannelViewModel : BaseViewModel
             NotifyPropertyChangedOnUiThread(nameof(Channels));
         }
     }
+
+    public List<ChannelType> ChannelTypes => [.. Enum.GetValues<ChannelType>()];
 
     public IEnumerable<ChannelViewModel> Channels
     {

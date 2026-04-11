@@ -1,12 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
-using fractions.ui.configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace fractions.ui.viewmodels;
 
@@ -15,9 +9,35 @@ public partial class NoteOnOffViewModel : BaseViewModel
     public NoteOnOffViewModel(NoteOnOffMessage note) : base()
     {
         _note = note;
+        ChannelViewModel = new ChannelViewModel(fractions.Channel.Channel1);
+        ChannelViewModel.PropertyChanged += OnChannelChanged;
+        PitchViewModel = new PitchViewModel(note.Pitch);
+        PitchViewModel.PropertyChanged += OnPitchChanged;
     }
 
-    private NoteOnOffMessage _note;
+    private void OnChannelChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ChannelViewModel.Channel))
+        {
+            this.Channel = (int)this.ChannelViewModel.Channel;
+        }
+    }
+
+    private void OnPitchChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(PitchViewModel.Pitch))
+        {
+            this.Pitch = (int)this.PitchViewModel.Pitch;
+        }
+    }
+
+    private readonly NoteOnOffMessage _note;
+
+    [ObservableProperty]
+    private ChannelViewModel channelViewModel;
+
+    [ObservableProperty]
+    private PitchViewModel pitchViewModel;
 
     public float Time
     {
@@ -37,6 +57,7 @@ public partial class NoteOnOffViewModel : BaseViewModel
         {
             NotifyPropertyChangingOnUiThread(nameof(Channel));
             _note.Channel = (Channel)value;
+            ChannelViewModel.Channel = _note.Channel;
             NotifyPropertyChangedOnUiThread(nameof(Channel));
         }
     }
@@ -48,6 +69,7 @@ public partial class NoteOnOffViewModel : BaseViewModel
         {
             NotifyPropertyChangingOnUiThread(nameof(Pitch));
             _note.Pitch = (Pitch)value;
+            PitchViewModel.Pitch = _note.Pitch;
             NotifyPropertyChangedOnUiThread(nameof(Pitch));
         }
     }
@@ -127,6 +149,12 @@ public partial class NoteOnOffViewModel : BaseViewModel
             _note.MaxOctave = value;
             NotifyPropertyChangedOnUiThread(nameof(MaxOctave));
         }
+    }
+
+    public void Notify()
+    {
+        NotifyPropertyChangedOnUiThread(nameof(Channel));
+        NotifyPropertyChangedOnUiThread(nameof(Pitch));
     }
 
     [RelayCommand]

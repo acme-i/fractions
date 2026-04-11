@@ -31,46 +31,27 @@ namespace fractions
 
         public static NoteMessage operator +(NoteMessage left, NoteMessage right)
         {
-            var props = NoteProperty.Velocity;
-            props |= NoteProperty.Pan;
-            return NoteOperator.Plus(left, right, props);
+            return NoteOperator.Plus(left, right, NoteProperty.Velocity | NoteProperty.Pan);
         }
 
         public static NoteMessage operator +(NoteMessage left, double right)
         {
-            var props = NoteProperty.Velocity;
-            props |= NoteProperty.Pan;
-            return NoteOperator.Plus(left, right, props);
+            return NoteOperator.Plus(left, right, NoteProperty.Velocity | NoteProperty.Pan);
         }
 
         public static NoteMessage operator -(NoteMessage left, NoteMessage right)
         {
-            var props = NoteProperty.Velocity;
-            props |= NoteProperty.Pan;
-            return NoteOperator.Minus(left, right, props);
+            return NoteOperator.Minus(left, right, NoteProperty.Velocity | NoteProperty.Pan);
         }
 
         public static NoteMessage operator -(NoteMessage left, double right)
         {
-            var props = NoteProperty.Velocity;
-            props |= NoteProperty.Pan;
-            return NoteOperator.Minus(left, right, props);
+            return NoteOperator.Minus(left, right, NoteProperty.Velocity | NoteProperty.Pan);
         }
 
         public static NoteMessage operator *(NoteMessage left, double right)
         {
-            var clone = left.Clone() as NoteMessage;
-            if (1.0 != right && clone.Velocity > 0)
-            {
-                var value = clone.Velocity * Math.Abs(right);
-                var max = (double)Control.MaxControl;
-                if (value > max)
-                {
-                    value = max - (value % max);
-                }
-                clone.Velocity = value.ClampControlChange();
-            }
-            return clone;
+            return NoteOperator.Multiply(left, right, NoteProperty.Velocity | NoteProperty.Pan);
         }
 
         /// <summary>Returns a copy of this message, shifted in time by the specified amount</summary>

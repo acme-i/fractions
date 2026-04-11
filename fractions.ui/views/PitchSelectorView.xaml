@@ -11,7 +11,7 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <TextBlock Text="P" ToolTip="Pitch" />
+        <TextBlock Text="P" ToolTip="Pitch" Margin="4" />
         <ComboBox x:Name="PitchComboBox" Grid.Column="1"
                   ItemsSource="{Binding AllPitches}"
                   SelectedItem="{Binding Pitch, Mode=TwoWay}"

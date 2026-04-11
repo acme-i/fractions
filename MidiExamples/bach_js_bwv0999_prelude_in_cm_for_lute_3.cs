@@ -14,7 +14,7 @@ namespace fractions.examples
     /// </remarks>
     internal class bach_js_bwv0999_prelude_in_cm_for_lute_3 : ExampleBase
     {
-        string path = @".\midifiles\bach_js_bwv0999_prelude_in_cm_for_lute.mid";
+        readonly string path = @".\midifiles\bach_js_bwv0999_prelude_in_cm_for_lute.mid";
         MidiFile file;
         List<NoteOnOffMessage> notes;
         Enumerate<NoteOnOffMessage> noteE;

@@ -27,7 +27,7 @@ namespace fractions.examples
         private readonly Dictionary<Channel, Enumerate<float>> EchoPanMap2 = new Dictionary<Channel, Enumerate<float>>();
 
         private IOutputDevice OutputDevice;
-        private Clock Clock = new Clock(32);
+        private readonly Clock Clock = new Clock(32);
 
         private readonly Enumerate<Channel> chans = new[] {
             Channel.Channel1,
@@ -56,7 +56,7 @@ namespace fractions.examples
             Channel.Channel16
         }.AsEnumeration();
 
-        static Instrument[] instruments_ = new[] {
+        static readonly Instrument[] instruments_ = new[] {
             Instrument.Vibraphone,
             Instrument.Xylophone,
         };
@@ -66,9 +66,9 @@ namespace fractions.examples
         private readonly Enumerate<Instrument> echoMainInstr = instruments_.AsCycle();
         private readonly Enumerate<Instrument> echoSecondInstr = instruments_.AsCycle().AsReversed();
 
-        static string path = @".\midifiles\bach_js_bwv0999_prelude_in_cm_for_lute.mid";
-        static MidiFile file = new MidiFile(path);
-        static float div = file.TicksPerQuarterNote + 0f;
+        static readonly string path = @".\midifiles\bach_js_bwv0999_prelude_in_cm_for_lute.mid";
+        static readonly MidiFile file = new MidiFile(path);
+        static readonly float div = file.TicksPerQuarterNote + 0f;
 
         static (IEnumerable<MidiEvent> OnEvents, IEnumerable<MidiEvent> OffEvents, IEnumerable<float> Durations) result = file.GetEventsAndDurations();
         static readonly Enumerate<MidiEvent> nots = result.OnEvents.AsEnumeration();

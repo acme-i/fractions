@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Policy;
 
 namespace fractions
 {
@@ -13,22 +14,6 @@ namespace fractions
                 value = max - value;
             }
             return value.ClampControlChange();
-        }
-
-        public static NoteMessage Multiply(NoteMessage left, double right, NoteProperty property = NoteProperty.Velocity)
-        {
-            var clone = left.Clone() as NoteMessage;
-            if (1.0 != right && clone.Velocity > 0)
-            {
-                var value = clone.Velocity * Math.Abs(right);
-                var max = (double)Control.MaxControl;
-                if (value > max)
-                {
-                    value = max - (value % max);
-                }
-                clone.Velocity = value.ClampControlChange();
-            }
-            return clone;
         }
 
         public static NoteMessage Plus(NoteMessage left, double right, NoteProperty property = NoteProperty.Velocity)
@@ -125,6 +110,65 @@ namespace fractions
             if ((NoteProperty.Time & property) == NoteProperty.Time)
             {
                 clone.Time -= right.Time;
+            }
+            return clone;
+        }
+
+        public static double Multiply(double left, double right)
+        {
+            if (1.0 != right && right > 0.0)
+            {
+                var value = left * Math.Abs(right);
+                var max = (double)Control.MaxControl;
+                if (value > max)
+                {
+                    value = max - (value % max);
+                }
+                return value.ClampControlChange();
+            }
+            return left;
+        }
+
+        public static NoteMessage Multiply(NoteMessage left, double right, NoteProperty property = NoteProperty.Velocity)
+        {
+            var clone = left.Clone() as NoteMessage;
+            if ((property & NoteProperty.Velocity) == NoteProperty.Velocity)
+            {
+                clone.Velocity = Multiply(left.Velocity, right);
+            }
+            if ((property & NoteProperty.Pan) == NoteProperty.Pan)
+            {
+                clone.Pan = Multiply(left.Pan, right);
+            }
+            if ((property & NoteProperty.Reverb) == NoteProperty.Reverb)
+            {
+                clone.Pan = Multiply(left.Reverb ?? 1.0, right);
+            }
+            return clone;
+        }
+
+        public static NoteMessage Multiply(NoteMessage left, NoteMessage right, NoteProperty property = NoteProperty.Velocity)
+        {
+            var clone = left.Clone() as NoteMessage;
+            if ((property & NoteProperty.Velocity) == NoteProperty.Velocity)
+            {
+                clone.Velocity = Multiply(left.Velocity, right.Velocity);
+            }
+            if ((property & NoteProperty.Pan) == NoteProperty.Pan)
+            {
+                clone.Pan = Multiply(left.Pan, right.Pan);
+            }
+            if ((property & NoteProperty.Reverb) == NoteProperty.Reverb)
+            {
+                if (left.Reverb != null || right.Reverb != null)
+                {
+                    if (left.Reverb == null)
+                        clone.Reverb = right.Reverb;
+                    else if (right.Reverb == null)
+                        clone.Reverb = left.Reverb;
+                    else 
+                        clone.Reverb = Multiply(left.Reverb ?? 1.0, right.Reverb ?? 1.0);
+                }
             }
             return clone;
         }

@@ -32,18 +32,11 @@
 
         <Grid Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <views:NoteOnOffListView Grid.Column="0" Grid.Row="0" DataContext="{Binding NoteOnOffListViewModel}"
-                                     VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
-
-            <views:FloatInterpolatorView Grid.Column="1" Grid.Row="0" DataContext="{Binding FloatInterpolatorViewModel}"
-                                          VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+            <views:NoteOnOffListView Grid.Column="0" DataContext="{Binding NoteOnOffListViewModel}" />
+            <views:FloatInterpolatorView Grid.Column="1" DataContext="{Binding FloatInterpolatorViewModel}" />
         </Grid>
     </Grid>
 </Window>

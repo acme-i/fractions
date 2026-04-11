@@ -17,9 +17,9 @@
         <ToolBarPanel Grid.Row="0">
             <Menu>
                 <MenuItem Header="Select All" Command="{Binding SelectAllCommand}" />
-                <MenuItem Header="Note" IsEnabled="{Binding IsSingleItemSelected}">
+                <!--<MenuItem Header="Note" IsEnabled="{Binding IsSingleItemSelected}">
                     <MenuItem Header="Edit" Command="{Binding EditNote}" CommandParameter="{Binding SelectedItem}"></MenuItem>
-                </MenuItem>
+                </MenuItem>-->
                 <MenuItem Header="Range" IsEnabled="{Binding IsRangeSelected}">
                     <MenuItem Header="Interpolate">
                         <MenuItem Header="Velocity" Command="{Binding InterpolateVelocityCommand}" CommandParameter="{Binding SelectedItems}"></MenuItem>
@@ -33,72 +33,81 @@
 
         <Button Grid.Row="1" Content="Read" Command="{Binding ReadFileCommand}" />
 
-        <DataGrid 
-          Grid.Row="2"
-          Name="dataGrid"
-          AutoGenerateColumns="False"
-          CanUserAddRows="False"
-          CanUserDeleteRows="False"
-          IsReadOnly="False"
-          SelectionMode="Extended"
-          HeadersVisibility="Column"
-          GridLinesVisibility="Horizontal"
-          BorderThickness="0"
-          VirtualizingPanel.IsVirtualizing="True"
-          VirtualizingPanel.VirtualizationMode="Recycling"
-          VirtualizingPanel.IsContainerVirtualizable="True"
-          EnableRowVirtualization="True"
-          EnableColumnVirtualization="True"
-          ScrollViewer.IsDeferredScrollingEnabled="True"
-          ScrollViewer.VerticalScrollBarVisibility="Auto"
-          IsSynchronizedWithCurrentItem="True"
-          ItemsSource="{Binding Source}"
-          SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-          SelectionUnit="FullRow"
-          ClipboardCopyMode="ExcludeHeader">
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <DataGrid 
+    Name="dataGrid"
+  AutoGenerateColumns="False"
+  CanUserAddRows="False"
+  CanUserDeleteRows="False"
+  IsReadOnly="False"
+  SelectionMode="Extended"
+  HeadersVisibility="Column"
+  GridLinesVisibility="Horizontal"
+  BorderThickness="0"
+  VirtualizingPanel.IsVirtualizing="True"
+  VirtualizingPanel.VirtualizationMode="Recycling"
+  VirtualizingPanel.IsContainerVirtualizable="True"
+  EnableRowVirtualization="True"
+  EnableColumnVirtualization="True"
+  ScrollViewer.IsDeferredScrollingEnabled="True"
+  ScrollViewer.VerticalScrollBarVisibility="Auto"
+  IsSynchronizedWithCurrentItem="True"
+  ItemsSource="{Binding Source}"
+  SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+  SelectionUnit="FullRow"
+  ClipboardCopyMode="ExcludeHeader">
 
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Ch"
-                            Binding="{Binding Channel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            Width="30"/>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Ch"
+                    Binding="{Binding Channel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Width="30"/>
 
-                <DataGridTextColumn Header="T"
-                            Binding="{Binding Time, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            Width="40"/>
+                    <DataGridTextColumn Header="T"
+                    Binding="{Binding Time, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Width="40"/>
 
-                <DataGridTextColumn Header="Pitch"
-                            Binding="{Binding Pitch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            Width="40"/>
+                    <DataGridTextColumn Header="Pitch"
+                    Binding="{Binding Pitch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Width="40"/>
 
-                <DataGridTextColumn Header="Vel"
-                            Binding="{Binding Velocity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
-                            Width="36"/>
+                    <DataGridTextColumn Header="Vel"
+                    Binding="{Binding Velocity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
+                    Width="36"/>
 
-                <DataGridTextColumn Header="Pan"
-                            Binding="{Binding Pan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
-                            Width="36"/>
+                    <DataGridTextColumn Header="Pan"
+                    Binding="{Binding Pan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
+                    Width="36"/>
 
-                <DataGridTextColumn Header="Rev"
-                            Binding="{Binding Reverb, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0, TargetNullValue='-'}"
-                            Width="36"/>
+                    <DataGridTextColumn Header="Rev"
+                    Binding="{Binding Reverb, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0, TargetNullValue='-'}"
+                    Width="36"/>
 
-                <DataGridTextColumn Header="Dur"
-                            Binding="{Binding Duration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
-                            Width="38"/>
+                    <DataGridTextColumn Header="Dur"
+                    Binding="{Binding Duration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
+                    Width="38"/>
 
-                <DataGridTemplateColumn Header="▶" Width="28">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button Content="▶"
-                            Command="{Binding SendNowCommand}"
-                            Padding="0"
-                            BorderThickness="0"
-                            Background="Transparent"
-                            ToolTip="Send now"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+                    <DataGridTemplateColumn Header="▶" Width="28">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="▶"
+                    Command="{Binding SendNowCommand}"
+                    Padding="0"
+                    BorderThickness="0"
+                    Background="Transparent"
+                    ToolTip="Send now"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Grid Grid.Row="1">
+                <views:NoteOnOffView DataContext="{Binding SelectedItem}"/>
+            </Grid>
+        </Grid>
+        
     </Grid>
 </UserControl>

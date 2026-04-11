@@ -7,7 +7,7 @@ namespace fractions.ui.viewmodels;
 abstract public partial class EnumerateViewModel<T>() : BaseViewModel()
 {
     [ObservableProperty]
-    public Enumerate<T> source = new Enumerate<T>();
+    public Enumerate<T> source = [];
 
     public string Name
     {
@@ -50,7 +50,7 @@ abstract public partial class EnumerateViewModel<T>() : BaseViewModel()
 
     public bool IsReady()
     {
-        return Source != null;
+        return Source?.Count > 0;
     }
 
     [RelayCommand(CanExecute = nameof(IsReady))]
@@ -64,6 +64,7 @@ abstract public partial class EnumerateViewModel<T>() : BaseViewModel()
         NotifyPropertyChangingOnUiThread(nameof(Source));
         Source.AddRange(collection);
         NotifyPropertyChangedOnUiThread(nameof(Source));
+        NotifyPropertyChangedOnUiThread(nameof(IsReady));
     }
 
 
@@ -98,5 +99,6 @@ abstract public partial class EnumerateViewModel<T>() : BaseViewModel()
         Source.Reset();
         NotifyPropertyChangedOnUiThread(nameof(Index));
         NotifyPropertyChangedOnUiThread(nameof(Current));
+        NotifyPropertyChangedOnUiThread(nameof(IsReady));
     }
 }
